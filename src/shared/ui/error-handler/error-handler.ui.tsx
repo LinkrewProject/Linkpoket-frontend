@@ -1,31 +1,31 @@
 //이후 버튼이 개발되고 다시 살릴 컴포넌트
 
-// import { Button } from '../button';
+import { Button } from '../Button';
 
-// type ErrorHandlerProps = {
-//   error: Error;
-//   resetErrorBoundary?: (...args: any[]) => void;
-// };
+type ErrorHandlerProps = {
+  error: Error;
+  resetErrorBoundary?: (...args: any[]) => void;
+};
 
-// const isDevelopment = process.env.NODE_ENV; // TODO: check if this works
+const isDevelopment = process.env.NODE_ENV; // TODO: check if this works
 
-// export function ErrorHandler(props: ErrorHandlerProps) {
-//   const { error, resetErrorBoundary } = props;
+export function ErrorHandler(props: ErrorHandlerProps) {
+  const { error, resetErrorBoundary } = props;
 
-//   return (
-//     <div>
-//       <h3>Something went wrong.</h3>
-//       {isDevelopment && (
-//         <>
-//           <ul className="error-messages">
-//             <li key={error.message}>{error.message}</li>
-//           </ul>
-//           <pre>{error.stack}</pre>
-//         </>
-//       )}
-//       <Button type="button" onClick={resetErrorBoundary}>
-//         Try again
-//       </Button>
-//     </div>
-//   );
-// }
+  return (
+    <div>
+      <h3>Something went wrong.</h3>
+      {isDevelopment && (
+        <>
+          <ul className="error-messages">
+            <li key={error.message}>{error.message}</li>
+          </ul>
+          <pre>{error.stack}</pre>
+        </>
+      )}
+      <Button type="button" onClick={resetErrorBoundary}>
+        Try again
+      </Button>
+    </div>
+  );
+}
