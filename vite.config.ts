@@ -1,13 +1,13 @@
-import path from 'path'
+import path from 'path';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import tailwindcss from '@tailwindcss/vite'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [react()], // tailwind는 postcss에서 처리함
   resolve: {
     alias: {
+      '@': path.resolve(__dirname, './src'),
       '~app': path.resolve('src/app'),
       '~entities': path.resolve('src/entities'),
       '~features': path.resolve('src/features'),
