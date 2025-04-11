@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/shared/lib/util/utils';
 import Status from '@/shared/assets/Status.svg?react';
@@ -28,58 +28,49 @@ export interface InputProps
   containerClassName?: string;
 }
 
-export const Input = forwardRef<HTMLInputElement, InputProps>(
-  (
-    {
-      className,
-      variant,
-      label,
-      errorMessage,
-      containerClassName,
-      disabled,
-      ...props
-    },
-    ref
-  ) => {
-    const inputVariant = disabled ? 'disabled' : variant;
+export const Input = ({
+  className,
+  variant,
+  label,
+  errorMessage,
+  containerClassName,
+  disabled,
+  ...props
+}: InputProps) => {
+  const inputVariant = disabled ? 'disabled' : variant;
 
-    // 에러 상태일 때 적용할 스타일 클래스
-    const errorStyles =
-      variant === 'error'
-        ? 'border-status-danger focus:ring-status-danger focus:border-status-danger'
-        : '';
+  // 에러 상태일 때 적용할 스타일 클래스
+  const errorStyles =
+    variant === 'error'
+      ? 'border-status-danger focus:ring-status-danger focus:border-status-danger'
+      : '';
 
-    return (
-      <div className={cn('flex flex-col space-y-1', containerClassName)}>
-        {label && (
-          <label
-            htmlFor={props.id}
-            className="text-sm font-medium text-gray-80"
-          >
-            {label}
-          </label>
+  return (
+    <div className={cn('flex flex-col space-y-1', containerClassName)}>
+      {label && (
+        <label htmlFor={props.id} className="text-sm font-medium text-gray-80">
+          {label}
+        </label>
+      )}
+
+      <input
+        className={cn(
+          inputVariants({ variant: inputVariant }),
+          errorStyles,
+          className
         )}
+        disabled={disabled}
+        {...props}
+      />
 
-        <input
-          ref={ref}
-          className={cn(
-            inputVariants({ variant: inputVariant }),
-            errorStyles,
-            className
-          )}
-          disabled={disabled}
-          {...props}
-        />
-
-        {errorMessage && variant === 'error' && (
-          <div className="flex mt-1">
-            <Status className="mr-1" />
-            <p className="text-sm text-status-danger">{errorMessage}</p>
-          </div>
-        )}
-      </div>
-    );
-  }
-);
+      {errorMessage && variant === 'error' && (
+        <div className="flex mt-1">
+          <Status className="mr-1" />
+          <p className="text-sm text-status-danger">{errorMessage}</p>
+        </div>
+      )}
+    </div>
+  );
+};
 
 Input.displayName = 'Input';
