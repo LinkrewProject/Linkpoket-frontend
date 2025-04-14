@@ -1,7 +1,7 @@
 import Logo from '@/shared/assets/Logo.svg?react';
 import Kakao from '@/shared/assets/Kakao.svg?react';
 import Google from '@/shared/assets/Google.svg?react';
-import { Button } from '@/shared/ui/button';
+import { Button } from '@/shared/ui/Button';
 
 const LoginPage = () => {
   return (
