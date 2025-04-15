@@ -1,8 +1,10 @@
 import { cva } from 'class-variance-authority';
+import { cn } from '@/shared/lib/util/utils';
 
 interface ToggleSwitchProps {
   checked: boolean;
   onClick?: () => void;
+  className?: string;
 }
 
 const toggleContainer = cva(
@@ -29,11 +31,15 @@ const toggleCircle = cva(
   }
 );
 
-export default function ToggleButton({ checked, onClick }: ToggleSwitchProps) {
+export default function ToggleButton({
+  checked,
+  onClick,
+  className,
+}: ToggleSwitchProps) {
   return (
     <button
       onClick={onClick}
-      className={toggleContainer({ checked })}
+      className={cn(toggleContainer({ checked }), className)}
       role="switch"
       aria-checked={checked}
     >

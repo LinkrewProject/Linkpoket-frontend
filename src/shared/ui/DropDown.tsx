@@ -26,30 +26,34 @@ export default function DropDown({
       <div className="flex flex-col">
         <button
           onClick={onContact}
-          className="flex items-center gap-[10px] p-[12px] hover:bg-gray-5 active:bg-gray-5 cursor-pointer"
+          className="flex items-center gap-[10px] p-[12px] hover:bg-gray-5 hover:rounded-[8px] active:bg-gray-5 cursor-pointer"
         >
           <Consult /> <span className="text-[19px]">문의하기</span>
         </button>
-        <div className="flex gap-[20px] items-center justify-between  hover:bg-gray-5 active:bg-gray-5 ">
+        <div className="flex gap-[20px] items-center justify-between  hover:bg-gray-5 hover:rounded-[8px] active:bg-gray-5 ">
           <button className="flex items-center gap-[10px] p-[12px]">
             <DarkMode /> <span className="text-[19px]">다크 모드 전환</span>
           </button>
-          <ToggleButton checked={isDarkMode} onClick={onToggleDarkMode} />
+          <ToggleButton
+            checked={isDarkMode}
+            onClick={onToggleDarkMode}
+            className="mr-[10px]"
+          />
         </div>
         <div className="flex"></div>
       </div>
-      <div className="w-[274px] border border-gray-40" />
+      <div className="w-[274px] border border-gray-40  my-[8px] mx-[10px]" />
       <div className="flex flex-col">
         <button
           onClick={onWithDrawPage}
-          className="flex items-center gap-[10px] p-[12px] text-status-danger  hover:bg-gray-5 active:bg-gray-5 cursor-pointer"
+          className="flex items-center gap-[10px] p-[12px] text-status-danger  hover:bg-gray-5 hover:rounded-[8px] active:bg-gray-5 cursor-pointer"
         >
           <Withdraw /> <span className="text-[19px]">공유 페이지 탈퇴</span>
         </button>
         {isHost && (
           <button
             onClick={onDeletePage}
-            className="flex items-center gap-[10px] p-[12px] text-status-danger  hover:bg-gray-5 active:bg-gray-5 cursor-pointer"
+            className="flex items-center gap-[10px] p-[12px] text-status-danger  hover:bg-gray-5 hover:rounded-[8px] active:bg-gray-5 cursor-pointer"
           >
             <Deleted /> <span className="text-[19px]">페이지 삭제하기</span>
           </button>
