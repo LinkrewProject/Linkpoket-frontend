@@ -6,8 +6,10 @@ import { AuthButtons } from './AuthButtons';
 
 interface Props {
   isLoggedIn: boolean;
-  hasSidebar: boolean;
   showDepth: boolean;
+  showSidebar?: boolean;
+  setShowSidebar?: React.Dispatch<React.SetStateAction<boolean>>;
+  showHeaderButton: boolean;
 }
 
 //Todo: 해당 데이터는 useQuery 활용하여 대체.
@@ -18,24 +20,25 @@ const data = {
   ],
   current: { id: '2', name: '디렉토리2' },
 };
-
 export function Header({
   isLoggedIn = true,
-  hasSidebar = true,
   showDepth = true,
+  showSidebar,
+  setShowSidebar,
+  showHeaderButton,
 }: Props) {
   return (
     // Header 1920기준 w값 1600고정 - 반응형 고려시 해당부분 수정
+
     <header className="flex justify-between px-[22px] py-[12px]">
       <div className="flex items-center gap-[24px]">
-        {hasSidebar && (
-          <HamburgerButton onClick={() => console.log('Hamburger')} />
+        {!showSidebar && setShowSidebar && (
+          <HamburgerButton onClick={() => setShowSidebar(!showSidebar)} />
         )}
         <Logo className="h-[54px]" />
         {showDepth && <Breadcrumb items={data.breadcrumb} />}
       </div>
-
-      {isLoggedIn ? <UserActions /> : <AuthButtons />}
+      {showHeaderButton && (isLoggedIn ? <UserActions /> : <AuthButtons />)}
     </header>
   );
 }

@@ -16,7 +16,8 @@ type MenubarProps = {
   nickname: string;
   email: string;
   sharedPages: SharedPage[];
-  showFooter?: boolean;
+  showSidebar: boolean;
+  setShowSidebar: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const SideBar: React.FC<MenubarProps> = ({
@@ -24,14 +25,19 @@ const SideBar: React.FC<MenubarProps> = ({
   nickname,
   email,
   sharedPages,
-  showFooter = true,
+  showSidebar,
+  setShowSidebar,
 }) => {
-  return (
-    <aside className="border-r-gray-30 flex h-screen w-[320px] flex-col justify-between border-r">
+  const HandleSidebar = () => {
+    setShowSidebar(!showSidebar);
+  };
+
+  return showSidebar ? (
+    <aside className="border-r-gray-30 flex w-[320px] flex-col justify-between border-r">
       <div className="gap-[16px pt-[14px]] mb-[16px] flex flex-col px-[10px]">
         <div className="flex flex-col gap-[16px]">
           <div className="py-[10px]">
-            <HamburgerButton />
+            <HamburgerButton onClick={HandleSidebar} />
           </div>
           <div className="flex gap-[12px] px-[10px] py-[8px]">
             <img src={avatarUrl} alt="avatar" className="p-[8px]" />
@@ -76,9 +82,9 @@ const SideBar: React.FC<MenubarProps> = ({
         </ul>
       </div>
 
-      {showFooter && <Footer />}
+      <Footer />
     </aside>
-  );
+  ) : null;
 };
 
 export default SideBar;
