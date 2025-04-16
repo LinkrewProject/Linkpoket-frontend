@@ -29,6 +29,7 @@ export default function PageSelectBox({
   return (
     <div className="relative inline-block text-left">
       <button
+        aria-haspopup="listbox"
         onClick={() => setIsOpen((prev) => !prev)}
         className="bg-gray-5 text-gray-60 inline-flex w-[126px] cursor-pointer items-center justify-between rounded-[8px] px-[20px] py-[15px] text-[19px] font-[600]"
       >

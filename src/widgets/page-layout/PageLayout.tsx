@@ -9,6 +9,7 @@ import PageSelectBox from '@/widgets/page-layout/PageSelectBox';
 export default function PageLayout() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [view, setView] = useState<'grid' | 'list'>('grid');
 
   const MAX_TITLE_LENGTH = 21;
   const MAX_DESCRIPTION_LENGTH = 200;
@@ -58,11 +59,20 @@ export default function PageLayout() {
         <div className="flex gap-[20px]">
           <SearchBar size="fixed" />
           <PageSelectBox />
-
-          <ViewToggle selectedView="grid" onChange={() => {}} />
+          <ViewToggle selectedView={view} onChange={setView} />;
         </div>
       </div>
-      <div>3</div>
+      <div>
+        {view === 'grid' ? (
+          <div className="px-[136px] text-3xl font-bold">
+            GRID 적용 레이아웃
+          </div>
+        ) : (
+          <div className="px-[296px] text-3xl font-bold">
+            FLEX 적용 레이아웃
+          </div>
+        )}
+      </div>
     </div>
   );
 }
