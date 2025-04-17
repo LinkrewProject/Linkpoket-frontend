@@ -5,11 +5,17 @@ import { Button } from '@/shared/ui/button';
 import { SearchBar } from '@/shared/ui/SearchBar';
 import { ViewToggle } from '@/shared/ui/ViewToggle';
 import PageSelectBox from '@/widgets/page-layout/PageSelectBox';
+import { useOutletContext } from 'react-router-dom';
+
+type ContextType = {
+  showSidebar: boolean;
+};
 
 export default function PageLayout() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [view, setView] = useState<'grid' | 'list'>('grid');
+  const { showSidebar } = useOutletContext<ContextType>();
 
   const MAX_TITLE_LENGTH = 21;
   const MAX_DESCRIPTION_LENGTH = 200;
@@ -63,13 +69,13 @@ export default function PageLayout() {
         </div>
       </div>
       <div>
-        {view === 'grid' ? (
+        {showSidebar === true ? (
           <div className="px-[136px] text-3xl font-bold">
-            GRID 적용 레이아웃
+            Sidebar Open 레이아웃
           </div>
         ) : (
           <div className="px-[296px] text-3xl font-bold">
-            FLEX 적용 레이아웃
+            Sidebar Closed 레이아웃
           </div>
         )}
       </div>
