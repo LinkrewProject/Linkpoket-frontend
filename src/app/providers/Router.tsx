@@ -3,6 +3,7 @@ import TEST from '@/pages/TEST';
 import Layout from '../layout';
 import LoginPage from '@/pages/auth/login';
 import SignupPage from '@/pages/auth/signup';
+import { LandingPage } from '@/pages/landing/ui/LandingPage';
 
 const router = createBrowserRouter([
   {
@@ -11,6 +12,7 @@ const router = createBrowserRouter([
       { path: '/', element: <TEST /> },
       { path: 'login', element: <LoginPage /> },
       { path: 'signup', element: <SignupPage /> },
+      { path: 'landing', element: <LandingPage /> },
     ],
   },
 ]);
