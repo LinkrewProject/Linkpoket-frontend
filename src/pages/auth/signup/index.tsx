@@ -4,7 +4,8 @@ import { Radio } from '@/shared/ui/Radio';
 import { Checkbox } from '@/shared/ui/CheckBox';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Button } from '@/shared/ui/Button';
+import { Button } from '@/shared/ui/button';
+import { useEffect, useState } from 'react';
 
 // Zod 스키마 정의
 const signupSchema = z.object({
@@ -28,6 +29,8 @@ const SignupPage = () => {
   const {
     control,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors, isSubmitting, isValid },
   } = useForm<FormData>({
     resolver: zodResolver(signupSchema),
@@ -40,6 +43,35 @@ const SignupPage = () => {
       termsAgreed: false,
     },
   });
+
+  // 개별 약관 동의 상태 관리
+  const [termsStatus, setTermsStatus] = useState({
+    terms1: false,
+    terms2: false,
+  });
+
+  const termsAgreedValue = watch('termsAgreed');
+
+  // 전체 동의 상태가 변경될 때 개별 약관 상태 업데이트
+  useEffect(() => {
+    setTermsStatus({
+      terms1: termsAgreedValue,
+      terms2: termsAgreedValue,
+    });
+  }, [termsAgreedValue]);
+
+  // 개별 약관 변경 처리
+  const handleTermChange = (
+    termName: 'terms1' | 'terms2',
+    checked: boolean
+  ) => {
+    const newTermsStatus = { ...termsStatus, [termName]: checked };
+    setTermsStatus(newTermsStatus);
+
+    // 모든 약관이 동의되었는지 확인
+    const allAgreed = Object.values(newTermsStatus).every((status) => status);
+    setValue('termsAgreed', allAgreed, { shouldValidate: true });
+  };
 
   // 폼 제출 처리
   const onSubmit = async (data: FormData) => {
@@ -57,18 +89,18 @@ const SignupPage = () => {
   };
 
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen bg-white p-4">
+    <main className="flex min-h-screen flex-col items-center justify-center bg-white p-4">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="w-full max-w-md space-y-6"
       >
-        <h1 className="flex justify-center text-[28px] font-bold mb-8">
+        <h1 className="mb-8 flex justify-center text-[28px] font-bold">
           링크모아 회원 가입
         </h1>
 
         {/* 연령대 */}
         <div>
-          <label className="block font-medium text-gray-700 mb-2">연령대</label>
+          <label className="mb-2 block font-medium text-gray-700">연령대</label>
           <div className="flex flex-row space-x-4">
             <Controller
               name="ageGroup"
@@ -116,7 +148,7 @@ const SignupPage = () => {
 
         {/* 성별 */}
         <div>
-          <label className="block font-medium text-gray-700 mb-2">성별</label>
+          <label className="mb-2 block font-medium text-gray-700">성별</label>
           <div className="flex flex-row space-x-4">
             <Controller
               name="gender"
@@ -148,7 +180,7 @@ const SignupPage = () => {
 
         {/* 직업 */}
         <div>
-          <label className="block font-medium text-gray-700 mb-2">직업</label>
+          <label className="mb-2 block font-medium text-gray-700">직업</label>
           <Controller
             name="job"
             control={control}
@@ -165,7 +197,7 @@ const SignupPage = () => {
 
         {/* 닉네임 */}
         <div>
-          <label className="block font-medium text-gray-700 mb-2">닉네임</label>
+          <label className="mb-2 block font-medium text-gray-700">닉네임</label>
           <Controller
             name="nickname"
             control={control}
@@ -199,10 +231,14 @@ const SignupPage = () => {
 
           {/* 약관 항목 1 */}
           <div
-            className={`flex justify-between items-center text-sm ${errors.termsAgreed ? 'text-red-500' : 'text-gray-700'} pl-1`}
+            className={`flex items-center justify-between text-sm ${errors.termsAgreed ? 'text-red-500' : 'text-gray-700'}`}
           >
             <div className="flex items-center space-x-1">
-              <span className="text-orange-500">✓</span>
+              <Checkbox
+                checked={termsStatus.terms1}
+                onChange={(e) => handleTermChange('terms1', e.target.checked)}
+                variant="checkOnly"
+              />
               <span>(필수) 링크모아 이용약관 동의</span>
             </div>
             <button type="button" className="text-gray-500 underline">
@@ -212,10 +248,14 @@ const SignupPage = () => {
 
           {/* 약관 항목 2 */}
           <div
-            className={`flex justify-between items-center text-sm ${errors.termsAgreed ? 'text-red-500' : 'text-gray-700'} pl-1`}
+            className={`flex items-center justify-between text-sm ${errors.termsAgreed ? 'text-red-500' : 'text-gray-700'}`}
           >
             <div className="flex items-center space-x-1">
-              <span className="text-orange-500">✓</span>
+              <Checkbox
+                checked={termsStatus.terms2}
+                onChange={(e) => handleTermChange('terms2', e.target.checked)}
+                variant="checkOnly"
+              />
               <span>(필수) 개인정보 처리방침 동의</span>
             </div>
             <button type="button" className="text-gray-500 underline">
@@ -226,7 +266,7 @@ const SignupPage = () => {
 
         <Button
           type="submit"
-          className="w-full h-12 bg-orange-500 hover:bg-orange-600 text-white font-medium rounded-lg transition-colors"
+          className="h-12 w-full rounded-lg bg-orange-500 font-medium text-white transition-colors hover:bg-orange-600"
           disabled={isSubmitting || !isValid}
         >
           {isSubmitting ? '처리 중...' : '회원 가입'}
