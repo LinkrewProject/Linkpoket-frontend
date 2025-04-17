@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import PageSelectBoxIcon from '@/shared/assets/PageSelectBoxIcon.svg?react';
 import PageSelectBoxIconUp from '@/shared/assets/PageSelectBoxIconUp.svg?react';
 import PageSelectBoxIconCheck from '@/shared/assets/PageSelectBoxIconCheck.svg?react';
@@ -19,6 +19,25 @@ export default function PageSelectBox({
 }: SortSelectProps) {
   const [selected, setSelected] = useState<Option>(defaultValue);
   const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen]);
 
   const handleSelect = (opt: Option) => {
     setSelected(opt);
@@ -27,7 +46,7 @@ export default function PageSelectBox({
   };
 
   return (
-    <div className="relative inline-block text-left">
+    <div ref={dropdownRef} className="relative inline-block text-left">
       <button
         aria-haspopup="listbox"
         onClick={() => setIsOpen((prev) => !prev)}
@@ -38,10 +57,14 @@ export default function PageSelectBox({
       </button>
 
       {isOpen && (
-        <ul className="border-gray-30 text-gray-90 absolute z-10 mt-1 w-full rounded-[10px] border p-[8px] text-[19px] font-[600]">
+        <ul
+          role="menu"
+          className="border-gray-30 text-gray-90 absolute z-10 mt-1 w-full rounded-[10px] border p-[8px] text-[19px] font-[600]"
+        >
           {options.map((opt) => (
             <li
               key={opt}
+              role="menuitem"
               onClick={() => handleSelect(opt)}
               className={cn(
                 'hover:bg-gray-5 flex cursor-pointer items-center justify-between px-3 py-3',
