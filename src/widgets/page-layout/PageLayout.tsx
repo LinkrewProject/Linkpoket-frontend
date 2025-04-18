@@ -45,8 +45,8 @@ export default function PageLayout() {
                 setDescription(e.target.value);
               }
             }}
-            placeholder="페이지에 대한 설명을 입력하세요"
-            className="text-gray-70 max-h-[98px] w-full resize-none overflow-y-auto text-[19px] font-[400] outline-none"
+            placeholder="페이지에 대한 설명을 입력하세요. 디렉토리 소개글은 200자를 넘을 수 없습니다"
+            className="text-gray-70 max-h-[98px] w-full resize-none overflow-y-auto text-[16px] font-[400] outline-none"
           />
         </div>
       </div>
