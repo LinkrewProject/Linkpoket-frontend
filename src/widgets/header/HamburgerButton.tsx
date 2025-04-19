@@ -2,8 +2,13 @@ import Hamburger from '@/widgets/assets/Hamburger.svg?react';
 
 export function HamburgerButton({ onClick }: { onClick: () => void }) {
   return (
-    <button onClick={onClick} className="cursor-pointer">
-      <Hamburger />
-    </button>
+    <div className="active:bg-gray-5 flex h-[38px] w-[38px] items-center justify-center p-[10px] active:rounded-[8px]">
+      <button
+        onClick={onClick}
+        className="cursor-pointer px-[2px] pt-[5px] pb-[4px]"
+      >
+        <Hamburger />
+      </button>
+    </div>
   );
 }

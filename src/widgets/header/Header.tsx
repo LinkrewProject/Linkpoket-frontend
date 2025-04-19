@@ -35,7 +35,7 @@ export function Header({
         {!showSidebar && setShowSidebar && (
           <HamburgerButton onClick={() => setShowSidebar(!showSidebar)} />
         )}
-        <Logo className="h-[54px]" />
+        <Logo className="h-[24px]" />
         {showDepth && <Breadcrumb items={data.breadcrumb} />}
       </div>
       {showHeaderButton && (isLoggedIn ? <UserActions /> : <AuthButtons />)}

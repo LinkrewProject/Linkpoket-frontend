@@ -37,9 +37,8 @@ const SideBar: React.FC<MenubarProps> = ({
     <aside className="border-r-gray-30 flex min-h-screen w-[260px] flex-col justify-between border-r">
       <div className="flex flex-col gap-[16px] px-[12px] pt-[12px] pb-[8px]">
         <div className="flex flex-col gap-[16px]">
-          <div className="py-[10px]">
-            <HamburgerButton onClick={HandleSidebar} />
-          </div>
+          <HamburgerButton onClick={HandleSidebar} />
+
           <div className="flex gap-[12px] p-[8px]">
             <img
               src={avatarUrl}
