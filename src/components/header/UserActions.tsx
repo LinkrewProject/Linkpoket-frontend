@@ -3,11 +3,11 @@ import Menu from '@/assets/widget-ui-assets/Menu.svg?react';
 
 export function UserActions() {
   return (
-    <div className="flex items-center gap-2">
-      <button>
-        <Bell className="cursor-pointer px-[3px] py-[2px]" />
+    <div className="flex items-center">
+      <button className="active:bg-gray-10 flex h-[38px] w-[38px] cursor-pointer items-center justify-center active:rounded-[8px]">
+        <Bell className="h-[20px] w-[20px]" />
       </button>
-      <button>
+      <button className="active:bg-gray-10 flex h-[38px] w-[38px] cursor-pointer items-center justify-center active:rounded-[8px]">
         <Menu className="cursor-pointer" />
       </button>
     </div>
