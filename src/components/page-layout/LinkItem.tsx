@@ -8,7 +8,7 @@ interface FolderItemProps {
   view: 'grid' | 'list';
 }
 
-export default function FolderItem({ item, view }: FolderItemProps) {
+export default function LinkItem({ item, view }: FolderItemProps) {
   const isGrid = view === 'grid';
 
   return isGrid ? (
