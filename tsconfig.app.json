@@ -25,10 +25,9 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@shared/*": ["./src/shared/*"],
-      "@features/*": ["./src/features/*"],
-      "@entities/*": ["./src/entities/*"]
+      "@components/*": ["./src/components/*"],
+      "@assets/*": ["./src/assets/*"]
     }
   },
-  "include": ["src", "**/*.ts", "**/*.tsx", "tailwind.config.js"]
+  "include": ["src", "**/*.ts", "**/*.tsx", "tailwind.config.js", "fsd"]
 }
