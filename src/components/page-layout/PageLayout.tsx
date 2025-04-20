@@ -73,24 +73,22 @@ export default function PageLayout() {
       </div>
 
       {/* Folder, Link */}
-      {showSidebar ? (
-        <div className="px-[140px] text-3xl font-bold">
-          <div
-            className={
-              view === 'grid'
-                ? 'grid [grid-template-columns:repeat(auto-fit,minmax(134px,max-content))] gap-4'
-                : 'flex flex-col'
-            }
-          >
-            <FolderItem item={{ id: '1', title: '폴더 이름' }} view={view} />
-            <LinkItem item={{ id: '1', title: '링크 이름' }} view={view} />
-          </div>
+      <div
+        className={`text-3xl font-bold ${
+          showSidebar ? 'px-[140px]' : 'px-[142px]'
+        }`}
+      >
+        <div
+          className={
+            view === 'grid'
+              ? 'grid [grid-template-columns:repeat(auto-fit,minmax(134px,max-content))] gap-4'
+              : 'flex flex-col'
+          }
+        >
+          <FolderItem item={{ id: '1', title: '폴더 이름' }} view={view} />
+          <LinkItem item={{ id: '1', title: '링크 이름' }} view={view} />
         </div>
-      ) : (
-        <div className="px-[142px] text-3xl font-bold">
-          Sidebar Closed 레이아웃
-        </div>
-      )}
+      </div>
     </div>
   );
 }

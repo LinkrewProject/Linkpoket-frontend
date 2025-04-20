@@ -14,7 +14,7 @@ export default function FolderItem({ item, view }: FolderItemProps) {
   return isGrid ? (
     <div className="bg-gray-5 inline-flex flex-col items-center gap-2 rounded-[8px] p-[12px]">
       <div className="bg-primary-40 text-gray-0 flex h-[98px] w-[110px] items-center justify-center rounded-[8px] text-center">
-        링링
+        링
       </div>
       <span className="text-gray-90 text-center text-[15px] font-[400]">
         {item.title}

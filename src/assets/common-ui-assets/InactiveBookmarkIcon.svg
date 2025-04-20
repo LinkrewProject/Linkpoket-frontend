@@ -1,3 +1,37 @@
 <svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path fill-rule="evenodd" clip-rule="evenodd" d="M8 11.1321C8.50141 11.1321 8.9801 11.3407 9.32077 11.7077L14.2 16.9641V1.7955H1.8V16.9641L6.67923 11.7077C7.0199 11.3407 7.49859 11.1321 8 11.1321ZM14.2662 19.6782C14.8842 20.3439 16 19.9078 16 19.0005V0.997499C16 0.446596 15.5523 0 15 0H1C0.447715 0 0 0.446596 0 0.997499V19.0005C0 19.9078 1.1158 20.3439 1.73376 19.6782L8 12.9276L14.2662 19.6782Z" fill="#D8D8D8"/>
+<rect width="16" height="20" fill="#F2F2F2"/>
+<g id="1280px / &#235;&#169;&#148;&#236;&#157;&#184; &#237;&#142;&#152;&#236;&#157;&#180;&#236;&#167;&#128;(&#235;&#166;&#172;&#236;&#138;&#164;&#237;&#138;&#184;&#235;&#183;&#176;)" clip-path="url(#clip0_11_670)">
+<rect width="1280" height="800" transform="translate(-1072 -355)" fill="white"/>
+<g id="Main(Sidebar)">
+<g id="Page">
+<g id="Content">
+<g id="Container">
+<rect width="1280" height="716" transform="translate(-1072 -153)" fill="white"/>
+<g id="Section">
+<g id="Container_2">
+<g id="List">
+<mask id="path-1-inside-1_11_670" fill="white">
+<path d="M-929 -25H65V45H-929V-25Z"/>
+</mask>
+<path d="M65 45V44H-929V45V46H65V45Z" fill="#D8D8D8" mask="url(#path-1-inside-1_11_670)"/>
+<g id="Icon">
+<g id="Interaction">
+<g id="Icon/Bookmark">
+<path id="Union" fill-rule="evenodd" clip-rule="evenodd" d="M8 11.1321C8.50141 11.1321 8.9801 11.3407 9.32077 11.7077L14.2 16.9641V1.7955H1.8V16.9641L6.67923 11.7077C7.0199 11.3407 7.49859 11.1321 8 11.1321ZM14.2662 19.6782C14.8842 20.3439 16 19.9078 16 19.0005V0.997499C16 0.446596 15.5523 0 15 0H1C0.447715 0 0 0.446596 0 0.997499V19.0005C0 19.9078 1.1158 20.3439 1.73376 19.6782L8 12.9276L14.2662 19.6782Z" fill="#D8D8D8"/>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_11_670">
+<rect width="1280" height="800" fill="white" transform="translate(-1072 -355)"/>
+</clipPath>
+</defs>
 </svg>
