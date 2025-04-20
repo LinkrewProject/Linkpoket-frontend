@@ -21,8 +21,8 @@ export default function FolderItem({ item, view }: FolderItemProps) {
       </span>
     </div>
   ) : (
-    <div className="border-gray-30 border-b-gray-30 flex w-full items-center justify-between border-b py-[16px] pl-[8px]">
-      <div className="flex items-center gap-[20px]">
+    <div className="border-gray-30 border-b-gray-30 active:bg-gray-5 hover:bg-gray-5 flex w-full items-center justify-between border-b py-[16px] pl-[8px] last:border-b-0">
+      <div className="flex items-center gap-[24px]">
         <div className="h-[38px] w-[38px] text-center">링</div>
         <span className="text-gray-90 text-[16px] font-[400]">
           {item.title}
@@ -36,3 +36,5 @@ export default function FolderItem({ item, view }: FolderItemProps) {
 }
 
 //Link 텍스트를 감싸고있는 div는 추후 파비콘으로 교체 예정
+
+// id,타입,폴더명,링크등을 ListBookmarkModal에 props로 전달함.

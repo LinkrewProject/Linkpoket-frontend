@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Transfer from '@/assets/common-ui-assets/Transfer.svg?react';
 import Copy from '@/assets/common-ui-assets/Copy.svg?react';
 import Delete from '@/assets/common-ui-assets/Delete.svg?react';
@@ -14,6 +14,9 @@ type DropDownInlineProps = {
   onCopy?: (title: string) => void;
   onTitleChange?: (id: string, title: string) => void;
   onLinkChange?: (id: string, link: string) => void;
+  className?: string;
+  isDropDownInline: boolean;
+  setIsDropDownInline: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const DropDownInline = ({
@@ -26,9 +29,13 @@ const DropDownInline = ({
   onCopy,
   onTitleChange,
   onLinkChange,
+  isDropDownInline,
+  setIsDropDownInline,
+  className,
 }: DropDownInlineProps) => {
   const [title, setTitle] = useState(initialTitle);
   const [link, setLink] = useState(initialLink);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -42,9 +49,30 @@ const DropDownInline = ({
     onLinkChange?.(id, value);
   };
 
+  useEffect(() => {
+    if (!isDropDownInline) return;
+
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node)
+      ) {
+        setIsDropDownInline(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isDropDownInline, setIsDropDownInline]);
+
   // TODO : 삭제하기 disabled의 경우, auth가 추가되면 분기처리예정
   return (
-    <div className="border-gray-30 focus:bg-gray-30 focus:border-gray-30 inline-flex flex-col rounded-[10px] border bg-white p-[8px] text-[19px] font-[600] shadow">
+    <div
+      ref={dropdownRef}
+      className={`border-gray-30 focus:bg-gray-30 focus:border-gray-30 bg-gray-0 inline-flex flex-col rounded-[10px] border p-[8px] text-[19px] font-[600] shadow ${className}`}
+    >
       {type === 'directory' && (
         <>
           <input

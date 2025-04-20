@@ -82,7 +82,7 @@ export default function PageLayout() {
           className={
             view === 'grid'
               ? 'grid [grid-template-columns:repeat(auto-fit,minmax(134px,max-content))] gap-4'
-              : 'flex flex-col'
+              : 'flex max-w-[1374px] min-w-[422px] flex-col'
           }
         >
           <FolderItem item={{ id: '1', title: '폴더 이름' }} view={view} />

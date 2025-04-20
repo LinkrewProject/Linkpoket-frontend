@@ -2,12 +2,18 @@ import InactiveBookmarkIcon from '@/assets/common-ui-assets/InactiveBookmarkIcon
 import ActiveBookmarkIcon from '@/assets/common-ui-assets/ActiveBookmarkIcon.svg?react';
 import Menu from '@/assets/widget-ui-assets/Menu.svg?react';
 import { useState } from 'react';
+import DropDownInline from '../common-ui/DropDownInline';
 
 export default function ListBookmarkModal() {
   const [isBookmark, setIsBookmark] = useState(false);
+  const [isDropDownInline, setIsDropDownInline] = useState(false);
 
   const handleBookmark = () => {
     setIsBookmark((prev) => !prev);
+  };
+
+  const handleDropDownInline = () => {
+    setIsDropDownInline((prev) => !prev);
   };
 
   return (
@@ -22,8 +28,22 @@ export default function ListBookmarkModal() {
           <ActiveBookmarkIcon className="relative right-[3px] cursor-pointer" />
         )}
       </button>
-      <button className="active:bg-gray-10 h-[38px] w-[38px] cursor-pointer px-[10px] py-[10px] active:rounded-[8px]">
+      <button
+        className="active:bg-gray-10 relative h-[38px] w-[38px] cursor-pointer px-[10px] py-[10px] active:rounded-[8px]"
+        onClick={handleDropDownInline}
+      >
         <Menu width={20} height={20} />
+        {isDropDownInline && (
+          <DropDownInline
+            id="1"
+            type="directory"
+            initialTitle="타이틀"
+            initialLink="링크"
+            className="absolute right-1 z-1"
+            isDropDownInline={isDropDownInline}
+            setIsDropDownInline={setIsDropDownInline}
+          />
+        )}
       </button>
     </div>
   );
