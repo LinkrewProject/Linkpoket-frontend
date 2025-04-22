@@ -65,7 +65,7 @@ export default function PageSortBox({
               role="menuitem"
               onClick={() => handleSelect(option)}
               className={cn(
-                'hover:bg-gray-5 flex cursor-pointer items-center justify-between px-3 py-3',
+                'hover:bg-gray-5 flex cursor-pointer items-center justify-between px-3 py-3 hover:rounded-[8px]',
                 selected === option && 'bg-gray-5 rounded-[8px]'
               )}
             >
