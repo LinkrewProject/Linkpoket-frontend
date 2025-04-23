@@ -33,14 +33,14 @@ const FeatureSection: React.FC = () => {
   return (
     <>
       {featureData.map((feature, index) => (
-        <section key={index} className={`py-20 ${feature.background}`}>
+        <section key={index} className={`pt-[152px] ${feature.background}`}>
           <div className="mx-auto max-w-[1600px] px-4 md:px-8">
             <div className="grid grid-cols-1 items-center">
               <div>
-                <h2 className="mb-6 text-[46px] font-bold text-gray-100 md:text-3xl lg:text-4xl">
+                <h2 className="mb-6 text-[38px] font-bold text-gray-100 md:text-3xl lg:text-4xl">
                   {feature.title}
                 </h2>
-                <p className="text-gray-70 text-[22px] font-medium">
+                <p className="text-gray-70 text-[18px] font-medium">
                   {feature.description}
                 </p>
                 <div className="mt-8 flex rounded-lg">

@@ -18,26 +18,29 @@ const HeroSection: React.FC = () => {
   ];
 
   return (
-    <section className="bg-primary-5 flex min-h-screen items-center justify-center py-10">
-      <div className="mx-auto flex w-full max-w-[1600px] flex-col items-center justify-between gap-10 px-4 md:px-8 lg:flex-row lg:gap-16">
-        <header className="w-full lg:w-auto">
-          <div className="mb-5 md:mb-8">
-            {heroTitles.map((title, index) => (
-              <h1
-                key={index}
-                className={`text-3xl leading-tight font-bold md:text-4xl lg:text-5xl xl:text-[56px] ${
-                  index === 0 ? 'text-primary-50' : 'text-gray-100'
-                }`}
-              >
-                {title}
-              </h1>
-            ))}
-          </div>
-          <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-5">
+    <section className="bg-primary-5 h-[558.41px] w-[1280px] px-[90px] py-[112px]">
+      <div className="mx-auto flex items-start justify-between">
+        <header className="flex w-[550px] flex-col">
+          {heroTitles.map((title, index) => (
+            <h1
+              key={index}
+              className={`text-[38px] leading-[140%] font-bold tracking-[0.01em] ${
+                index === 0 ? 'text-primary-50' : 'text-gray-100'
+              }`}
+            >
+              {title}
+            </h1>
+          ))}
+
+          <div className="mt-[22px] space-x-4">
             {buttonVariants.map(({ text, href, className }, index) => (
               <a key={index} href={href}>
                 <Button
-                  className={`px-4 py-3 text-sm md:px-6 md:py-4 md:text-base lg:px-[18px] lg:py-[20px] ${className} ${index === 0 ? 'hover:bg-primary-40 active:bg-primary-60' : 'hover:bg-primary-20 active:bg-primary-30'}`}
+                  className={`px-5 py-4 text-[19px] font-semibold ${className} ${
+                    index === 0
+                      ? 'hover:bg-primary-40 active:bg-primary-60'
+                      : 'hover:bg-primary-20 active:bg-primary-30'
+                  }`}
                 >
                   {text}
                 </Button>
@@ -45,13 +48,12 @@ const HeroSection: React.FC = () => {
             ))}
           </div>
         </header>
-        <div className="flex w-full justify-center lg:w-auto lg:justify-end">
-          <img
-            src={LandingMainWebp}
-            alt="Landing page main illustration"
-            className="h-auto w-full max-w-[500px] lg:w-auto lg:max-w-none"
-          />
-        </div>
+
+        <img
+          src={LandingMainWebp}
+          alt="Landing page main illustration"
+          className="w-[550px] object-contain"
+        />
       </div>
     </section>
   );

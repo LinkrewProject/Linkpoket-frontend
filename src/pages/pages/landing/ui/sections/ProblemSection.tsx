@@ -13,39 +13,49 @@ const ProblemSection: React.FC = () => {
     {
       texts: [
         { text: '브라우저마다 즐겨찾기 위치가 달라서', highlight: false },
-        { text: '다시 검색하느라 시간을 낭비했던 적', highlight: true },
+        { text: '다시 검색하느라 ', highlight: true },
+        { text: '시간을 낭비했던 적', highlight: false },
       ],
     },
   ];
 
   return (
-    <section className="bg-white py-20">
-      <div className="mx-auto max-w-[1600px] px-4 md:px-8">
-        <h2 className="mb-16 text-3xl font-bold md:text-4xl">
-          혹시 이런 적 있나요?
-        </h2>
+    <section className="bg-white px-[90px] pt-[100px]">
+      <div className="w-[1100px]">
+        <h2 className="mb-14 text-[38px] font-bold">혹시 이런 적 있나요?</h2>
 
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+        <div className="flex justify-between">
           {/* 문제점 설명 */}
-          <div className="space-y-8">
+          <div className="flex w-[542px] flex-col space-y-4">
             {problemDescriptions.map((problem, index) => (
               <div
                 key={index}
-                className="bg-gray-5 rounded-[20px] px-[54px] py-[68px]"
+                className="bg-gray-5 rounded-[20px] px-[54px] py-[43px]"
               >
                 <div className="flex items-center">
-                  <YellowCheck className="h-[51px] w-[51px]" />
+                  <YellowCheck />
                   <div className="ml-4">
-                    {problem.texts.map((textItem, textIndex) => (
-                      <p
-                        key={textIndex}
-                        className={`text-[32px] font-semibold ${
-                          textItem.highlight ? 'text-primary-50' : ''
-                        }`}
-                      >
-                        {textItem.text}
-                      </p>
-                    ))}
+                    {problem.texts.map((textItem, textIndex) =>
+                      textIndex === 0 ? (
+                        <p
+                          key={textIndex}
+                          className={`text-[24px] font-semibold ${
+                            textItem.highlight && 'text-primary-50'
+                          }`}
+                        >
+                          {textItem.text}
+                        </p>
+                      ) : (
+                        <span
+                          key={textIndex}
+                          className={`text-[24px] font-semibold ${
+                            textItem.highlight && 'text-primary-50'
+                          }`}
+                        >
+                          {textItem.text}
+                        </span>
+                      )
+                    )}
                   </div>
                 </div>
               </div>
@@ -53,15 +63,13 @@ const ProblemSection: React.FC = () => {
           </div>
 
           {/* 링크 일러스트레이션 */}
-          <div className="bg-primary-5 flex items-center justify-center rounded-[20px] px-[104px] py-[82px]">
-            <LinkManagementImg />
-          </div>
+          <LinkManagementImg />
         </div>
 
         {/* LINKREW 소개 */}
-        <div className="mt-[152px] flex flex-col items-center text-center">
-          <Logo className="mb-9 h-[122px] w-[122px]" />
-          <p className="mb-2 text-[46px] font-bold">
+        <div className="mt-[152px] flex w-[1110px] flex-col items-center">
+          <Logo className="h-[122px] w-[122px] object-contain" />
+          <p className="mt-6 mb-2 text-[38px] font-bold">
             그럴 땐, <span className="text-primary-50">LINKREW</span> 하나면
             충분해요
           </p>
