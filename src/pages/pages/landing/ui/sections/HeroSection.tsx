@@ -18,8 +18,8 @@ const HeroSection: React.FC = () => {
   ];
 
   return (
-    <section className="bg-primary-5 h-[558.41px] w-[1280px] px-[90px] py-[112px]">
-      <div className="mx-auto flex items-start justify-between">
+    <section className="bg-primary-5 h-[558.41px] w-full px-[90px] py-[112px]">
+      <div className="mx-auto flex max-w-[1280px] items-start justify-between">
         <header className="flex w-[550px] flex-col">
           {heroTitles.map((title, index) => (
             <h1

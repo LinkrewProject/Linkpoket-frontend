@@ -1,5 +1,5 @@
 import YellowCheck from '@/assets/common-ui-assets/YellowCheck.svg?react';
-import LinkManagementImg from '@/assets/common-ui-assets/LinkManagementImg.svg?react';
+import LinkManagementImg from '@/assets/common-ui-assets/LinkManagementImg.webp';
 import Logo from '@/assets/common-ui-assets/Logo.svg?react';
 
 const ProblemSection: React.FC = () => {
@@ -20,8 +20,8 @@ const ProblemSection: React.FC = () => {
   ];
 
   return (
-    <section className="bg-white px-[90px] pt-[100px]">
-      <div className="w-[1100px]">
+    <section className="w-full bg-white px-[90px] pt-[100px]">
+      <div className="mx-auto max-w-[1280px]">
         <h2 className="mb-14 text-[38px] font-bold">혹시 이런 적 있나요?</h2>
 
         <div className="flex justify-between">
@@ -63,11 +63,11 @@ const ProblemSection: React.FC = () => {
           </div>
 
           {/* 링크 일러스트레이션 */}
-          <LinkManagementImg />
+          <img src={LinkManagementImg} className="max-w-[542px]" />
         </div>
 
         {/* LINKREW 소개 */}
-        <div className="mt-[152px] flex w-[1110px] flex-col items-center">
+        <div className="mt-[152px] flex max-w-[1280px] flex-col items-center">
           <Logo className="h-[122px] w-[122px] object-contain" />
           <p className="mt-6 mb-2 text-[38px] font-bold">
             그럴 땐, <span className="text-primary-50">LINKREW</span> 하나면
