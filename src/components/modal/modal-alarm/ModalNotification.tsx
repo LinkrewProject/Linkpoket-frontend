@@ -1,7 +1,8 @@
 import { NotificationModalProps } from '@/types/modalAlaram';
 import { useRef, useState } from 'react';
-import profile from '@/assets/common-ui-assets/Profile.webp';
 import { useClickOutside } from '@/hooks/useClickOutside';
+import profile from '@/assets/common-ui-assets/Profile.webp';
+import Close from '@/assets/common-ui-assets/AlarmModalClose.svg?react';
 
 export default function NotificationModal({
   onClose,
@@ -62,12 +63,14 @@ export default function NotificationModal({
                 {/* 텍스트 + 버튼 */}
                 <div className="text-gray-90 flex-1 text-sm font-[400]">
                   {item.type === 'link' ? (
-                    <>
-                      <span>{item.senderEmail}</span>
-                      님이 회원님에게
-                      <span>{item.directoryName}</span>
-                      페이지에 초대했습니다.
-                    </>
+                    <div className="flex">
+                      <span>
+                        {item.senderEmail}
+                        님이 회원님에게
+                        {item.directoryName}
+                        페이지에 초대했습니다.
+                      </span>
+                    </div>
                   ) : (
                     <div>
                       <span className="font-semibold">
@@ -82,6 +85,13 @@ export default function NotificationModal({
                     {item.dateTime}
                   </div>
                 </div>
+                {/* TODO: 함수 로직 id값 활용해서 해당 알림 삭제로 교체하기 */}
+                <button
+                  onClick={() => console.log('해당 알림 삭제')}
+                  className="cursor-pointer"
+                >
+                  <Close className="text-gray-40" width={14} height={14} />
+                </button>
               </div>
 
               {/* 수락/거절 버튼 (link일 경우만) */}
