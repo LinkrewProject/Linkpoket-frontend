@@ -1,28 +1,39 @@
 import Consult from '@/assets/common-ui-assets/Consult.svg?react';
-import DarkMode from '@/assets/common-ui-assets/DarkMode.svg?react';
 import Withdraw from '@/assets/common-ui-assets/Withdraw.svg?react';
 import Deleted from '@/assets/common-ui-assets/Deleted.svg?react';
-import ToggleButton from './ToggleButton';
+import { useRef } from 'react';
+import { useClickOutside } from '@/hooks/useClickOutside';
+// import DarkMode from '@/assets/common-ui-assets/DarkMode.svg?react';
+// import ToggleButton from './ToggleButton';
 
 interface DropDownProps {
   isHost: boolean;
-  isDarkMode: boolean;
-  onToggleDarkMode?: () => void; //우선 후순위 기능이기에 옵셔널 처리리
+  // isDarkMode?: boolean;
+  // onToggleDarkMode?: () => void;
   onWithDrawPage: () => void;
   onDeletePage: () => void;
   onContact: () => void;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function DropDown({
+export default function DropDownMenu({
+  // isDarkMode = false,
+  // onToggleDarkMode,
   isHost,
-  isDarkMode = false,
-  onToggleDarkMode,
   onWithDrawPage,
   onDeletePage,
   onContact,
+  setIsOpen,
 }: DropDownProps) {
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  useClickOutside(modalRef, setIsOpen);
+
   return (
-    <div className="border-gray-30 inline-flex flex-col justify-center rounded-[10px] border p-[8px] font-[600] shadow-lg">
+    <div
+      className="border-gray-30 bg-gray-0 absolute top-12 right-7 z-1 inline-flex flex-col justify-center rounded-[10px] border p-[8px] font-[600] shadow-lg"
+      ref={modalRef}
+    >
       <div className="flex flex-col">
         <button
           onClick={onContact}
@@ -30,7 +41,7 @@ export default function DropDown({
         >
           <Consult /> <span className="text-[19px]">문의하기</span>
         </button>
-        <div className="hover:bg-gray-5 active:bg-gray-5 flex items-center justify-between gap-[20px] hover:rounded-[8px]">
+        {/* <div className="hover:bg-gray-5 active:bg-gray-5 flex items-center justify-between gap-[20px] hover:rounded-[8px]">
           <button className="flex items-center gap-[10px] p-[12px]">
             <DarkMode /> <span className="text-[19px]">다크 모드 전환</span>
           </button>
@@ -39,7 +50,7 @@ export default function DropDown({
             onClick={onToggleDarkMode}
             className="mr-[10px]"
           />
-        </div>
+        </div> */}
         <div className="flex"></div>
       </div>
       <div className="border-gray-40 mx-[10px] my-[8px] w-[274px] border" />
@@ -63,24 +74,28 @@ export default function DropDown({
   );
 }
 
-// api를 어떻게 받냐에 따라 수정 가능성이 있음 : user.role === 'host';
-// 다음과 같이 쓰길 기대함.
-// export default function TEST() {
-//   const [isDarkMode, setIsDarkMode] = useState(false);
+/* 
+api를 어떻게 받냐에 따라 수정 가능성이 있음 : user.role === 'host';
+다음과 같이 쓰길 기대함.
+export default function TEST() {
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
-//   const handleToggleDarkMode = () => {
-//     setIsDarkMode(!isDarkMode);
-//   };
-//   return (
-//     <div>
-//       <DropDown
-//         isHost={true}
-//         isDarkMode={isDarkMode}
-//         onToggleDarkMode={handleToggleDarkMode}
-//         onWithDrawPage={() => console.log('탈퇴')}
-//         onDeletePage={() => console.log('삭제')}
-//         onContact={() => console.log('문의')}
-//       />
-//     </div>
-//   );
-// }
+  const handleToggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+  };
+  return (
+    <div>
+      <DropDown
+isHost={true}
+isDarkMode={isDarkMode}
+onToggleDarkMode={handleToggleDarkMode}
+onWithDrawPage={() => console.log('탈퇴')}
+onDeletePage={() => console.log('삭제')}
+onContact={() => console.log('문의')}
+      />
+    </div>
+  );
+} 
+
+4.29 : 다크모드는 후순위 작업으로서 일단 주석처리함
+*/

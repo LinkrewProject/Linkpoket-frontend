@@ -3,7 +3,9 @@ import Menu from '@/assets/widget-ui-assets/Menu.svg?react';
 import { useState } from 'react';
 import NotificationModal from '../modal/modal-alarm/ModalNotification';
 import { NotificationItem } from '@/types/modalAlaram';
+import DropDownMenu from '../common-ui/DropDownMenu';
 
+//테스트용 목데이터 POSTMAN참고
 const notifications: NotificationItem[] = [
   {
     id: 1,
@@ -22,22 +24,25 @@ const notifications: NotificationItem[] = [
 ];
 
 export function UserActions() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isAlarmOpen, setIsAlarmOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   return (
     <div className="flex items-center">
       <button
-        className="active:bg-gray-10 hover:bg-gray-10 flex h-[38px] w-[38px] cursor-pointer items-center justify-center hover:rounded-[8px] active:rounded-[8px]"
+        className={`hover:bg-gray-10 active:bg-gray-10 flex h-[38px] w-[38px] cursor-pointer items-center justify-center hover:rounded-[8px] active:rounded-[8px] ${isAlarmOpen ? 'bg-gray-10 rounded-[8px]' : ''} `}
         onClick={(e) => {
           e.stopPropagation();
-          setIsOpen((prev) => !prev);
+          setIsMenuOpen(false);
+          setIsAlarmOpen((prev) => !prev);
         }}
       >
         <Bell className="h-[20px] w-[20px]" />
       </button>
-      {isOpen && (
+      {isAlarmOpen && (
         <NotificationModal
-          isOpen={isOpen}
-          setIsOpen={() => setIsOpen(!isOpen)}
+          isOpen={isAlarmOpen}
+          setIsOpen={() => setIsAlarmOpen(!isAlarmOpen)}
           notifications={notifications}
           onAccept={() =>
             console.log('수락하는 로직 + 모달닫기 함수로 대체예정')
@@ -51,9 +56,28 @@ export function UserActions() {
         />
       )}
 
-      <button className="active:bg-gray-10 hover:bg-gray-10 flex h-[38px] w-[38px] cursor-pointer items-center justify-center hover:rounded-[8px] active:rounded-[8px]">
-        <Menu className="cursor-pointer" />
+      <button
+        className={`hover:bg-gray-10 active:bg-gray-10 flex h-[38px] w-[38px] cursor-pointer items-center justify-center hover:rounded-[8px] active:rounded-[8px] ${isMenuOpen ? 'bg-gray-10 rounded-[8px]' : ''} `}
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsAlarmOpen(false);
+          setIsMenuOpen((prev) => !prev);
+        }}
+      >
+        <Menu className="relative" />
       </button>
+
+      {isMenuOpen && (
+        <DropDownMenu
+          isHost={true}
+          // isDarkMode={isDarkMode}
+          // onToggleDarkMode={handleToggleDarkMode}
+          setIsOpen={() => setIsMenuOpen(!isMenuOpen)}
+          onWithDrawPage={() => console.log('탈퇴')}
+          onDeletePage={() => console.log('삭제')}
+          onContact={() => console.log('문의')}
+        />
+      )}
     </div>
   );
 }

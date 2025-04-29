@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import FolderIcon from '@/assets/widget-ui-assets/FolderIcon.svg?react';
 import SiteIcon from '@/assets/widget-ui-assets/SiteIcon.svg?react';
@@ -8,6 +8,7 @@ import { ViewToggle } from '@/components/common-ui/ViewToggle';
 import PageSortBox from './PageSortBox';
 import LinkItem from './LinkItem';
 import FolderItem from './FolderItem';
+import { ContextMenu } from '../common-ui/ContextMenu';
 
 type ContextType = {
   showSidebar: boolean;
@@ -17,15 +18,48 @@ export default function PageLayout() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [isBookmark, setIsBookmark] = useState(false);
-  const [isDropDownInline, setIsDropDownInline] = useState(false);
   const [view, setView] = useState<'grid' | 'list'>('grid');
   const { showSidebar } = useOutletContext<ContextType>();
+  const [contextMenu, setContextMenu] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
+
+  useEffect(() => {
+    const handleGlobalContextMenu = (e: MouseEvent) => {
+      e.preventDefault();
+    };
+
+    document.addEventListener('contextmenu', handleGlobalContextMenu);
+
+    return () => {
+      document.removeEventListener('contextmenu', handleGlobalContextMenu);
+    };
+  }, []);
+
+  const handleContextMenu = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const next = { x: e.clientX, y: e.clientY };
+
+    if (contextMenu) {
+      setContextMenu(next);
+      return;
+    }
+
+    setContextMenu(null);
+
+    requestAnimationFrame(() => {
+      setContextMenu(next);
+    });
+  };
 
   const MAX_TITLE_LENGTH = 21;
   const MAX_DESCRIPTION_LENGTH = 200;
 
   return (
-    <div className="flex flex-col gap-[40px]">
+    <div className="flex h-full flex-col gap-[40px]">
       {/* HEADER SECTION */}
       <div className="border-b-gray-30 flex flex-col gap-[8px] border-b px-[64px] py-[24px]">
         <div className="relative w-full">
@@ -76,6 +110,7 @@ export default function PageLayout() {
 
       {/* Folder, Link */}
       <div
+        onContextMenu={handleContextMenu}
         className={`text-3xl font-bold ${
           showSidebar ? 'px-[140px]' : 'px-[142px]'
         }`}
@@ -99,6 +134,13 @@ export default function PageLayout() {
             item={{ id: '1', title: '링크 이름' }}
             view={view}
           />
+          {contextMenu && (
+            <ContextMenu
+              x={contextMenu.x}
+              y={contextMenu.y}
+              onClose={() => setContextMenu(null)}
+            />
+          )}
         </div>
       </div>
     </div>
