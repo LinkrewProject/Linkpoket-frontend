@@ -5,7 +5,7 @@ import profile from '@/assets/common-ui-assets/Profile.webp';
 import Close from '@/assets/common-ui-assets/AlarmModalClose.svg?react';
 
 export default function NotificationModal({
-  onClose,
+  setIsOpen,
   notifications,
   onAccept,
   onReject,
@@ -13,7 +13,7 @@ export default function NotificationModal({
   const [selectedTab, setSelectedTab] = useState<'time' | 'type'>('time');
   const modalRef = useRef<HTMLDivElement>(null);
 
-  useClickOutside(modalRef, onClose);
+  useClickOutside(modalRef, setIsOpen);
 
   return (
     <div className="absolute top-12 right-17 z-1" ref={modalRef}>

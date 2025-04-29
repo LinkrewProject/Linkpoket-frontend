@@ -10,7 +10,7 @@ export interface NotificationItem {
 
 export interface NotificationModalProps {
   isOpen: boolean;
-  onClose: () => void;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   notifications: NotificationItem[];
   onAccept?: (id: number) => void;
   onReject?: (id: number) => void;

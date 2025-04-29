@@ -22,25 +22,25 @@ const notifications: NotificationItem[] = [
 ];
 
 export function UserActions() {
-  const [open, setOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="flex items-center">
       <button
         className="active:bg-gray-10 hover:bg-gray-10 flex h-[38px] w-[38px] cursor-pointer items-center justify-center hover:rounded-[8px] active:rounded-[8px]"
         onClick={(e) => {
           e.stopPropagation();
-          setOpen((prev) => !prev);
+          setIsOpen((prev) => !prev);
         }}
       >
         <Bell className="h-[20px] w-[20px]" />
       </button>
-      {open && (
+      {isOpen && (
         <NotificationModal
-          isOpen={open}
-          onClose={() => setOpen(!open)}
+          isOpen={isOpen}
+          setIsOpen={() => setIsOpen(!isOpen)}
           notifications={notifications}
-          onAccept={() => setOpen((prev) => !prev)}
-          onReject={() => setOpen((prev) => !prev)}
+          onAccept={() => setIsOpen((prev) => !prev)}
+          onReject={() => setIsOpen((prev) => !prev)}
         />
       )}
 
