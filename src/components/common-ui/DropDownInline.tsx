@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import Transfer from '@/assets/common-ui-assets/Transfer.svg?react';
 import Copy from '@/assets/common-ui-assets/Copy.svg?react';
 import Delete from '@/assets/common-ui-assets/Delete.svg?react';
+import { useClickOutside } from '@/hooks/useClickOutside';
 
 type DropDownInlineProps = {
   id: string;
@@ -29,7 +30,6 @@ const DropDownInline = ({
   onCopy,
   onTitleChange,
   onLinkChange,
-  isDropDownInline,
   setIsDropDownInline,
   className,
 }: DropDownInlineProps) => {
@@ -49,23 +49,7 @@ const DropDownInline = ({
     onLinkChange?.(id, value);
   };
 
-  useEffect(() => {
-    if (!isDropDownInline) return;
-
-    const handleClickOutside = (e: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(e.target as Node)
-      ) {
-        setIsDropDownInline(false);
-      }
-    };
-
-    document.addEventListener('click', handleClickOutside);
-    return () => {
-      document.removeEventListener('click', handleClickOutside);
-    };
-  }, [isDropDownInline, setIsDropDownInline]);
+  useClickOutside(dropdownRef, setIsDropDownInline);
 
   // TODO : 삭제하기 disabled의 경우, auth가 추가되면 분기처리예정
   return (
