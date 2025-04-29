@@ -30,9 +30,10 @@ export function UserActions() {
   return (
     <div className="flex items-center">
       <button
-        className="active:bg-gray-10 hover:bg-gray-10 flex h-[38px] w-[38px] cursor-pointer items-center justify-center hover:rounded-[8px] active:rounded-[8px]"
+        className={`hover:bg-gray-10 active:bg-gray-10 flex h-[38px] w-[38px] cursor-pointer items-center justify-center hover:rounded-[8px] active:rounded-[8px] ${isAlarmOpen ? 'bg-gray-10 rounded-[8px]' : ''} `}
         onClick={(e) => {
           e.stopPropagation();
+          setIsMenuOpen(false);
           setIsAlarmOpen((prev) => !prev);
         }}
       >
@@ -56,11 +57,11 @@ export function UserActions() {
       )}
 
       <button
-        className="active:bg-gray-10 hover:bg-gray-10 flex h-[38px] w-[38px] cursor-pointer items-center justify-center hover:rounded-[8px] active:rounded-[8px]"
+        className={`hover:bg-gray-10 active:bg-gray-10 flex h-[38px] w-[38px] cursor-pointer items-center justify-center hover:rounded-[8px] active:rounded-[8px] ${isMenuOpen ? 'bg-gray-10 rounded-[8px]' : ''} `}
         onClick={(e) => {
           e.stopPropagation();
+          setIsAlarmOpen(false);
           setIsMenuOpen((prev) => !prev);
-          console.log('뭐지?');
         }}
       >
         <Menu className="relative" />
