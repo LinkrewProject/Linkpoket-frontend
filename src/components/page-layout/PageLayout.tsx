@@ -9,6 +9,7 @@ import PageSortBox from './PageSortBox';
 import LinkItem from './LinkItem';
 import FolderItem from './FolderItem';
 import { ContextMenu } from '../common-ui/ContextMenu';
+import { axiosInstance } from '@/apis/axiosInstance';
 
 type ContextType = {
   showSidebar: boolean;
@@ -25,41 +26,40 @@ export default function PageLayout() {
     y: number;
   } | null>(null);
 
-  useEffect(() => {
-    const handleGlobalContextMenu = (e: MouseEvent) => {
-      e.preventDefault();
-    };
-
-    document.addEventListener('contextmenu', handleGlobalContextMenu);
-
-    return () => {
-      document.removeEventListener('contextmenu', handleGlobalContextMenu);
-    };
-  }, []);
-
   const handleContextMenu = (e: React.MouseEvent) => {
     e.preventDefault();
-    e.stopPropagation();
-
-    const next = { x: e.clientX, y: e.clientY };
-
-    if (contextMenu) {
-      setContextMenu(next);
-      return;
-    }
-
-    setContextMenu(null);
-
-    requestAnimationFrame(() => {
-      setContextMenu(next);
-    });
+    setContextMenu({ x: e.clientX, y: e.clientY });
   };
 
   const MAX_TITLE_LENGTH = 21;
   const MAX_DESCRIPTION_LENGTH = 200;
 
+  // 서버 연결 테스트용
+  useEffect(() => {
+    axiosInstance
+      .request({
+        method: 'GET',
+        url: '/api/page/details',
+        headers: {
+          ...axiosInstance.defaults.headers.common,
+          'Content-Type': 'application/json',
+        },
+        data: {
+          pageId: 2,
+          commandType: 'VIEW',
+        },
+      })
+      .then((res) => {
+        console.log('응답:', res.data);
+      })
+      .catch((err) => {
+        console.error('에러:', err.response?.status);
+        console.error('에러 메시지:', err.response?.data);
+      });
+  }, []);
+
   return (
-    <div className="flex h-full flex-col gap-[40px]">
+    <div className="flex h-screen flex-col gap-[40px]">
       {/* HEADER SECTION */}
       <div className="border-b-gray-30 flex flex-col gap-[8px] border-b px-[64px] py-[24px]">
         <div className="relative w-full">
@@ -111,7 +111,7 @@ export default function PageLayout() {
       {/* Folder, Link */}
       <div
         onContextMenu={handleContextMenu}
-        className={`text-3xl font-bold ${
+        className={`flex-1 text-3xl font-bold ${
           showSidebar ? 'px-[140px]' : 'px-[142px]'
         }`}
       >

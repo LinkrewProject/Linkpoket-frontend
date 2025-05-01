@@ -33,6 +33,7 @@
     "src/**/*.ts",
     "src/**/*.tsx",
     "tailwind.config.js",
-    "src/types/custom.d.ts"
+    "src/types/custom.d.ts",
+    "env.d.ts"
   ]
 }

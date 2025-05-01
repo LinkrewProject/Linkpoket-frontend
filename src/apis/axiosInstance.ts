@@ -1,8 +1,11 @@
 import axios, { AxiosError } from 'axios';
 import { z } from 'zod';
 
-export const client = axios.create({
-  baseURL: 'http://dev.linkrew.com/api',
+export const axiosInstance = axios.create({
+  baseURL: import.meta.env.VITE_API_HOST,
+  headers: {
+    Authorization: import.meta.env.VITE_API_TOKEN,
+  },
 });
 
 //백엔드 api 유효성 검증 에러 응답
