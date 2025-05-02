@@ -34,24 +34,6 @@ export default function PageLayout() {
   const MAX_TITLE_LENGTH = 21;
   const MAX_DESCRIPTION_LENGTH = 200;
 
-  // 서버 연결 테스트용
-  useEffect(() => {
-    axiosInstance
-      .get('/api/page/dashboard', {
-        params: {
-          pageId: 2,
-          commandType: 'VIEW',
-        },
-      })
-      .then((res) => {
-        console.log('응답:', res.data);
-      })
-      .catch((err) => {
-        console.error('에러 코드:', err.response?.status);
-        console.error('에러 메시지:', err.response?.data);
-      });
-  }, []);
-
   return (
     <div className="flex h-screen flex-col gap-[40px]">
       {/* HEADER SECTION */}
