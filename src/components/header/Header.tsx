@@ -3,6 +3,8 @@ import Breadcrumb from './BreadCrumb';
 import { HamburgerButton } from './HamburgerButton';
 import { UserActions } from './UserActions';
 import { AuthButtons } from './AuthButtons';
+import { useMobile } from '@/hooks/useMobile';
+import { Link } from 'react-router-dom';
 
 interface Props {
   isLoggedIn: boolean;
@@ -23,19 +25,22 @@ const data = {
 export function Header({
   isLoggedIn = true,
   showDepth = true,
-  showSidebar,
   setShowSidebar,
   showHeaderButton,
 }: Props) {
+  const isMobile = useMobile();
+
   return (
     // Header 1920기준 w값 1600고정 - 반응형 고려시 해당부분 수정
 
     <header className="border-b-gray-30 flex justify-between border-b px-[24px] py-[12px]">
       <div className="flex items-center gap-[24px]">
-        {!showSidebar && setShowSidebar && (
-          <HamburgerButton onClick={() => setShowSidebar(!showSidebar)} />
+        {isMobile && setShowSidebar && (
+          <HamburgerButton onClick={() => setShowSidebar(true)} />
         )}
-        <Logo className="h-[24px]" />
+        <Link to="/">
+          <Logo className="h-[24px]" />
+        </Link>
         {showDepth && <Breadcrumb items={data.breadcrumb} />}
       </div>
       {showHeaderButton && (isLoggedIn ? <UserActions /> : <AuthButtons />)}

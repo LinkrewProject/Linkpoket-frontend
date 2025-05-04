@@ -1,186 +1,33 @@
 import { useEffect, useState } from 'react';
-import { useOutletContext } from 'react-router-dom';
-import FolderIcon from '@/assets/widget-ui-assets/FolderIcon.svg?react';
-import SiteIcon from '@/assets/widget-ui-assets/SiteIcon.svg?react';
-import { Button } from '@/components/common-ui/button';
-import { SearchBar } from '@/components/common-ui/SearchBar';
-import { ViewToggle } from '@/components/common-ui/ViewToggle';
-import PageSortBox from './PageSortBox';
-import LinkItem from './LinkItem';
-import FolderItem from './FolderItem';
-import { ContextMenu } from '../common-ui/ContextMenu';
 import { useMobile } from '@/hooks/useMobile';
-
-type ContextType = {
-  showSidebar: boolean;
-};
+import PageHeaderSection from './PageHeaderSection';
+import PageControllerSection from './PageControllerSection';
+import PageContentSection from './PageContentSection';
 
 export default function PageLayout() {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [isBookmark, setIsBookmark] = useState(false);
   const [view, setView] = useState<'grid' | 'list'>('grid');
-  const context = useOutletContext<ContextType | null>();
-  const showSidebar = context?.showSidebar ?? true; // 기본값으로 true 사용
-  const [contextMenu, setContextMenu] = useState<{
-    x: number;
-    y: number;
-  } | null>(null);
 
-  const handleContextMenu = (e: React.MouseEvent) => {
-    e.preventDefault();
-    setContextMenu({ x: e.clientX, y: e.clientY });
-  };
-
-  const MAX_TITLE_LENGTH = 21;
-  const MAX_DESCRIPTION_LENGTH = 200;
-  const isUnderDesktop = useMobile();
+  const isMobile = useMobile();
 
   useEffect(() => {
-    if (isUnderDesktop) {
+    if (isMobile) {
       setView('list');
     }
-  }, [isUnderDesktop]);
+  }, [isMobile]);
 
   return (
-    <div className="mx-auto flex h-screen w-full max-w-[1180px] flex-col gap-[40px]">
-      {/* HEADER SECTION */}
-      <div className="border-b-gray-30 mx-auto flex w-full max-w-[1180px] min-w-[328px] flex-col gap-[8px] border-b px-[64px] py-[24px]">
-        <div className="relative w-full">
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => {
-              if (e.target.value.length <= MAX_TITLE_LENGTH) {
-                setTitle(e.target.value);
-              }
-            }}
-            placeholder="제목을 입력하세요"
-            className="inline-block text-[24px] font-bold text-gray-100 outline-none"
-          />
-        </div>
-        <div>
-          <textarea
-            value={description}
-            onChange={(e) => {
-              if (e.target.value.length <= MAX_DESCRIPTION_LENGTH) {
-                setDescription(e.target.value);
-              }
-            }}
-            placeholder="페이지에 대한 설명을 입력하세요. 디렉토리 소개글은 200자를 넘을 수 없습니다"
-            className="text-gray-70 max-h-[98px] w-full resize-none overflow-y-auto text-[16px] font-[400] outline-none"
-          />
-        </div>
-      </div>
+    <div className="flex h-screen flex-col">
+      {/* HEADER SECTION*/}
+      <PageHeaderSection />
 
-      {/* CONTROLLER */}
-      <div className="flex justify-between px-[64px]">
-        <div className="flex h-[48px] gap-[12px]">
-          <Button variant="ghost" size="md" className="flex gap-[6px]">
-            <FolderIcon />
-            폴더 추가
-          </Button>
-          <Button variant="ghost" size="md" className="flex gap-[6px]">
-            <SiteIcon />
-            링크 추가
-          </Button>
-        </div>
-        <div className="flex gap-[12px]">
-          <SearchBar size="fixed" placeholder="폴더, 링크 검색" />
-          <PageSortBox />
-          <div className="hidden md:block">
-            <ViewToggle selectedView={view} onChange={setView} />
-          </div>
-        </div>
-      </div>
+      {/* Boundary line */}
+      <div className="border-b-gray-30 mb-[40px] w-full border-b" />
 
-      {/* Folder, Link */}
-      <div
-        onContextMenu={handleContextMenu}
-        className={`flex-1 overflow-y-auto px-[104px] text-3xl font-bold`}
-      >
-        <div
-          className={`w-full max-w-[1180px] min-w-[328px] ${
-            view === 'grid'
-              ? 'grid-cols-custom grid gap-4'
-              : 'flex flex-col gap-4'
-          }`}
-        >
-          <FolderItem
-            isBookmark={isBookmark}
-            setIsBookmark={setIsBookmark}
-            item={{ id: '1', title: '폴더 이름' }}
-            view={view}
-          />
-          <FolderItem
-            isBookmark={isBookmark}
-            setIsBookmark={setIsBookmark}
-            item={{ id: '1', title: '폴더 이름' }}
-            view={view}
-          />
-          <FolderItem
-            isBookmark={isBookmark}
-            setIsBookmark={setIsBookmark}
-            item={{ id: '1', title: '폴더 이름' }}
-            view={view}
-          />
-          <FolderItem
-            isBookmark={isBookmark}
-            setIsBookmark={setIsBookmark}
-            item={{ id: '1', title: '폴더 이름' }}
-            view={view}
-          />
-          <FolderItem
-            isBookmark={isBookmark}
-            setIsBookmark={setIsBookmark}
-            item={{ id: '1', title: '폴더 이름' }}
-            view={view}
-          />
-          <LinkItem
-            isBookmark={isBookmark}
-            setIsBookmark={setIsBookmark}
-            item={{ id: '1', title: '링크 이름' }}
-            view={view}
-          />
-          <LinkItem
-            isBookmark={isBookmark}
-            setIsBookmark={setIsBookmark}
-            item={{ id: '1', title: '링크 이름' }}
-            view={view}
-          />
-          <LinkItem
-            isBookmark={isBookmark}
-            setIsBookmark={setIsBookmark}
-            item={{ id: '1', title: '링크 이름' }}
-            view={view}
-          />
-          <LinkItem
-            isBookmark={isBookmark}
-            setIsBookmark={setIsBookmark}
-            item={{ id: '1', title: '링크 이름' }}
-            view={view}
-          />
-          <LinkItem
-            isBookmark={isBookmark}
-            setIsBookmark={setIsBookmark}
-            item={{ id: '1', title: '링크 이름' }}
-            view={view}
-          />
-          <LinkItem
-            isBookmark={isBookmark}
-            setIsBookmark={setIsBookmark}
-            item={{ id: '1', title: '링크 이름' }}
-            view={view}
-          />
-          {contextMenu && (
-            <ContextMenu
-              x={contextMenu.x}
-              y={contextMenu.y}
-              onClose={() => setContextMenu(null)}
-            />
-          )}
-        </div>
-      </div>
+      {/* CONTROLLER SECTION*/}
+      <PageControllerSection view={view} setView={setView} />
+
+      {/*CONTENT SECTION*/}
+      <PageContentSection view={view} />
     </div>
   );
 }
