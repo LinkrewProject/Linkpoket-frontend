@@ -122,6 +122,7 @@ export const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
               aria-label="Clear search"
             >
               <Close
+                className="text-gray-60"
                 width={size === 'sm' ? 14 : size === 'md' ? 18 : 22}
                 height={size === 'sm' ? 14 : size === 'md' ? 18 : 22}
               />
@@ -130,8 +131,8 @@ export const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
             rightIcon || (
               <Search
                 className="text-gray-60 mr-3 flex-shrink-0"
-                width={size === 'sm' ? 16 : size === 'md' ? 20 : 24}
-                height={size === 'sm' ? 16 : size === 'md' ? 20 : 24}
+                width={size === 'sm' ? 16 : size === 'md' ? 20 : 22}
+                height={size === 'sm' ? 16 : size === 'md' ? 20 : 22}
               />
             )
           )}
