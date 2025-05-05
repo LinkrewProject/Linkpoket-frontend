@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import Depth from '@/assets/common-ui-assets/BreadCrumbDepth.svg?react';
+import { useMobile } from '@/hooks/useMobile';
 
 type Directory = {
   id: string;
@@ -11,8 +12,10 @@ interface BreadcrumbProps {
 }
 
 export default function Breadcrumb({ items }: BreadcrumbProps) {
+  const isMobile = useMobile();
+
   return (
-    <nav>
+    <nav className={`${isMobile ? 'hidden' : 'block'}`}>
       <ol className="flex items-center">
         {/* TODO : 기본 값 depth 수정  */}
         <li>
