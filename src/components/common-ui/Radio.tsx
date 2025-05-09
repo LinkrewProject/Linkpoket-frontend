@@ -15,6 +15,9 @@ const radioVariants = cva('relative flex items-center', {
     error: {
       true: 'text-red-500',
     },
+    isModal: {
+      true: 'gap-3',
+    },
   },
   defaultVariants: {
     size: 'md',
@@ -32,6 +35,7 @@ export interface RadioProps
   containerClassName?: string;
   error?: boolean;
   disabled?: boolean;
+  isModal?: boolean;
 }
 
 export const Radio = ({
@@ -41,6 +45,7 @@ export const Radio = ({
   disabled,
   error,
   containerClassName,
+  isModal = false,
   ...props
 }: RadioProps) => {
   const radioSize = {
@@ -58,7 +63,7 @@ export const Radio = ({
   return (
     <label
       className={cn(
-        radioVariants({ size, disabled, error }),
+        radioVariants({ size, disabled, error, isModal }),
         containerClassName
       )}
     >
@@ -73,7 +78,7 @@ export const Radio = ({
               : 'border-gray-30 checked:border-0 checked:bg-[#FF9320] focus:ring-[#FF9320]/50',
             'focus:ring-2 focus:outline-none',
             'disabled:border-gray-30 disabled:bg-gray-10',
-            radioSize[size || 'md'],
+            isModal ? 'h-[18px] w-[18px]' : radioSize[size || 'md'],
             className
           )}
           {...props}
@@ -81,14 +86,15 @@ export const Radio = ({
         <div
           className={cn(
             'pointer-events-none absolute rounded-full bg-white opacity-0 peer-checked:opacity-100',
-            dotSize[size || 'md']
+            isModal ? 'h-[6px] w-[6px]' : dotSize[size || 'md']
           )}
         ></div>
       </div>
       {label && (
         <span
           className={cn(
-            'text-gray-90 text-[19px]',
+            'text-gray-90',
+            isModal ? 'text-[14px]' : 'text-[19px]',
             disabled ? 'text-gray-50' : ''
           )}
         >

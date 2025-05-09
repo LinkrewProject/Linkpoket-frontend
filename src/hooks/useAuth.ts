@@ -1,11 +1,14 @@
-// src/hooks/useAuth.ts
 import { useState, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import { axiosInstance } from '@/apis/axiosInstance';
 
 // JWT 페이로드 타입 정의
 interface TokenPayload {
+  email: string;
   exp: number;
+  iat: number;
+  role: string;
+  token_type: string;
 }
 
 export function useAuth() {
@@ -15,10 +18,8 @@ export function useAuth() {
   // 토큰 유효성 검증 함수
   const validateToken = (token: string): boolean => {
     try {
-      // 토큰 디코딩
       const decoded = jwtDecode<TokenPayload>(token);
 
-      // 만료 시간 검증
       const currentTime = Date.now() / 1000;
       if (decoded.exp < currentTime) {
         console.log('토큰이 만료되었습니다.');
