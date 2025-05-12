@@ -5,3 +5,9 @@ export interface CreateSharedPageData {
   onSuccess?: () => void;
   onError?: (error: any) => void;
 }
+
+export interface JoinedPageData {
+  pageId: string;
+  pageTitle: string;
+  pageType: string;
+}

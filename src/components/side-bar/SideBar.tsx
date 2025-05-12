@@ -8,6 +8,8 @@ import PlusIcon from '@/assets/common-ui-assets/PlusIcon.svg?react';
 import { useMobile } from '@/hooks/useMobile';
 import { useUserStore } from '@/stores/userStore';
 import AddSharedPageModal from '../modal/page/AddSharedPageModal';
+import useFetchJoinedPage from '@/hooks/queries/useFetchJoinedPage';
+import { JoinedPageData } from '@/types/sharedPage';
 
 type SharedPage = {
   id: string;
@@ -15,16 +17,11 @@ type SharedPage = {
 };
 
 type MenubarProps = {
-  sharedPages: SharedPage[];
   showSidebar: boolean;
   setShowSidebar: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const SideBar: React.FC<MenubarProps> = ({
-  sharedPages,
-  showSidebar,
-  setShowSidebar,
-}) => {
+const SideBar: React.FC<MenubarProps> = ({ showSidebar, setShowSidebar }) => {
   const sidebarRef = useRef<HTMLElement | null>(null);
   const isMobile = useMobile();
   const { nickname, email, colorCode } = useUserStore();
@@ -53,6 +50,10 @@ const SideBar: React.FC<MenubarProps> = ({
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isMobile, setShowSidebar, showSidebar]);
+
+  // 현재 참여중인 페이지 호출
+  const { joinedPage } = useFetchJoinedPage();
+  const joinedPageData = (joinedPage ?? []).slice(1);
 
   return showSidebar ? (
     <aside
@@ -130,14 +131,13 @@ const SideBar: React.FC<MenubarProps> = ({
               />
             )}
 
-            {sharedPages.map((page) => (
+            {joinedPageData.map((page: JoinedPageData) => (
               <Link
                 to="#"
-                key={page.id}
-                // TODO: 만약 공유페이지에도 아이콘이 들어간다면 padding 수정
+                key={page.pageId}
                 className="text-gray-70 hover:bg-primary-5 focus:bg-primary-10 focus:text-primary-50 flex py-[12px] pr-[8px] pl-[52px] text-[18px] font-[600] hover:rounded-[8px] focus:rounded-[8px]"
               >
-                {page.title}
+                {page.pageTitle}
               </Link>
             ))}
           </li>

@@ -3,11 +3,6 @@ import SideBar from '@/components/side-bar/SideBar';
 import { useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 
-const sharedPagesData = [
-  { id: '1', title: '공유 페이지 1' },
-  { id: '2', title: '공유 페이지 2' },
-]; // 해당 데이터는 목데이터로, 추후 query로 대체
-
 export default function Layout() {
   const location = useLocation();
   const path = location.pathname;
@@ -37,11 +32,7 @@ export default function Layout() {
 
       <div className="flex">
         {!isHideSidebar ? (
-          <SideBar
-            showSidebar={showSidebar}
-            setShowSidebar={setShowSidebar}
-            sharedPages={sharedPagesData}
-          />
+          <SideBar showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
         ) : null}
         <main className="flex-1">
           <Outlet context={{ showSidebar }} />
