@@ -1,9 +1,9 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import Layout from '../layout/layout';
-import LoginPage from '@/pages/pages/auth/login';
-import SignupPage from '@/pages/pages/auth/signup';
-import { LandingPage } from '@/pages/pages/landing/ui/LandingPage';
-import ReissuePage from '@/pages/pages/reissue/page';
+import LoginPage from '@/pages/auth/login';
+import SignupPage from '@/pages/auth/signup';
+import { LandingPage } from '@/pages/landing/ui/LandingPage';
+import ReissuePage from '@/pages/reissue/page';
 import { ProtectedRoute } from './guards/ProtectedRoute';
 import { RedirectIfAuthenticated } from './guards/RedirectIfAuthenticated';
 import PersonalPage from '@/pages/PersonalPage';
