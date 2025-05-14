@@ -12,7 +12,7 @@ export default function ReissuePage() {
         }
 
         const accessToken = response.data.data;
-        
+
         if (accessToken) {
           localStorage.setItem('access_token', accessToken);
         }
