@@ -49,6 +49,7 @@ const FeatureSection: React.FC = () => {
                 <div className="mt-8 flex justify-center rounded-lg">
                   <img
                     src={feature.image}
+                    alt={`${feature.title} 기능 이미지`}
                     className="feature-image-mobile feature-image-tablet feature-image-desktop"
                   />
                 </div>
