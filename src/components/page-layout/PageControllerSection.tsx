@@ -5,15 +5,24 @@ import { SearchBar } from '@/components/common-ui/SearchBar';
 import { ViewToggle } from '@/components/common-ui/ViewToggle';
 import PageSortBox from './PageSortBox';
 import { PageControllerSectionProps } from '@/types/pageItems';
+import { useState } from 'react';
+import AddFolderModal from '../modal/folder/AddFolderModal';
 
 export default function PageControllerSection({
   view,
   setView,
 }: PageControllerSectionProps) {
+  const [isFolderOpen, setIsFolderOpen] = useState(false);
+
   return (
     <div className="flex flex-col justify-between gap-[16px] px-[64px] xl:flex-row xl:gap-0">
       <div className="flex h-[48px] gap-[12px]">
-        <Button variant="ghost" size="md" className="flex gap-[6px]">
+        <Button
+          variant="ghost"
+          size="md"
+          className="flex gap-[6px]"
+          onClick={() => setIsFolderOpen(true)}
+        >
           <FolderIcon />
           폴더 추가
         </Button>
@@ -29,6 +38,14 @@ export default function PageControllerSection({
           <ViewToggle selectedView={view} onChange={setView} />
         </div>
       </div>
+      {isFolderOpen && (
+        <AddFolderModal
+          isOpen={isFolderOpen}
+          onClose={() => setIsFolderOpen(false)}
+          pageId={2}
+          parentFolderId={1}
+        />
+      )}
     </div>
   );
 }
