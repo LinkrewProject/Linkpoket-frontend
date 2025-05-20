@@ -85,7 +85,7 @@ const SideBar: React.FC<MenubarProps> = ({ showSidebar, setShowSidebar }) => {
         <ul>
           <li>
             <Link
-              to="#"
+              to="bookmarks"
               className="hover:bg-primary-5 group text-gray-90 focus:bg-primary-10 focus:text-primary-50 flex items-center gap-[20px] px-[8px] py-[12px] text-[18px] font-[600] hover:rounded-[8px] focus:rounded-[8px]"
             >
               <BookMark

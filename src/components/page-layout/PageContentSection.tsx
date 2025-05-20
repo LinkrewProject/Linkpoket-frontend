@@ -3,7 +3,7 @@ import FolderItem from './FolderItem';
 import LinkItem from './LinkItem';
 import { ContextMenu } from '../common-ui/ContextMenu';
 import { PageContentSectionProps } from '@/types/pageItems';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { useFetchSelectedPage } from '@/hooks/queries/useFetchSelectedPage';
 
 export default function PageContentSection({ view }: PageContentSectionProps) {
@@ -20,9 +20,27 @@ export default function PageContentSection({ view }: PageContentSectionProps) {
 
   //만약 path param이 없다면 1로 간주하고, 있다면 그대로 꺼내와서 사용.
   const { pageId } = useParams();
+  const location = useLocation();
+
+  // pageId 기본값 및 쿼리 활성화 여부 결정
+  let resolvedPageId = 1;
+  let shouldFetch = true;
+
+  if (pageId) {
+    resolvedPageId = parseInt(pageId);
+  } else if (location.pathname.includes('bookmarks')) {
+    shouldFetch = false;
+  } else if (location.pathname === '/') {
+    resolvedPageId = 1;
+  } else {
+    resolvedPageId = 1;
+  }
+
+  // enabled 옵션으로 쿼리 비활성화
   const { data } = useFetchSelectedPage({
-    pageId: pageId ? parseInt(pageId) : 1,
-    commandType: 'VIEW', //TODO: 추후 url로 넘기고 값을 받아와서 수정필요함.
+    pageId: resolvedPageId,
+    commandType: 'VIEW',
+    enabled: shouldFetch,
   });
 
   console.log(data);
