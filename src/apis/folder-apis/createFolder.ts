@@ -1,5 +1,5 @@
 import { axiosInstance } from '../axiosInstance';
-import { CreateFolderData } from '@/types/folder';
+import { CreateFolderData } from '@/types/folders';
 
 export async function createFolder(data: CreateFolderData) {
   try {

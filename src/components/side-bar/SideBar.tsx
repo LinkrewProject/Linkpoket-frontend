@@ -9,7 +9,7 @@ import { useMobile } from '@/hooks/useMobile';
 import { useUserStore } from '@/stores/userStore';
 import AddSharedPageModal from '../modal/page/AddSharedPageModal';
 import useFetchJoinedPage from '@/hooks/queries/useFetchJoinedPage';
-import { JoinedPageData } from '@/types/sharedPage';
+import { JoinedPageData } from '@/types/pages';
 
 type MenubarProps = {
   showSidebar: boolean;
@@ -51,6 +51,13 @@ const SideBar: React.FC<MenubarProps> = ({ showSidebar, setShowSidebar }) => {
   //첫 번째 항목은 항상 개인 페이지이므로 제외합니다
   const joinedPageData = (joinedPage ?? []).slice(1);
 
+  //추후 지울 코드 (개발중 res값 확인용)
+  useEffect(() => {
+    if (joinedPage) {
+      console.log('참여중인 페이지', joinedPage);
+    }
+  }, [joinedPage]);
+
   return showSidebar ? (
     <aside
       ref={sidebarRef}
@@ -89,7 +96,7 @@ const SideBar: React.FC<MenubarProps> = ({ showSidebar, setShowSidebar }) => {
               즐겨찾기 / 북마크
             </Link>
             <Link
-              to="#"
+              to="/"
               className="group hover:bg-primary-5 text-gray-90 focus:bg-primary-10 focus:text-primary-50 flex items-center gap-[20px] px-[8px] py-[14px] text-[18px] font-[600] hover:rounded-[8px] focus:rounded-[8px]"
             >
               <PersonalPage
@@ -131,7 +138,7 @@ const SideBar: React.FC<MenubarProps> = ({ showSidebar, setShowSidebar }) => {
 
             {joinedPageData.map((page: JoinedPageData) => (
               <Link
-                to="#"
+                to={`shared/${page.pageId}`}
                 key={page.pageId}
                 className="text-gray-70 hover:bg-primary-5 focus:bg-primary-10 focus:text-primary-50 flex py-[12px] pr-[8px] pl-[52px] text-[18px] font-[600] hover:rounded-[8px] focus:rounded-[8px]"
               >

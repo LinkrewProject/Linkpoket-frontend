@@ -1,4 +1,4 @@
-import { CreateSharedPageData } from '@/types/sharedPage';
+import { CreateSharedPageData } from '@/types/pages';
 import { axiosInstance } from '../axiosInstance';
 
 export async function createSharedPage(data: CreateSharedPageData) {

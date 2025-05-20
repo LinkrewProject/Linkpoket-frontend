@@ -11,3 +11,8 @@ export interface JoinedPageData {
   pageTitle: string;
   pageType: string;
 }
+
+export interface SelectedPageData {
+  pageId: number;
+  commandType: string;
+}

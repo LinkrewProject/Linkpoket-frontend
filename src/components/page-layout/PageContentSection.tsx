@@ -3,6 +3,8 @@ import FolderItem from './FolderItem';
 import LinkItem from './LinkItem';
 import { ContextMenu } from '../common-ui/ContextMenu';
 import { PageContentSectionProps } from '@/types/pageItems';
+import { useParams } from 'react-router-dom';
+import { useFetchSelectedPage } from '@/hooks/queries/useFetchSelectedPage';
 
 export default function PageContentSection({ view }: PageContentSectionProps) {
   const [isBookmark, setIsBookmark] = useState(false);
@@ -15,6 +17,15 @@ export default function PageContentSection({ view }: PageContentSectionProps) {
     e.preventDefault();
     setContextMenu({ x: e.clientX, y: e.clientY });
   };
+
+  //만약 path param이 없다면 1로 간주하고, 있다면 그대로 꺼내와서 사용.
+  const { pageId } = useParams();
+  const { data } = useFetchSelectedPage({
+    pageId: pageId ? parseInt(pageId) : 1,
+    commandType: 'VIEW', //TODO: 추후 url로 넘기고 값을 받아와서 수정필요함.
+  });
+
+  console.log(data);
 
   return (
     <div
