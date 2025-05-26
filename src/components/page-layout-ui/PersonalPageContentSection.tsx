@@ -6,10 +6,12 @@ import { PageContentSectionProps } from '@/types/pageItems';
 import { useParams } from 'react-router-dom';
 import { useFetchSelectedPage } from '@/hooks/queries/useFetchSelectedPage';
 import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
+import { useModalStore } from '@/stores/modalStore';
 
 export default function PersonalPageContentSection({
   view,
 }: PageContentSectionProps) {
+  const { openLinkModal, openFolderModal } = useModalStore();
   const [isBookmark, setIsBookmark] = useState(false);
   const [contextMenu, setContextMenu] = useState<{
     x: number;
@@ -99,6 +101,8 @@ export default function PersonalPageContentSection({
             x={contextMenu.x}
             y={contextMenu.y}
             onClose={() => setContextMenu(null)}
+            onAddFolder={openFolderModal}
+            onAddLink={openLinkModal}
           />
         )}
       </div>

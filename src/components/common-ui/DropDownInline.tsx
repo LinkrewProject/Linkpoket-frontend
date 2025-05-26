@@ -107,7 +107,7 @@ const DropDownInline = ({
               value={link}
               onChange={handleLinkChange}
               placeholder="링크를 입력하세요"
-              className="text-gray-60 cursor-pointer resize-none p-[12px] text-[13px] font-[400] outline-none"
+              className="text-gray-60 resize-none p-[12px] text-[13px] font-[400] outline-none"
             />
           </div>
           {isModified && (
