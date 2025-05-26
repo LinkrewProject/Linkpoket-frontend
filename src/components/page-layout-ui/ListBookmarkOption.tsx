@@ -30,8 +30,6 @@ export default function ListBookMarkOption({
     setIsDropDownInline((prev) => !prev);
   };
 
-  console.log('ListBookMarkOptionItemId', itemId);
-
   return (
     <div className="relative flex items-center">
       <button

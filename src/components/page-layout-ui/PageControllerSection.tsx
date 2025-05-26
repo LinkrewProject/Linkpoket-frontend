@@ -5,12 +5,11 @@ import { SearchBar } from '@/components/common-ui/SearchBar';
 import { ViewToggle } from '@/components/common-ui/ViewToggle';
 import PageSortBox from './PageSortBox';
 import { PageControllerSectionProps } from '@/types/pageItems';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import AddFolderModal from '../modal/folder/AddFolderModal';
 import AddLinkModal from '../modal/link/AddLinkModal';
 import { useCreateLink } from '@/hooks/mutations/useCreateLink';
 import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
-import { useQueryClient } from '@tanstack/react-query';
 import { useDeleteLink } from '@/hooks/mutations/useDeleteLink';
 import { useLinkActionStore } from '@/stores/linkActionStore';
 
@@ -21,32 +20,14 @@ export default function PageControllerSection({
   const [isFolderOpen, setIsFolderOpen] = useState(false);
   const [isLinkOpen, setIsLinkOpen] = useState(false);
   const pageId = usePageStore((state) => state.pageId);
-  const queryClient = useQueryClient();
   const setDeleteLink = useLinkActionStore((state) => state.setDeleteLink);
   const { parentsFolderId } = useParentsFolderIdStore();
-  console.log('pageId', pageId);
 
-  const { mutate: createLink } = useCreateLink({
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['selectedPage', pageId, 'VIEW'] as const,
-      });
-    },
-    onError: (error) => {
-      console.error('링크 생성 실패:', error);
-    },
-  });
+  const { mutate: createLink } = useCreateLink();
+  const { mutate: deleteLinkMutate } = useDeleteLink();
 
-  const { mutate: deleteLinkMutate } = useDeleteLink({
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['selectedPage', pageId, 'VIEW'] as const,
-      });
-    },
-  });
-
-  useEffect(() => {
-    setDeleteLink((id) => {
+  const deleteHandler = useCallback(
+    (id: string) => {
       deleteLinkMutate({
         baseRequest: {
           pageId,
@@ -54,8 +35,13 @@ export default function PageControllerSection({
         },
         linkId: Number(id),
       });
-    });
-  }, [deleteLinkMutate, setDeleteLink, pageId]);
+    },
+    [deleteLinkMutate, pageId]
+  );
+
+  useEffect(() => {
+    setDeleteLink(deleteHandler);
+  }, [setDeleteLink, deleteHandler]);
 
   return (
     <div className="flex flex-col justify-between gap-[16px] px-[64px] xl:flex-row xl:gap-0">

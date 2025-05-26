@@ -1,6 +1,8 @@
+type CommandType = 'CREATE' | 'EDIT' | 'DELETE' | 'VIEW';
+
 export type BaseRequest = {
   pageId: number;
-  commandType: string;
+  commandType: CommandType;
 };
 
 export type CreateLinkData = {
@@ -23,8 +25,12 @@ export type UpdateLinkData = {
   linkId: number;
 };
 
-export type UpdateLinkResponse = {
+export type CommonApiResponse = {
   status: number;
   message: string;
   data: number;
 };
+
+export type CreateLinkResponse = CommonApiResponse;
+export type UpdateLinkResponse = CommonApiResponse;
+export type DeleteLinkResponse = CommonApiResponse;

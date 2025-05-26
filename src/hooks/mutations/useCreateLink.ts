@@ -1,12 +1,30 @@
+import {
+  useMutation,
+  UseMutationOptions,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { createLink } from '@/apis/link-apis/createLink';
-import { CreateLinkData } from '@/types/links';
-import { useMutation, UseMutationOptions } from '@tanstack/react-query';
+import { CreateLinkData, CreateLinkResponse } from '@/types/links';
 
 export function useCreateLink(
-  options?: UseMutationOptions<any, unknown, CreateLinkData>
+  options?: UseMutationOptions<CreateLinkResponse, unknown, CreateLinkData>
 ) {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: createLink,
-    ...options,
+    onSuccess: (data, variables, context) => {
+      queryClient.invalidateQueries({
+        queryKey: ['selectedPage', variables.baseRequest.pageId, 'VIEW'],
+      });
+
+      options?.onSuccess?.(data, variables, context);
+    },
+    onError: (error, variables, context) => {
+      options?.onError?.(error, variables, context);
+    },
+    onSettled: (data, error, variables, context) => {
+      options?.onSettled?.(data, error, variables, context);
+    },
   });
 }

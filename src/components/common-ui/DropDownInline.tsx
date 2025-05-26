@@ -113,16 +113,26 @@ const DropDownInline = ({
           {isModified && (
             <button
               onClick={() => {
-                mutate({
-                  baseRequest: {
-                    pageId,
-                    commandType: 'EDIT',
+                mutate(
+                  {
+                    baseRequest: {
+                      pageId,
+                      commandType: 'EDIT',
+                    },
+                    linkId: Number(id),
+                    linkName: title,
+                    linkUrl: link,
                   },
-                  linkId: Number(id),
-                  linkName: title,
-                  linkUrl: link,
-                });
-                setIsDropDownInline(false);
+                  {
+                    onSuccess: () => {
+                      setIsDropDownInline(false);
+                    },
+                    onError: (error) => {
+                      console.error('링크 수정 실패:', error);
+                      //Todo 사용자에게 에러 메시지 표시
+                    },
+                  }
+                );
               }}
               className="text-primary-60 flex cursor-pointer gap-[10px] p-[12px]"
             >

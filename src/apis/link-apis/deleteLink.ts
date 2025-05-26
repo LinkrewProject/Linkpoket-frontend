@@ -1,7 +1,9 @@
-import { DeleteLinkData } from '@/types/links';
+import { DeleteLinkData, DeleteLinkResponse } from '@/types/links';
 import { axiosInstance } from '../axiosInstance';
 
-export async function deleteLink(data: DeleteLinkData) {
+export async function deleteLink(
+  data: DeleteLinkData
+): Promise<DeleteLinkResponse> {
   try {
     const response = await axiosInstance.delete('/api/links', { data });
     return response.data;
