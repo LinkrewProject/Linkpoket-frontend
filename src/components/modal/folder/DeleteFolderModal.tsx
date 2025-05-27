@@ -13,7 +13,7 @@ const DeleteFolderModal = ({
   folderId: number;
   pageId: number;
 }) => {
-  const { mutate: deleteFolder } = useDeleteFolder(pageId, 'EDIT');
+  const { mutate: deleteFolder } = useDeleteFolder(pageId);
 
   const handleDelete = () => {
     const requestBody = {
