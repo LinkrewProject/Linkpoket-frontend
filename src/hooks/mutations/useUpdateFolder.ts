@@ -13,6 +13,7 @@ export default function useUpdateFolder(
   const queryClient = useQueryClient();
 
   return useMutation({
+    ...options,
     mutationFn: updateFolder,
     onSuccess: async (response, variables, context) => {
       await Promise.all([
@@ -31,7 +32,6 @@ export default function useUpdateFolder(
       }
     },
     onError: (error, variables, context) => {
-      console.error('폴더 생성 에러:', error);
       if (options?.onError) {
         options.onError(error, variables, context);
       }
