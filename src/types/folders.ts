@@ -7,3 +7,28 @@ export type CreateFolderData = {
   parentFolderId: number;
   folderDescription: string;
 };
+
+export type UpdateFolderData = {
+  baseRequest: {
+    pageId: number;
+    commandType: string;
+  };
+  folderName: string;
+  folderId: number;
+  folderDescription?: string;
+};
+
+export type DeleteFolderData = {
+  baseRequest: {
+    pageId: number;
+    commandType: string;
+  };
+  folderId: number;
+};
+
+export interface FetchFolderDetailsProps {
+  pageId: number;
+  commandType: string;
+  folderId: number;
+  sortType: string;
+}
