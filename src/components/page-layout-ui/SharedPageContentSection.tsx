@@ -56,7 +56,7 @@ export default function SharedPageContentSection({
                 isBookmark={item.isFavorite}
                 setIsBookmark={setIsBookmark}
                 item={{ id: item.folderId, title: item.folderName }}
-                pageDescription={pageDescription}
+                pageDescription={contentData?.pageDescription}
                 view={view}
               />
             );

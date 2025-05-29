@@ -16,6 +16,7 @@ type FolderUpdateData = {
 
 const MAX_TITLE_LENGTH = 21;
 const MAX_DESCRIPTION_LENGTH = 500;
+const DEBOUNCE_DELAY = 200;
 
 export default function PageHeaderSection({
   pageTitle,
@@ -33,33 +34,42 @@ export default function PageHeaderSection({
   const { mutate: updateFolder } = useUpdateFolder(pageId);
 
   const updateFolderImmediately = (data: FolderUpdateData) => {
+    console.log('updateFolderImmediately called with:', data);
+    console.log('folderId:', folderId, 'pageId:', pageId);
+
     if (!folderId) return;
 
     const updateData = {
       baseRequest: { pageId, commandType: 'EDIT' },
       folderId,
-      folderName: data.title,
-      folderDescription: data.description,
+      folderName: title,
+      folderDescription: description,
     };
 
     console.log('서버로 전송할 데이터:', updateData);
 
     updateFolder(updateData, {
-      onSuccess: () => {
-        console.log('폴더 업데이트 성공:', data);
+      onSuccess: (response) => {
+        console.log('폴더 업데이트 성공 응답:', response);
+        console.log('업데이트된 데이터:', { title, description });
+        lastUpdateRef.current = { title, description };
       },
       onError: (error) => {
         console.error('폴더 업데이트 실패:', error);
-        setTitle(pageTitle ?? '');
-        setDescription(pageDescription ?? '');
+        console.log('업데이트 실패로 현재 상태 유지:', { title, description });
       },
     });
   };
 
-  const debouncedUpdate = useDebounce<FolderUpdateData>((data) => {
+  const handleDebouncedUpdate = (data: FolderUpdateData) => {
     console.log('디바운스된 업데이트:', data);
-    lastUpdateRef.current = data;
-  }, 200);
+    lastUpdateRef.current = { title, description };
+  };
+
+  const debouncedUpdate = useDebounce<FolderUpdateData>(
+    handleDebouncedUpdate,
+    DEBOUNCE_DELAY
+  );
 
   // 초기 마운트 시에만 props로 상태 초기화
   useEffect(() => {

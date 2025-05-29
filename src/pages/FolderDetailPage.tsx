@@ -44,6 +44,7 @@ export default function FolderDetailPage() {
       <PageHeaderSection
         pageTitle={folderDetailsQuery.data?.data.targetFolderName}
         pageDescription={folderDetailsQuery.data?.data.targetFolderDescription}
+        folderId={folderDetailsQuery.data?.data.targetFolderId}
       />
 
       {/* Boundary line */}
