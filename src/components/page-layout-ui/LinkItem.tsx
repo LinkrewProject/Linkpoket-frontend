@@ -3,7 +3,6 @@ import ListBookmarkModal from './ListBookmarkOption';
 import InactiveBookmarkIcon from '@/assets/common-ui-assets/FolderBookmarkInactive.svg?react';
 import ActiveBookmarkIcon from '@/assets/common-ui-assets/FolderBookmarkActive.svg?react';
 import { PageItemProps } from '@/types/pageItems';
-import { useState } from 'react';
 import DropDownInline from '../common-ui/DropDownInline';
 import { useModalStore } from '@/stores/modalStore';
 
@@ -28,7 +27,7 @@ export default function LinkItem({
   const handleContextMenu = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    openLinkContextMenu();
+    openLinkContextMenu(item.id);
   };
 
   return isGrid ? (
@@ -50,13 +49,13 @@ export default function LinkItem({
       <span className="text-gray-90 text-center text-[14px] font-[400]">
         {item.title}
       </span>
-      {isLinkContextMenuOpen && (
+      {isLinkContextMenuOpen === item.id && (
         <DropDownInline
           id={item.id}
           type={type}
           initialTitle={item.title}
           initialLink={item.linkUrl}
-          isDropDownInline={isLinkContextMenuOpen}
+          isDropDownInline={isLinkContextMenuOpen === item.id}
           setIsDropDownInline={closeLinkContextMenu}
           className="absolute top-32 left-2"
         />

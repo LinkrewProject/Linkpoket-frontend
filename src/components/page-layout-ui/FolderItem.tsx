@@ -16,6 +16,7 @@ export default function FolderItem({
   const isGrid = view === 'grid';
   const type = 'folder';
   const navigate = useNavigate();
+
   const {
     isFolderContextMenuOpen,
     openFolderContextMenu,
@@ -29,7 +30,7 @@ export default function FolderItem({
   const handleContextMenu = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    openFolderContextMenu();
+    openFolderContextMenu(item.id);
   };
 
   return isGrid ? (
@@ -48,12 +49,12 @@ export default function FolderItem({
       <span className="text-gray-90 text-center text-[14px] font-[400]">
         {item.title}
       </span>
-      {isFolderContextMenuOpen && (
+      {isFolderContextMenuOpen === item.id && (
         <DropDownInline
           id={item.id}
           type={type}
           initialTitle={item.title}
-          isDropDownInline={isFolderContextMenuOpen}
+          isDropDownInline={isFolderContextMenuOpen === item.id}
           setIsDropDownInline={closeFolderContextMenu}
           className="absolute top-32 left-2"
         />

@@ -85,7 +85,7 @@ const DropDownInline = ({
       ref={dropdownRef}
       className={`border-gray-30 focus:bg-gray-30 focus:border-gray-30 bg-gray-0 z-50 inline-flex w-[214px] flex-col rounded-[10px] border p-[8px] text-[14px] font-[600] shadow ${className}`}
     >
-      {type === 'directory' && (
+      {type === 'folder' && (
         <div className="flex flex-col">
           <input
             value={title}

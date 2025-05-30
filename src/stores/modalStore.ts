@@ -10,12 +10,13 @@ type ModalStore = {
   isTransferFolderModalOpen: boolean;
   openTransferFolderModal: () => void;
   closeTransferFolderModal: () => void;
+
   // for context menu
-  isFolderContextMenuOpen: boolean;
-  openFolderContextMenu: () => void;
+  isFolderContextMenuOpen: number | null;
+  openFolderContextMenu: (id: number) => void;
   closeFolderContextMenu: () => void;
-  isLinkContextMenuOpen: boolean;
-  openLinkContextMenu: () => void;
+  isLinkContextMenuOpen: number | null;
+  openLinkContextMenu: (id: number) => void;
   closeLinkContextMenu: () => void;
 };
 
@@ -30,13 +31,14 @@ export const useModalStore = create<ModalStore>((set) => ({
   isTransferFolderModalOpen: false,
   openTransferFolderModal: () => set({ isTransferFolderModalOpen: true }),
   closeTransferFolderModal: () => set({ isTransferFolderModalOpen: false }),
+
   // for context menu
-  isFolderContextMenuOpen: false,
-  openFolderContextMenu: () =>
-    set({ isFolderContextMenuOpen: true, isLinkContextMenuOpen: false }),
-  closeFolderContextMenu: () => set({ isFolderContextMenuOpen: false }),
-  isLinkContextMenuOpen: false,
-  openLinkContextMenu: () =>
-    set({ isLinkContextMenuOpen: true, isFolderContextMenuOpen: false }),
-  closeLinkContextMenu: () => set({ isLinkContextMenuOpen: false }),
+  isFolderContextMenuOpen: null,
+  openFolderContextMenu: (id) => set({ isFolderContextMenuOpen: id }),
+  closeFolderContextMenu: () => set({ isFolderContextMenuOpen: null }),
+
+  isLinkContextMenuOpen: null,
+  openLinkContextMenu: (id) =>
+    set({ isLinkContextMenuOpen: id, isFolderContextMenuOpen: null }),
+  closeLinkContextMenu: () => set({ isLinkContextMenuOpen: null }),
 }));

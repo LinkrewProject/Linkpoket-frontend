@@ -31,7 +31,9 @@ export default function PageControllerSection({
     closeFolderModal,
   } = useModalStore();
   const pageId = usePageStore((state) => state.pageId);
+
   const setDeleteLink = useLinkActionStore((state) => state.setDeleteLink);
+
   const setTransferFolder = useTransferActionStore(
     (state) => state.setTransferFolder
   );
@@ -57,6 +59,7 @@ export default function PageControllerSection({
   }, [setDeleteLink, deleteHandler]);
 
   const { mutate: transferFolder } = useTransferFolder();
+
   const transferHandler = useCallback(
     (receiverEmail: string, directoryId: number) => {
       transferFolder({
@@ -70,6 +73,7 @@ export default function PageControllerSection({
     },
     [transferFolder, pageId]
   );
+
   useEffect(() => {
     setTransferFolder(transferHandler);
   }, [setTransferFolder, transferHandler]);
