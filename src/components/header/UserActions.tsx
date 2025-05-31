@@ -2,30 +2,32 @@ import Bell from '@/assets/widget-ui-assets/Bell.svg?react';
 import Menu from '@/assets/widget-ui-assets/Menu.svg?react';
 import { useState } from 'react';
 import NotificationModal from '../modal/page/ModalNotification';
-import { NotificationItem } from '@/types/modalAlaram';
+import { NotificationItem } from '@/types/modalAlarm';
 import ModalMenu from '../modal/page/ModalMenu';
+import { useFetchNotifications } from '@/hooks/queries/useFetchNotification';
 
 //테스트용 목데이터 POSTMAN참고
-const notifications: NotificationItem[] = [
-  {
-    id: 1,
-    type: 'link',
-    senderEmail: 'linkmoa@gmail.com',
-    receiverEmail: 'youremail@gmail.com',
-    directoryName: '00페이지',
-    dateTime: '2025.04.09 | 08:20',
-  },
-  {
-    id: 2,
-    type: 'edit',
-    directoryName: '00페이지',
-    dateTime: '2025.04.09 | 08:20',
-  },
-];
+// const notifications: NotificationItem[] = [
+//   {
+//     id: 1,
+//     type: 'link',
+//     senderEmail: 'linkmoa@gmail.com',
+//     receiverEmail: 'youremail@gmail.com',
+//     directoryName: '00페이지',
+//     dateTime: '2025.04.09 | 08:20',
+//   },
+//   {
+//     id: 2,
+//     type: 'edit',
+//     directoryName: '00페이지',
+//     dateTime: '2025.04.09 | 08:20',
+//   },
+// ];
 
 export function UserActions() {
   const [isAlarmOpen, setIsAlarmOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { data: notifications = [] } = useFetchNotifications();
 
   return (
     <div className="flex items-center">
@@ -44,15 +46,9 @@ export function UserActions() {
           isOpen={isAlarmOpen}
           setIsOpen={() => setIsAlarmOpen(!isAlarmOpen)}
           notifications={notifications}
-          onAccept={() =>
-            console.log('수락하는 로직 + 모달닫기 함수로 대체예정')
-          }
-          onReject={() =>
-            console.log('거절하는 로직 + 모달닫기 함수로 대체예정')
-          }
-          onDelete={() =>
-            console.log('item.id 를 통해서 해당 알람 삭제하는 함수로 대체예정')
-          }
+          onAccept={(id) => console.log(`${id} 수락`)}
+          onReject={(id) => console.log(`${id} 거절`)}
+          onDelete={(id) => console.log(`${id} 삭제`)}
         />
       )}
 

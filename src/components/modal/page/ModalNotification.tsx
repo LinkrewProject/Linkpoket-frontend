@@ -1,4 +1,4 @@
-import { NotificationModalProps } from '@/types/modalAlaram';
+import { NotificationModalProps } from '@/types/modalAlarm';
 import { useRef, useState } from 'react';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import profile from '@/assets/common-ui-assets/Profile.webp';
@@ -54,7 +54,7 @@ export default function NotificationModal({
               className={`py-4 ${notifications.length - 1 === idx ? '' : 'border-b-gray-30 border-b'}`}
             >
               <div className="flex items-start gap-[10px]">
-                {/* 프로필 추후 item.iconUrl로 변경경*/}
+                {/* 프로필 */}
                 <img
                   src={profile}
                   alt="프로필 이미지"
@@ -63,30 +63,12 @@ export default function NotificationModal({
 
                 {/* 텍스트 + 버튼 */}
                 <div className="text-gray-90 flex-1 text-sm font-[400]">
-                  {item.type === 'link' ? (
-                    <div className="flex">
-                      <span>
-                        {item.senderEmail}
-                        님이 회원님에게
-                        {item.directoryName}
-                        페이지에 초대했습니다.
-                      </span>
-                    </div>
-                  ) : (
-                    <div>
-                      <span className="font-semibold">
-                        {item.directoryName}
-                      </span>
-                      페이지에 대한 권한이 에디터로 변경되었습니다.
-                    </div>
-                  )}
-                  <div
-                    className={`text-gray-60 text-xs ${item.type === 'link' ? '' : 'pb-[33px]'}`}
-                  >
-                    {item.dateTime}
+                  <div>{item.message}</div>
+                  <div className="text-gray-60 text-xs">
+                    {new Date(item.senderInfo.sentAt).toLocaleString('ko-KR')}
                   </div>
                 </div>
-                {/* TODO: 함수 로직 id값 활용해서 해당 알림 삭제로 교체하기 */}
+
                 <button
                   onClick={() => onDelete?.(item.id)}
                   className="cursor-pointer"
@@ -95,8 +77,8 @@ export default function NotificationModal({
                 </button>
               </div>
 
-              {/* 수락/거절 버튼 (link일 경우만) */}
-              {item.type === 'link' && (
+              {/* 수락/거절 버튼 (초대일 경우만) */}
+              {item.notificationType === 'INVITE_PAGE' && (
                 <div className="mt-2 flex justify-end gap-2">
                   <button
                     onClick={() => onReject?.(item.id)}

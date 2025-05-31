@@ -19,4 +19,14 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['@emotion/react', '@emotion/styled', '@mui/material'],
   },
+
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '/api'),
+      },
+    },
+  },
 });
