@@ -11,6 +11,7 @@ export default function SharedPageContentSection({
   searchResult,
 }: PageContentSectionProps) {
   const { openLinkModal, openFolderModal } = useModalStore();
+  const [isBookmarkRerender, setIsBookmarkRerender] = useState(false);
   const [contextMenu, setContextMenu] = useState<{
     x: number;
     y: number;

@@ -3,14 +3,14 @@ import {
   UseMutationOptions,
   useQueryClient,
 } from '@tanstack/react-query';
-import updateFolderBookmark from '@/apis/folder-apis/updateFolderBookmark';
+import updateLinkBookmark from '@/apis/link-apis/updateLinkBookmark';
 
-export default function useUpdateFolderBookmark({
-  folderId,
+export default function useUpdateLinkBookmark({
+  linkId,
   pageId,
   options,
 }: {
-  folderId: number;
+  linkId: number;
   pageId: number;
   options?: UseMutationOptions<any, Error, number, unknown>;
 }) {
@@ -18,9 +18,9 @@ export default function useUpdateFolderBookmark({
 
   return useMutation({
     ...options,
-    mutationFn: updateFolderBookmark,
+    mutationFn: updateLinkBookmark,
     onSuccess: (response, variables, context) => {
-      queryClient.invalidateQueries({ queryKey: ['bookmark', folderId] });
+      queryClient.invalidateQueries({ queryKey: ['bookmark', linkId] });
       queryClient.invalidateQueries({ queryKey: ['sharedPage', pageId] });
       queryClient.invalidateQueries({ queryKey: ['personalPage', pageId] });
       if (options?.onSuccess) {
@@ -28,7 +28,7 @@ export default function useUpdateFolderBookmark({
       }
     },
     onError: (error, variables, context) => {
-      console.error('폴더 북마크 업데이트 에러:', error);
+      console.error('링크 북마크 업데이트 에러:', error);
       if (options?.onError) {
         options.onError(error, variables, context);
       }

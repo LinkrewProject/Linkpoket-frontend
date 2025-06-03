@@ -58,17 +58,17 @@ export default function SharedPage() {
   );
 
   //TODO: 해당 값을 통해서 현재 공유페이지의 정보 리스팅
-  // const sharedPageDashboardQuery = useFetchSharedPageDashboard({
-  //   pageId: resolvedPageId,
-  //   commandType: 'VIEW',
-  // });
+  const sharedPageDashboardQuery = useFetchSharedPageDashboard({
+    pageId: resolvedPageId,
+    commandType: 'VIEW',
+  });
 
   const sharedPageMemberQuery = useFetchSharedPageMember({
     pageId: resolvedPageId,
     commandType: 'VIEW',
   });
 
-  // console.log('페이지 대쉬보드 정보', sharedPageDashboardQuery.data);
+  console.log('페이지 대쉬보드 정보', sharedPageDashboardQuery.data);
   console.log('페이지 멤버 정보', sharedPageMemberQuery.data);
 
   return (

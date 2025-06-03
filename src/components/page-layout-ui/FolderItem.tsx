@@ -7,21 +7,19 @@ import { useNavigate } from 'react-router-dom';
 import DropDownInline from '../common-ui/DropDownInline';
 import { useModalStore } from '@/stores/modalStore';
 import useUpdateFolderBookmark from '@/hooks/mutations/useUpdateFolderBookmark';
+import { usePageStore } from '@/stores/pageStore';
 
 export default function FolderItem({ item, view, isBookmark }: PageItemProps) {
   const isGrid = view === 'grid';
   const type = 'folder';
   const navigate = useNavigate();
+  const { pageId } = usePageStore();
 
   const {
     isFolderContextMenuOpen,
     openFolderContextMenu,
     closeFolderContextMenu,
   } = useModalStore();
-
-  const { mutate: updateFolderBookmark } = useUpdateFolderBookmark({
-    folderId: item.id,
-  });
 
   const handleDoubleClick = () => {
     navigate(`folder/${item.id}`);
@@ -32,6 +30,11 @@ export default function FolderItem({ item, view, isBookmark }: PageItemProps) {
     e.stopPropagation();
     openFolderContextMenu(item.id);
   };
+
+  const { mutate: updateFolderBookmark } = useUpdateFolderBookmark({
+    folderId: item.id,
+    pageId,
+  });
 
   const handleBookmark = (e: React.MouseEvent) => {
     e.preventDefault();
