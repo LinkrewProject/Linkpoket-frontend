@@ -4,20 +4,22 @@ import LinkItem from './LinkItem';
 import { ContextMenu } from '../common-ui/ContextMenu';
 import { PageContentSectionProps } from '@/types/pageItems';
 import { useParams } from 'react-router-dom';
-import { useFetchSelectedPage } from '@/hooks/queries/useFetchSelectedPage';
+import { useFetchSelectedPage } from '@/hooks/queries/useFetchSharedPage';
 import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
 import { useModalStore } from '@/stores/modalStore';
+import { useProfileModalStore } from '@/stores/profileModalStore';
+import ProfileSettingsModal from '../modal/profile/ProfileSettingsModal';
 
 export default function PersonalPageContentSection({
   view,
   searchResult,
 }: PageContentSectionProps) {
   const { openLinkModal, openFolderModal } = useModalStore();
-  const [isBookmark, setIsBookmark] = useState(false);
   const [contextMenu, setContextMenu] = useState<{
     x: number;
     y: number;
   } | null>(null);
+  const { isProfileModalOpen, closeProfileModal } = useProfileModalStore();
 
   //만약 path param이 없다면 1로 간주하고, 있다면 그대로 꺼내와서 사용.
   const { pageId } = useParams();
@@ -33,7 +35,6 @@ export default function PersonalPageContentSection({
 
   const selectedPageQuery = useFetchSelectedPage({
     pageId: resolvedPageId,
-    commandType: 'VIEW',
   });
 
   console.log('선택한 페이지 데이터:', selectedPageQuery.data);
@@ -85,7 +86,6 @@ export default function PersonalPageContentSection({
               <FolderItem
                 key={`folder-${item.folderId}`}
                 isBookmark={item.isFavorite}
-                setIsBookmark={setIsBookmark}
                 item={{ id: item.folderId, title: item.folderName }}
                 view={view}
               />
@@ -95,7 +95,6 @@ export default function PersonalPageContentSection({
               <LinkItem
                 key={`link-${item.linkId}`}
                 isBookmark={item.isFavorite}
-                setIsBookmark={setIsBookmark}
                 item={{
                   id: item.linkId,
                   title: item.linkName,
@@ -115,6 +114,14 @@ export default function PersonalPageContentSection({
             onClose={() => setContextMenu(null)}
             onAddFolder={openFolderModal}
             onAddLink={openLinkModal}
+          />
+        )}
+
+        {/* 프로필 세팅 모달 */}
+        {isProfileModalOpen && (
+          <ProfileSettingsModal
+            isOpen={isProfileModalOpen}
+            onClose={() => closeProfileModal()}
           />
         )}
       </div>

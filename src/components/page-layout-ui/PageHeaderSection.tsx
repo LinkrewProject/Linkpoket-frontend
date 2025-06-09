@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from 'react';
 import { usePageStore } from '@/stores/pageStore';
 import useUpdateFolder from '@/hooks/mutations/useUpdateFolder';
 import { useDebounce } from '@/hooks/useDebounce';
+import useUpdatePersonalPageTitle from '@/hooks/mutations/useUpdatePersonalPageTitle';
+import useUpdatePersonalPageDescription from '@/hooks/mutations/useUpdatePersonalPageDescription';
 
 type PageHeaderSectionProps = {
   pageTitle: string;
@@ -16,7 +18,6 @@ type FolderUpdateData = {
 
 const MAX_TITLE_LENGTH = 21;
 const MAX_DESCRIPTION_LENGTH = 500;
-const DEBOUNCE_DELAY = 200;
 
 export default function PageHeaderSection({
   pageTitle,
@@ -33,6 +34,10 @@ export default function PageHeaderSection({
   const { pageId } = usePageStore();
   const { mutate: updateFolder } = useUpdateFolder(pageId);
 
+  const { mutate: updatePersonalPageTitle } = useUpdatePersonalPageTitle();
+  const { mutate: updatePersonalPageDescription } =
+    useUpdatePersonalPageDescription();
+
   const updateFolderImmediately = (data: FolderUpdateData) => {
     console.log('updateFolderImmediately called with:', data);
     console.log('folderId:', folderId, 'pageId:', pageId);
@@ -46,17 +51,13 @@ export default function PageHeaderSection({
       folderDescription: description,
     };
 
-    console.log('서버로 전송할 데이터:', updateData);
-
     updateFolder(updateData, {
       onSuccess: (response) => {
         console.log('폴더 업데이트 성공 응답:', response);
-        console.log('업데이트된 데이터:', { title, description });
         lastUpdateRef.current = { title, description };
       },
       onError: (error) => {
         console.error('폴더 업데이트 실패:', error);
-        console.log('업데이트 실패로 현재 상태 유지:', { title, description });
       },
     });
   };
@@ -68,7 +69,7 @@ export default function PageHeaderSection({
 
   const debouncedUpdate = useDebounce<FolderUpdateData>(
     handleDebouncedUpdate,
-    DEBOUNCE_DELAY
+    500
   );
 
   // 초기 마운트 시에만 props로 상태 초기화
@@ -82,14 +83,6 @@ export default function PageHeaderSection({
     };
     lastUpdateRef.current = newState;
   }, [pageTitle, pageDescription]);
-
-  // 언마운트 시 마지막 상태 서버에 저장
-  useEffect(() => {
-    return () => {
-      console.log('언마운트 시 마지막 상태 저장:', lastUpdateRef.current);
-      updateFolderImmediately(lastUpdateRef.current);
-    };
-  }, []);
 
   const handleBlur = () => {
     console.log('포커스 아웃:', {

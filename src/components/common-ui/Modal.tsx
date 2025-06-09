@@ -1,6 +1,7 @@
 import React, {
   createContext,
   forwardRef,
+  useCallback,
   useContext,
   useEffect,
   useImperativeHandle,
@@ -30,18 +31,34 @@ const BaseModal = forwardRef<
 >(({ children, isOpen, onClose, className }, ref) => {
   const modalRef = useRef<HTMLDivElement>(null);
 
+  // ✅ onClose 안정화
+  const handleClose = useCallback(() => {
+    onClose?.();
+  }, [onClose]);
+
   useImperativeHandle(ref, () => modalRef.current!, []);
 
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
-        onClose();
+      const target = e.target as HTMLElement;
+      if (target.closest('[data-ignore-outside-click]')) return;
+      if (modalRef.current && !modalRef.current.contains(target)) {
+        handleClose();
       }
     };
 
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') handleClose();
+    };
+
     document.addEventListener('click', handleClick, true);
-    return () => document.removeEventListener('click', handleClick, true);
-  }, [onClose]);
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('click', handleClick, true);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [handleClose]);
 
   if (!isOpen) return null;
 
@@ -54,6 +71,7 @@ const BaseModal = forwardRef<
             className
           )}
           ref={modalRef}
+          data-ignore-outside-click
         >
           {children}
         </div>
@@ -132,6 +150,7 @@ const ConfirmButton = ({
 
   return (
     <button
+      type="button"
       onClick={onClick}
       disabled={disabled}
       className={cn(
@@ -148,14 +167,17 @@ const ConfirmButton = ({
 const CancelButton = ({
   onClick,
   className,
+  disabled = false,
 }: {
   onClick?: () => void;
   className?: string;
+  disabled?: boolean;
 }) => {
   const { onClose } = useContext(ModalContext);
 
   return (
     <button
+      disabled={disabled}
       onClick={() => {
         onClick?.();
         onClose();

@@ -10,6 +10,7 @@ import { useUserStore } from '@/stores/userStore';
 import AddSharedPageModal from '../modal/page/AddSharedPageModal';
 import useFetchJoinedPage from '@/hooks/queries/useFetchJoinedPage';
 import { JoinedPageData } from '@/types/pages';
+import { useProfileModalStore } from '@/stores/profileModalStore';
 
 type MenubarProps = {
   showSidebar: boolean;
@@ -21,6 +22,7 @@ const SideBar: React.FC<MenubarProps> = ({ showSidebar, setShowSidebar }) => {
   const isMobile = useMobile();
   const { nickname, email, colorCode } = useUserStore();
   const [showAddSharedPageModal, setShowAddSharedPageModal] = useState(false);
+  const { openProfileModal } = useProfileModalStore();
 
   //768px 이하의 경우, showSidebar를 false처리, 이외엔 true처리
   useEffect(() => {
@@ -66,7 +68,10 @@ const SideBar: React.FC<MenubarProps> = ({ showSidebar, setShowSidebar }) => {
       {/* TODO: 유저 정보쪽 데이터 전달까지 스켈레톤 처리 필요 */}
       <div className="flex flex-col gap-[16px] px-[12px] pt-[24px] pb-[8px]">
         <div className="flex flex-col gap-[16px]">
-          <div className="flex gap-[12px] p-[8px]">
+          <div
+            className="flex gap-[12px] p-[8px] hover:cursor-pointer"
+            onClick={() => openProfileModal()}
+          >
             <div
               style={{ backgroundColor: colorCode }}
               className="flex h-[50px] w-[50px] items-center justify-center rounded-full p-[8px]"

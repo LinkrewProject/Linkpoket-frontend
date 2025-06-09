@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useMobile } from '@/hooks/useMobile';
-import { useFetchSelectedPage } from '@/hooks/queries/useFetchSelectedPage';
+import { useFetchSelectedPage } from '@/hooks/queries/useFetchSharedPage';
 import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
 import SharedPageContentSection from '@/components/page-layout-ui/SharedPageContentSection';
 import PageHeaderSection from '@/components/page-layout-ui/PageHeaderSection';

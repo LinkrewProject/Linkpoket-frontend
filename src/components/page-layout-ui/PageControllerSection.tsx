@@ -37,6 +37,7 @@ export default function PageControllerSection({
   const { mutate: createLink } = useCreateLink();
 
   const { mutate: transferFolder } = useTransferFolder();
+
   const transferHandler = useCallback(
     (receiverEmail: string, directoryId: number) => {
       transferFolder({
@@ -50,6 +51,7 @@ export default function PageControllerSection({
     },
     [transferFolder, pageId]
   );
+
   useEffect(() => {
     setTransferFolder(transferHandler);
   }, [setTransferFolder, transferHandler]);

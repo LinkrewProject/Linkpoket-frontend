@@ -11,7 +11,7 @@ export default function SharedPageContentSection({
   searchResult,
 }: PageContentSectionProps) {
   const { openLinkModal, openFolderModal } = useModalStore();
-  const [isBookmark, setIsBookmark] = useState(false);
+  const [isBookmarkRerender, setIsBookmarkRerender] = useState(false);
   const [contextMenu, setContextMenu] = useState<{
     x: number;
     y: number;
@@ -54,7 +54,6 @@ export default function SharedPageContentSection({
               <FolderItem
                 key={item.folderName}
                 isBookmark={item.isFavorite}
-                setIsBookmark={setIsBookmark}
                 item={{ id: item.folderId, title: item.folderName }}
                 pageDescription={contentData?.pageDescription}
                 view={view}
@@ -65,7 +64,6 @@ export default function SharedPageContentSection({
               <LinkItem
                 key={item.linkName}
                 isBookmark={item.isFavorite}
-                setIsBookmark={setIsBookmark}
                 item={{
                   id: item.linkId,
                   title: item.linkName,

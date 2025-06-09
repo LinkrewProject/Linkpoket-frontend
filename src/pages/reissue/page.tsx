@@ -7,14 +7,26 @@ export default function ReissuePage() {
       try {
         const response = await axiosInstance.get('/api/jwt/access-token');
 
-        if (response?.headers['redirect-url']) {
-          window.location.href = response.headers['redirect-url'];
+        // 1. 일반 인증용 access token은 헤더에서 꺼냄
+        const authAccessToken = response.headers['authorization']?.replace(
+          'Bearer ',
+          ''
+        );
+        if (authAccessToken) {
+          localStorage.setItem('access_token', authAccessToken);
+        } else {
+          window.location.href = '/login';
+          return;
         }
 
-        const accessToken = response.data.data;
+        // 2. SSE 전용 토큰은 응답 바디에서 꺼냄
+        const sseToken = response.data.data?.value;
+        if (sseToken) {
+          localStorage.setItem('sse_token', sseToken);
+        }
 
-        if (accessToken) {
-          localStorage.setItem('access_token', accessToken);
+        if (response?.headers['redirect-url']) {
+          window.location.href = response.headers['redirect-url'];
         }
       } catch (error) {
         window.location.href = '/login';

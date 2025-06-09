@@ -1,12 +1,12 @@
-import { SelectedPageData } from '@/types/pages';
+import { PageParamsData } from '@/types/pages';
 import { axiosInstance } from '../axiosInstance';
 
-export async function fetchSharedPageDashboard(data: SelectedPageData) {
+export async function fetchSharedPageDashboard(data: PageParamsData) {
   try {
-    const response = await axiosInstance.get('/api/page/dashboard', {
+    const response = await axiosInstance.get('api/share-pages/dashboard', {
       params: {
         pageId: data.pageId,
-        commandType: data.commandType,
+        commandType: 'VIEW',
       },
     });
     return response.data;

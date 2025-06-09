@@ -4,11 +4,14 @@ import { useEffect, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { useUserStore } from '@/stores/userStore';
 import { useNotificationStore } from '@/stores/notification';
+import ProfileSettingsModal from '@/components/modal/profile/ProfileSettingsModal';
+import { useProfileModalStore } from '@/stores/profileModalStore';
 
 export default function Layout() {
   const location = useLocation();
   const path = location.pathname;
   const [showSidebar, setShowSidebar] = useState(true);
+  const { isProfileModalOpen, closeProfileModal } = useProfileModalStore();
 
   const isLoggedIn = useUserStore((s) => s.isLoggedIn);
   const setUnreadCount = useNotificationStore((s) => s.setUnreadCount);
@@ -63,6 +66,13 @@ export default function Layout() {
         ) : null}
         <main className="flex-1">
           <Outlet context={{ showSidebar }} />
+
+          {isProfileModalOpen && (
+            <ProfileSettingsModal
+              isOpen={isProfileModalOpen}
+              onClose={closeProfileModal}
+            />
+          )}
         </main>
       </div>
     </div>

@@ -3,15 +3,15 @@ import ListBookmarkModal from './ListBookmarkOption';
 import InactiveBookmarkIcon from '@/assets/common-ui-assets/FolderBookmarkInactive.svg?react';
 import ActiveBookmarkIcon from '@/assets/common-ui-assets/FolderBookmarkActive.svg?react';
 import { PageItemProps } from '@/types/pageItems';
+import DropDownInline from '../common-ui/DropDownInline';
+import { useModalStore } from '@/stores/modalStore';
+import { usePageStore } from '@/stores/pageStore';
+import useUpdateLinkBookmark from '@/hooks/mutations/useUpdateLinkBookmkar';
 
-export default function LinkItem({
-  item,
-  view,
-  isBookmark,
-  setIsBookmark,
-}: PageItemProps) {
+export default function LinkItem({ item, view, isBookmark }: PageItemProps) {
   const isGrid = view === 'grid';
   const type = 'link';
+  const { pageId } = usePageStore();
 
   const handleDoubleClick = () => {
     if ('linkUrl' in item) {
@@ -19,24 +19,54 @@ export default function LinkItem({
     }
   };
 
+  const { isLinkContextMenuOpen, openLinkContextMenu, closeLinkContextMenu } =
+    useModalStore();
+
+  const handleContextMenu = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    openLinkContextMenu(item.id);
+  };
+
+  const { mutate: updateLinkBookmark } = useUpdateLinkBookmark({
+    linkId: item.id,
+    pageId,
+  });
+
+  const handleBookmark = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    updateLinkBookmark(item.id);
+    console.log('북마크 업데이트', item.id);
+  };
+
   return isGrid ? (
     <div
       className="bg-gray-0 hover:bg-gray-5 active:bg-gray-5 relative inline-flex w-full cursor-pointer flex-col items-center gap-2 rounded-[10px] p-[12px]"
       onDoubleClick={handleDoubleClick}
+      onContextMenu={handleContextMenu}
     >
       <LinkItemIcon />
       <button
         className="absolute top-4 right-4 cursor-pointer bg-transparent"
-        onClick={(e) => {
-          e.stopPropagation();
-          setIsBookmark((prev) => !prev);
-        }}
+        onClick={handleBookmark}
       >
         {isBookmark ? <ActiveBookmarkIcon /> : <InactiveBookmarkIcon />}
       </button>
       <span className="text-gray-90 text-center text-[14px] font-[400]">
         {item.title}
       </span>
+      {isLinkContextMenuOpen === item.id && (
+        <DropDownInline
+          id={item.id}
+          type={type}
+          initialTitle={item.title}
+          initialLink={item.linkUrl}
+          isDropDownInline={isLinkContextMenuOpen === item.id}
+          setIsDropDownInline={closeLinkContextMenu}
+          className="absolute top-32 left-2"
+        />
+      )}
     </div>
   ) : (
     <div
@@ -52,7 +82,6 @@ export default function LinkItem({
       <div>
         <ListBookmarkModal
           isBookmark={isBookmark}
-          setIsBookmark={setIsBookmark}
           itemId={item.id}
           initialTitle={item.title}
           initialLink={item.linkUrl}
