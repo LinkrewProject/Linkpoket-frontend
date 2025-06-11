@@ -1,19 +1,38 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNotificationStore } from '@/stores/notification';
 
 export function useNotificationSSE(isLoggedIn: boolean) {
+  const [sseToken, setSseToken] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('sse_token');
+    }
+    return null;
+  });
+
   const setUnreadCount = useNotificationStore((s) => s.setUnreadCount);
 
+  // 다른 탭에서 localStorage 변경 시 자동 감지
   useEffect(() => {
-    if (!isLoggedIn) return;
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'sse_token') {
+        setSseToken(e.newValue);
+      }
+    };
 
-    const sseToken = localStorage.getItem('sse_token');
-    if (!sseToken) return;
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
+
+  // SSE 연결 관리
+  useEffect(() => {
+    if (!isLoggedIn || !sseToken) return;
 
     const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
     const eventSource = new EventSource(
-      `${API_BASE_URL}/api/notification/subscribe?token=${encodeURIComponent(sseToken)}`,
+      `${API_BASE_URL}/api/notification/subscribe?token=${encodeURIComponent(
+        sseToken
+      )}`,
       {
         withCredentials: true,
       }
@@ -35,15 +54,17 @@ export function useNotificationSSE(isLoggedIn: boolean) {
 
     eventSource.onerror = async (event) => {
       console.error('❌ SSE 연결 오류 발생:', event);
-      eventSource.close(); // 에러 발생 시 연결 끊기
+      eventSource.close();
 
-      // ⏳ 3초 안에 fetch 실패하면 중단
+      // 헬스체크
       const ac = new AbortController();
       const timeoutId = setTimeout(() => ac.abort(), 3000);
 
       try {
         await fetch(
-          `${API_BASE_URL}/api/notification/subscribe?token=${encodeURIComponent(sseToken)}`,
+          `${API_BASE_URL}/api/notification/subscribe?token=${encodeURIComponent(
+            sseToken
+          )}`,
           { signal: ac.signal }
         );
       } catch (err) {
@@ -52,10 +73,17 @@ export function useNotificationSSE(isLoggedIn: boolean) {
         clearTimeout(timeoutId);
       }
 
-      // ⏱️ 5초 뒤 재시도 (지금은 window.location.reload로 간단히)
+      // 재연결 시도 (페이지 리로드 대신 토큰 재확인)
       setTimeout(() => {
         console.log('🔄 SSE 재연결 시도');
-        window.location.reload(); // 일단은 전체 새로고침으로 대체
+        const currentToken = localStorage.getItem('sse_token');
+        if (currentToken !== sseToken) {
+          setSseToken(currentToken); // 토큰이 변경되었다면 업데이트하여 재연결
+        } else {
+          // 토큰이 같다면 강제로 재연결을 위해 state 업데이트
+          setSseToken(null);
+          setTimeout(() => setSseToken(currentToken), 100);
+        }
       }, 5000);
     };
 
@@ -63,5 +91,25 @@ export function useNotificationSSE(isLoggedIn: boolean) {
       console.log('🧹 SSE 연결 종료');
       eventSource.close();
     };
-  }, [isLoggedIn]);
+  }, [isLoggedIn, sseToken, setUnreadCount]);
+
+  // 외부에서 토큰 업데이트 호출 시 사용
+  const updateToken = () => {
+    const newToken = localStorage.getItem('sse_token');
+    setSseToken(newToken);
+  };
+
+  // 연결 강제 재시작
+  const reconnect = () => {
+    setSseToken(null);
+    setTimeout(() => {
+      setSseToken(localStorage.getItem('sse_token'));
+    }, 100);
+  };
+
+  return {
+    updateToken,
+    reconnect,
+    isConnected: !!(isLoggedIn && sseToken),
+  };
 }
