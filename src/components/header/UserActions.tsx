@@ -13,7 +13,8 @@ export function UserActions() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { data: notifications = [] } = useFetchNotifications();
 
-  const { mutate: patchShareInvitation } = usePatchShareInvitationStatus();
+  const { mutate: patchShareInvitation, isPending: isShareProcessing } =
+    usePatchShareInvitationStatus();
   const { mutate: patchDirectoryTransmission, isPending: isProcessing } =
     usePatchDirectoryTransmissionStatus();
   const { mutate: deleteDirectoryRequest } = useDeleteDirectoryRequest();
@@ -58,9 +59,10 @@ export function UserActions() {
       {isAlarmOpen && (
         <NotificationModal
           isOpen={isAlarmOpen}
-          setIsOpen={() => setIsAlarmOpen(!isAlarmOpen)}
+          setIsOpen={setIsAlarmOpen}
           notifications={notifications}
           isProcessing={isProcessing}
+          isShareProcessing={isShareProcessing}
           onAccept={({ id, type }) => handleStatusChange(id, 'ACCEPTED', type)}
           onReject={({ id, type }) => handleStatusChange(id, 'REJECTED', type)}
           onDelete={(dispatchId) => deleteDirectoryRequest({ dispatchId })}

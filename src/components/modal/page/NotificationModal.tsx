@@ -8,6 +8,7 @@ export default function NotificationModal({
   setIsOpen,
   notifications,
   isProcessing,
+  isShareProcessing,
   onAccept,
   onReject,
   onDelete,
@@ -102,7 +103,7 @@ export default function NotificationModal({
               {item.requestStatus === 'WAITING' && (
                 <div className="mt-2 flex justify-end gap-2">
                   <button
-                    disabled={isProcessing}
+                    disabled={isProcessing || isShareProcessing}
                     onClick={() =>
                       onReject?.({ id: item.id, type: item.notificationType })
                     }
@@ -111,7 +112,7 @@ export default function NotificationModal({
                     거절
                   </button>
                   <button
-                    disabled={isProcessing}
+                    disabled={isProcessing || isShareProcessing}
                     onClick={() =>
                       onAccept?.({ id: item.id, type: item.notificationType })
                     }
