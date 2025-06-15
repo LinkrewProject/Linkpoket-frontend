@@ -4,7 +4,7 @@ import PageSortBoxIcon from '@/assets/common-ui-assets/PageSortBoxIcon.svg?react
 import PageSortBoxIconUp from '@/assets/common-ui-assets/PageSortBoxIconUp.svg?react';
 import PageSortBoxIconCheck from '@/assets/common-ui-assets/PageSortBoxIconCheck.svg?react';
 
-type Option = '기본순' | '최신순' | '이름순';
+type Option = '기본순' | '최신순' | '이름순' | '호스트' | '뷰어';
 
 interface SortSelectProps {
   options?: Option[];
@@ -12,10 +12,10 @@ interface SortSelectProps {
 }
 
 export default function PageSortBox({
-  options = ['기본순', '최신순', '이름순'],
+  options = ['기본순', '최신순', '이름순', '호스트', '뷰어'],
   onChange,
 }: SortSelectProps) {
-  const [selected, setSelected] = useState<Option>('기본순');
+  const [selected, setSelected] = useState<Option>(options[0]);
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
