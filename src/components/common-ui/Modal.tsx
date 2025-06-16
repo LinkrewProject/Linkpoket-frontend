@@ -67,7 +67,7 @@ const BaseModal = forwardRef<
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
         <div
           className={cn(
-            'flex w-full max-w-[70%] flex-col overflow-hidden rounded-2xl bg-white p-[24px] md:max-w-[466px]',
+            'flex w-full max-w-[70%] flex-col overflow-hidden rounded-2xl bg-white p-[24px] md:max-w-[530px]',
             className
           )}
           ref={modalRef}

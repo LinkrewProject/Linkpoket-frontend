@@ -1,16 +1,20 @@
 import { axiosInstance } from '../axiosInstance';
 
 interface PatchProfileColorResponse {
-  success: boolean;
+  email: string;
   colorCode: string;
-  message?: string;
 }
 
 export const patchProfileColor = async (
   colorCode: string
 ): Promise<PatchProfileColorResponse> => {
-  const response = await axiosInstance.patch('/api/member/color-code', {
+  const response = await axiosInstance.patch<{
+    status: number;
+    message: string;
+    data: PatchProfileColorResponse;
+  }>('/api/member/color-code', {
     colorCode,
   });
-  return response.data;
+
+  return response.data.data;
 };

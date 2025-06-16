@@ -7,6 +7,8 @@ import { useProfileModalStore } from '@/stores/profileModalStore';
 import WithdrawAccountModal from './WithdrawAccountModal';
 import ProfileChangeBody from './ProfileChangeBody';
 import { useLogoutMutation } from '@/hooks/mutations/auth/useLogoutMutation';
+import { Button } from '@/components/common-ui/button';
+import { useUpdateProfileNickname } from '@/hooks/mutations/useUpdateProfileNickname';
 
 export const ProfileSettingsModal = ({
   isOpen,
@@ -20,6 +22,7 @@ export const ProfileSettingsModal = ({
   const [isEditingProfile, setIsEditingProfile] = useState(false);
 
   const { mutate: logout } = useLogoutMutation();
+  const { mutate: patchNickname } = useUpdateProfileNickname();
 
   const { isWithdrawModalOpen, openWithdrawModal, closeWithdrawModal } =
     useProfileModalStore();
@@ -62,21 +65,32 @@ export const ProfileSettingsModal = ({
                   {nickname.charAt(0).toUpperCase()}
                 </div>
                 <button
-                  className="hover:cursor-pointer"
+                  className="text-gray-50 hover:cursor-pointer"
                   onClick={() => setIsEditingProfile(true)}
                 >
                   변경
                 </button>
               </div>
-              <div>
-                <Input
-                  className="w-[295px]"
-                  placeholder="닉네임을 입력해 주세요"
-                  value={inputValue}
-                  onChange={handleChange}
-                  // variant={error && !pageName ? 'error' : 'default'}
-                  isModal
-                />
+              <div className="flex w-full flex-col">
+                <div className="flex items-center justify-between">
+                  <Input
+                    className="w-[295px]"
+                    placeholder="닉네임을 입력해 주세요"
+                    value={inputValue}
+                    onChange={handleChange}
+                    // variant={error && !pageName ? 'error' : 'default'}
+                    isModal
+                  />
+                  <Button
+                    disabled={
+                      inputValue.trim() === nickname.trim() ||
+                      inputValue.trim() === ''
+                    }
+                    onClick={() => patchNickname(inputValue)}
+                  >
+                    닉네임 수정
+                  </Button>
+                </div>
                 <p className="text-[16px] font-[400] text-gray-50">{email}</p>
               </div>
             </div>
