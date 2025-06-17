@@ -7,6 +7,8 @@ import { useProfileModalStore } from '@/stores/profileModalStore';
 import WithdrawAccountModal from './WithdrawAccountModal';
 import ProfileChangeBody from './ProfileChangeBody';
 import { useLogoutMutation } from '@/hooks/mutations/auth/useLogoutMutation';
+import { Button } from '@/components/common-ui/button';
+import { useUpdateProfileNickname } from '@/hooks/mutations/useUpdateProfileNickname';
 
 export const ProfileSettingsModal = ({
   isOpen,
@@ -16,17 +18,22 @@ export const ProfileSettingsModal = ({
   onClose: () => void;
 }) => {
   const { nickname, email, colorCode } = useUserStore();
-  const [inputValue, setInputValue] = useState(nickname || '');
-  const [isEditingProfile, setIsEditingProfile] = useState(false);
 
   const { mutate: logout } = useLogoutMutation();
-
+  const { mutate: patchNickname, isPending } = useUpdateProfileNickname();
   const { isWithdrawModalOpen, openWithdrawModal, closeWithdrawModal } =
     useProfileModalStore();
+
+  const [inputValue, setInputValue] = useState(nickname || '');
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
+
+  const trimmedInput = inputValue.trim();
+  const isNicknameInvalid = trimmedInput === '' || trimmedInput.length > 20;
+  const isNicknameUnchanged = trimmedInput === nickname.trim();
 
   const profileActions = [
     {
@@ -62,21 +69,41 @@ export const ProfileSettingsModal = ({
                   {nickname.charAt(0).toUpperCase()}
                 </div>
                 <button
-                  className="hover:cursor-pointer"
+                  className="text-gray-50 hover:cursor-pointer"
                   onClick={() => setIsEditingProfile(true)}
                 >
                   변경
                 </button>
               </div>
-              <div>
-                <Input
-                  className="w-[295px]"
-                  placeholder="닉네임을 입력해 주세요"
-                  value={inputValue}
-                  onChange={handleChange}
-                  // variant={error && !pageName ? 'error' : 'default'}
-                  isModal
-                />
+              <div className="flex w-full flex-col">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <Input
+                    className="xlg:w-full w-[295px] min-w-0 flex-1"
+                    placeholder="닉네임을 입력해 주세요"
+                    value={inputValue}
+                    onChange={handleChange}
+                    variant={isNicknameInvalid ? 'error' : 'default'}
+                    isModal
+                  />
+                  <Button
+                    className="whitespace-nowrap"
+                    disabled={
+                      isPending || isNicknameInvalid || isNicknameUnchanged
+                    }
+                    onClick={() => {
+                      const trimmed = inputValue.trim();
+                      if (trimmed === '' || trimmed.length > 20) return;
+                      patchNickname(trimmed);
+                    }}
+                  >
+                    {isPending ? '수정 중...' : '닉네임 수정'}
+                  </Button>
+                </div>
+                {isNicknameInvalid && (
+                  <p className="text-status-danger mt-1 text-sm">
+                    닉네임은 1자 이상 20자 이하로 입력해주세요.
+                  </p>
+                )}
                 <p className="text-[16px] font-[400] text-gray-50">{email}</p>
               </div>
             </div>
