@@ -75,6 +75,7 @@ const ManageSharedPageModal = ({
   );
 
   const MEMBERS: {
+    memberId: number;
     nickName: string;
     email: string;
     colorCode: string;
@@ -182,7 +183,7 @@ const ManageSharedPageModal = ({
         <div className="max-h-[220px] overflow-y-auto">
           {filteredMembers.map((m, i) => (
             <div
-              key={i}
+              key={m.memberId}
               className="border-gray-10 flex items-center gap-3 border-b py-2 last:border-b-0"
             >
               <div

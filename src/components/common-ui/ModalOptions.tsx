@@ -14,6 +14,9 @@ export default function ModalOptions({
 
   const updateMemberRole = useUpdateSharedPageInvitation({
     pageId,
+    onSuccess: () => {
+      console.log('역할 변경 성공toast적용');
+    },
     onError: (error) => {
       console.error('역할 변경 실패:', error);
     },

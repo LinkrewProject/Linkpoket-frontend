@@ -12,5 +12,6 @@ export default async function updateSharedPageInvitation(
     return response.data;
   } catch (error) {
     console.error('Error updating shared page invitation:', error);
+    throw error;
   }
 }
