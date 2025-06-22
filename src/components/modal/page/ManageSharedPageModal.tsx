@@ -181,13 +181,13 @@ const ManageSharedPageModal = ({
         </div>
 
         <div className="max-h-[220px] overflow-y-auto">
-          {filteredMembers.map((m, i) => (
+          {filteredMembers.map((m) => (
             <div
               key={m.memberId}
               className="border-gray-10 flex items-center gap-3 border-b py-2 last:border-b-0"
             >
               <div
-                className="text-primary-0 flex items-center justify-center rounded-full px-[16px] py-[10px] text-[22px] font-[500]"
+                className="text-primary-0 flex h-[40px] w-[40px] items-center justify-center rounded-full px-[16px] py-[10px] text-[22px] font-[500]"
                 style={{ backgroundColor: m.colorCode }}
               >
                 {m.nickName[0]}
@@ -204,9 +204,13 @@ const ManageSharedPageModal = ({
                     userRole={m.role}
                     pageId={resolvedPageId ?? -1}
                     email={m.email}
+                    memberId={m.memberId}
                   />
                 ) : (
-                  <Button variant="ghost" className="bg-gray-20 text-gray-50">
+                  <Button
+                    variant="ghost"
+                    className="bg-gray-20 h-[42px] w-[87px] text-[14px] text-gray-50"
+                  >
                     수락 대기
                   </Button>
                 )}

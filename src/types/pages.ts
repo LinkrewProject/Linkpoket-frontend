@@ -60,3 +60,18 @@ export interface UpdateSharedPageInvitationData {
   receiverEmail: string;
   permissionType: string;
 }
+
+export interface UpdateSharedPagePermissionData {
+  baseRequest: {
+    pageId: number;
+    commandType: 'SHARED_PAGE_PERMISSION_CHANGE';
+  };
+  targetMemberId: number;
+  permissionType: string;
+}
+
+export interface PatchSharedPageInvitationData {
+  requestId: number;
+  requestStatus: string;
+  notificationType: string;
+}

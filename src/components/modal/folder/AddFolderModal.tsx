@@ -45,7 +45,7 @@ export default function AddFolderModal({
     const requestBody = {
       baseRequest: {
         pageId,
-        commandType: 'EDIT',
+        commandType: 'CREATE',
       },
       folderName,
       parentFolderId: parentsFolderId ?? 1,

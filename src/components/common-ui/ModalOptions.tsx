@@ -1,41 +1,38 @@
-import useUpdateSharedPageInvitation from '@/hooks/mutations/updateSharedPageInvitation';
+import { useUpdateSharedPageMemberType } from '@/hooks/mutations/useUpdateSharedPageMemberType';
+import { UpdateSharedPagePermissionData } from '@/types/pages';
 import { useState } from 'react';
 
 export default function ModalOptions({
   userRole,
   pageId,
   email,
+  memberId,
 }: {
   userRole: string;
   pageId: number;
   email: string;
+  memberId: number;
 }) {
   const [role, setRole] = useState(userRole || '');
 
-  const updateMemberRole = useUpdateSharedPageInvitation({
-    pageId,
-    onSuccess: () => {
-      console.log('역할 변경 성공toast적용');
-    },
-    onError: (error) => {
-      console.error('역할 변경 실패:', error);
-    },
-  });
+  const updateMemberRole = useUpdateSharedPageMemberType();
 
   const handleRoleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     if (!pageId) return;
 
-    updateMemberRole.mutate({
+    const requestBody: UpdateSharedPagePermissionData = {
       baseRequest: {
         pageId,
-        commandType: 'SHARED_PAGE_INVITATION',
+        commandType: 'SHARED_PAGE_PERMISSION_CHANGE',
       },
-      receiverEmail: email,
-      permissionType: e.target.value as 'VIEWER' | 'EDITOR' | 'HOST' | 'null',
-    });
+      targetMemberId: memberId,
+      permissionType: role,
+    };
 
+    updateMemberRole.mutate(requestBody);
     setRole(e.target.value as 'VIEWER' | 'EDITOR' | 'HOST' | 'null');
 
+    console.log('권한 변경 데이터', requestBody);
     console.log('권한변경', pageId, email, e.target.value);
   };
 

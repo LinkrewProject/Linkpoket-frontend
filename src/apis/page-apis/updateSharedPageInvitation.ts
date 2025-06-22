@@ -6,7 +6,7 @@ export default async function updateSharedPageInvitation(
 ) {
   try {
     const response = await axiosInstance.post(
-      '/api/page/updateSharedPageInvitation',
+      '/api/dispatch/share-page-invitations',
       data
     );
     return response.data;

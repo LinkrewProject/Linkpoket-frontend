@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Modal from '@/components/common-ui/Modal';
 import { Button } from '@/components/common-ui/button';
 import useUpdateSharedPageInvitation from '@/hooks/mutations/updateSharedPageInvitation';
+import { UpdateSharedPageInvitationData } from '@/types/pages';
 
 interface EmailInputWithRoleProps {
   email: string;
@@ -60,16 +61,19 @@ const InviteUserModal = ({ isOpen, onClose, pageId }: InviteUserModalProps) => {
   const handleInvite = () => {
     if (!email) return;
 
-    updateSharedPageInvitation.mutate({
+    const requestBody: UpdateSharedPageInvitationData = {
       baseRequest: {
         pageId,
         commandType: 'SHARED_PAGE_INVITATION',
       },
       receiverEmail: email,
       permissionType: role,
-    });
+    };
+
+    updateSharedPageInvitation.mutate(requestBody);
 
     setButtonStatus('완료');
+    console.log('초대 요청 데이터', requestBody);
     console.log('초대 완료');
     console.log(pageId, email, role);
   };

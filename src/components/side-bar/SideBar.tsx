@@ -74,7 +74,7 @@ const SideBar: React.FC<MenubarProps> = ({ showSidebar, setShowSidebar }) => {
           >
             <div
               style={{ backgroundColor: colorCode }}
-              className="flex h-[50px] w-[50px] items-center justify-center rounded-full p-[8px]"
+              className="flex h-[50px] w-[50px] items-center justify-center rounded-full p-[8px] text-[22px]"
             >
               {nickname.charAt(0).toUpperCase()}
             </div>
