@@ -72,14 +72,16 @@ export function useNotificationSSE(isLoggedIn: boolean) {
         }
       );
 
+      const isDevelopment = import.meta.env.DEV;
+
       eventSource.onopen = (event) => {
-        console.log('✅ SSE 연결 성공', event);
+        if (isDevelopment) console.log('✅ SSE 연결 성공', event);
       };
 
       eventSource.onmessage = (event) => {
         try {
           const data = JSON.parse(event.data);
-          console.log('🔔 알림 수신:', data);
+          if (isDevelopment) console.log('🔔 알림 수신:', data);
           setUnreadCount(data.countUnreadNotifications);
         } catch (e) {
           console.error('🔍 알림 데이터 파싱 실패:', e, event.data);
