@@ -5,7 +5,7 @@ export default async function updateSharedPageDescription(
   data: UpdatePageDescriptionData
 ) {
   try {
-    const response = await axiosInstance.put('/api/shared-pages/description', {
+    const response = await axiosInstance.put('/api/share-pages/description', {
       data,
     });
     return response.data;

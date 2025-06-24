@@ -10,7 +10,7 @@ export function useFetchSelectedPage({
 }: UseFetchSharedPageProps) {
   const { data, ...rest } = useQuery({
     queryKey: ['sharedPage', pageId],
-    queryFn: () => fetchSharedPage({ pageId, commandType: 'VIEW' }),
+    queryFn: () => fetchSharedPage({ pageId }),
     enabled,
   });
 
