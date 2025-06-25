@@ -27,7 +27,7 @@ axiosInstance.interceptors.response.use(
       originalRequest._retry = true;
       try {
         const res = await axios.get(
-          'http://localhost:8080/api/jwt/access-token',
+          `${import.meta.env.VITE_API_URL}/api/jwt/access-token`,
           {
             withCredentials: true,
           }
