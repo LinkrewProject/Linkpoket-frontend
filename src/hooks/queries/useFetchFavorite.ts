@@ -7,6 +7,7 @@ export default function useFetchFavorite() {
     queryFn: fetchFavorite,
     select: (response) => response.data,
     placeholderData: (prev) => prev,
+    structuralSharing: true,
   });
 
   return { favorite: data, ...rest };

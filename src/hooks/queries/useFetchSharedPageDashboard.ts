@@ -10,5 +10,6 @@ export default function useFetchSharedPageDashboard(
     queryFn: () => fetchSharedPageDashboard(data),
     enabled: !!data.pageId,
     placeholderData: (prev) => prev,
+    structuralSharing: true,
   });
 }

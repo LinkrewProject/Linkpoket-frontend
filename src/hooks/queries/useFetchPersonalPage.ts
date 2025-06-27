@@ -6,6 +6,7 @@ export function useFetchPersonalPage() {
     queryKey: ['personalPage'],
     queryFn: fetchPersonalPage,
     placeholderData: (prev) => prev,
+    structuralSharing: true,
   });
 
   const member = data?.data?.member;

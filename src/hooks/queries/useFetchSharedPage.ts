@@ -13,6 +13,7 @@ export function useFetchSelectedPage({
     queryFn: () => fetchSharedPage({ pageId }),
     enabled,
     placeholderData: (prev) => prev,
+    structuralSharing: true,
   });
 
   return {

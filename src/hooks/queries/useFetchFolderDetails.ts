@@ -7,5 +7,6 @@ export default function useFetchFolderDetails(data: FetchFolderDetailsProps) {
     queryKey: ['folderDetails', data.folderId],
     queryFn: () => fetchFolderDetails(data),
     placeholderData: (prev) => prev,
+    structuralSharing: true,
   });
 }
