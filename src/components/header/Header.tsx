@@ -4,7 +4,8 @@ import { UserActions } from './UserActions';
 import { AuthButtons } from './AuthButtons';
 import { useMobile } from '@/hooks/useMobile';
 import { Link } from 'react-router-dom';
-import { SearchBar } from '../common-ui/SearchBar';
+import { Search } from '../common-ui/Search';
+
 interface Props {
   isLoggedIn: boolean;
   showDepth: boolean;
@@ -35,7 +36,7 @@ export function Header({
         </Link>
       </div>
       <div className="flex items-center gap-[24px]">
-        <SearchBar />
+        <Search placeholder="폴더 또는 링크 검색" />
         {showHeaderButton && (isLoggedIn ? <UserActions /> : <AuthButtons />)}
       </div>
     </header>

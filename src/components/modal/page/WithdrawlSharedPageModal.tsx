@@ -46,11 +46,11 @@ const WithdrawSharedPageModal = forwardRef<
       className="p-4 md:max-w-[544px]"
     >
       <Modal.Header className="border-none text-[22px] font-bold">
-        <div className="flex items-center">
-          <Status className="mr-[10px] py-[2.5px]" />
-          공유 페이지 탈퇴
+        <div className="flex items-center space-x-[10px]">
+          <Status />
+          <span>공유 페이지 탈퇴</span>
         </div>
-        <p className="text-gray-90 pl-9 text-base font-normal">
+        <p className="text-gray-90 mt-2 ml-9 text-base font-normal">
           탈퇴하면 해당 공유 페이지에 더 이상 접근할 수 없습니다
           <br />
           공유 페이지에서 정말 탈퇴하시겠습니까?

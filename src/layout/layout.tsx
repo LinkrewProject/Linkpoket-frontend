@@ -6,12 +6,18 @@ import { useUserStore } from '@/stores/userStore';
 import ProfileSettingsModal from '@/components/modal/profile/ProfileSettingsModal';
 import { useProfileModalStore } from '@/stores/profileModalStore';
 import { useNotificationSSE } from '@/hooks/useNotificationSSE';
+import WithdrawAccountModal from '@/components/modal/profile/WithdrawAccountModal';
 
 export default function Layout() {
   const location = useLocation();
   const path = location.pathname;
   const [showSidebar, setShowSidebar] = useState(true);
-  const { isProfileModalOpen, closeProfileModal } = useProfileModalStore();
+  const {
+    isProfileModalOpen,
+    isWithdrawModalOpen,
+    closeProfileModal,
+    closeWithdrawModal,
+  } = useProfileModalStore();
 
   const isLoggedIn = useUserStore((s) => s.isLoggedIn);
 
@@ -49,6 +55,13 @@ export default function Layout() {
             <ProfileSettingsModal
               isOpen={isProfileModalOpen}
               onClose={closeProfileModal}
+            />
+          )}
+
+          {isWithdrawModalOpen && (
+            <WithdrawAccountModal
+              isOpen={isWithdrawModalOpen}
+              onClose={closeWithdrawModal}
             />
           )}
         </main>

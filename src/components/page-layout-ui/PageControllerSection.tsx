@@ -1,7 +1,7 @@
 import FolderIcon from '@/assets/widget-ui-assets/FolderIcon.svg?react';
 import SiteIcon from '@/assets/widget-ui-assets/SiteIcon.svg?react';
 import { Button } from '@/components/common-ui/button';
-import { SearchBar } from '@/components/common-ui/SearchBar';
+import { Search } from '../common-ui/Search';
 import { ViewToggle } from '@/components/common-ui/ViewToggle';
 import PageSortBox from './DropDownView';
 import { PageControllerSectionProps } from '@/types/pageItems';
@@ -79,7 +79,7 @@ export default function PageControllerSection({
         </Button>
       </div>
       <div className="flex gap-[12px]">
-        <SearchBar
+        <Search
           size="fixed"
           placeholder="폴더, 링크 검색"
           value={searchKeyword}

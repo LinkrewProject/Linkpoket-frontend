@@ -4,7 +4,6 @@ import { useUserStore } from '@/stores/userStore';
 import { useState } from 'react';
 import ChevronRight from '@/assets/common-ui-assets/ChevronRight.svg?react';
 import { useProfileModalStore } from '@/stores/profileModalStore';
-import WithdrawAccountModal from './WithdrawAccountModal';
 import ProfileChangeBody from './ProfileChangeBody';
 import { useLogoutMutation } from '@/hooks/mutations/auth/useLogoutMutation';
 import { Button } from '@/components/common-ui/button';
@@ -21,8 +20,7 @@ export const ProfileSettingsModal = ({
 
   const { mutate: logout } = useLogoutMutation();
   const { mutate: patchNickname, isPending } = useUpdateProfileNickname();
-  const { isWithdrawModalOpen, openWithdrawModal, closeWithdrawModal } =
-    useProfileModalStore();
+  const { openWithdrawModal } = useProfileModalStore();
 
   const [inputValue, setInputValue] = useState(nickname || '');
   const [isEditingProfile, setIsEditingProfile] = useState(false);
@@ -35,6 +33,11 @@ export const ProfileSettingsModal = ({
   const isNicknameInvalid = trimmedInput === '' || trimmedInput.length > 20;
   const isNicknameUnchanged = trimmedInput === nickname.trim();
 
+  const openWithdrawAndClose = () => {
+    onClose();
+    openWithdrawModal();
+  };
+
   const profileActions = [
     {
       title: '로그아웃',
@@ -46,20 +49,20 @@ export const ProfileSettingsModal = ({
       title: '회원탈퇴',
       subscription: '계정을 영구적으로 삭제합니다.',
       icon: <ChevronRight />,
-      fn: openWithdrawModal,
+      fn: openWithdrawAndClose,
     },
   ];
 
   if (!isOpen) return null;
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} className="w-[610px]">
+    <Modal isOpen={isOpen} onClose={onClose} className="w-[500px]">
       {isEditingProfile ? (
         <ProfileChangeBody onBack={() => setIsEditingProfile(false)} />
       ) : (
         <>
-          <Modal.Header>프로필</Modal.Header>
-          <Modal.Body className="py-4">
+          <Modal.Header showCloseButton>프로필</Modal.Header>
+          <Modal.Body hasFooter={false}>
             <div className="mb-4 flex gap-[12px]">
               <div className="flex flex-col">
                 <div
@@ -76,9 +79,9 @@ export const ProfileSettingsModal = ({
                 </button>
               </div>
               <div className="flex w-full flex-col">
-                <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                   <Input
-                    className="xlg:w-full w-[295px] min-w-0 flex-1"
+                    className="w-[295px] min-w-0 flex-1"
                     placeholder="닉네임을 입력해 주세요"
                     value={inputValue}
                     onChange={handleChange}
@@ -96,7 +99,7 @@ export const ProfileSettingsModal = ({
                       patchNickname(trimmed);
                     }}
                   >
-                    {isPending ? '수정 중...' : '닉네임 수정'}
+                    {isPending ? '변경 중...' : '변경'}
                   </Button>
                 </div>
                 {isNicknameInvalid && (
@@ -127,13 +130,6 @@ export const ProfileSettingsModal = ({
                 </div>
               ))}
             </div>
-
-            {isWithdrawModalOpen && (
-              <WithdrawAccountModal
-                isOpen={isWithdrawModalOpen}
-                onClose={closeWithdrawModal}
-              />
-            )}
           </Modal.Body>
         </>
       )}

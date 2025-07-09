@@ -60,8 +60,8 @@ export default function AddFolderModal({
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <Modal.Header>폴더 추가</Modal.Header>
-      <Modal.Body className="py-4">
+      <Modal.Header showCloseButton>폴더 추가</Modal.Header>
+      <Modal.Body hasFooter>
         {error && (
           <div className="text-status-danger mb-2 text-center text-[15px] font-semibold">
             <span>❗</span> {error}
@@ -79,7 +79,6 @@ export default function AddFolderModal({
               value={folderName}
               onChange={(e) => setFolderName(e.target.value)}
               isModal
-              inputSize="medium"
               containerClassName={inputClass}
               labelClassName="font-bold leading-[140%]"
               variant={error && !folderName ? 'error' : 'default'}
@@ -90,7 +89,6 @@ export default function AddFolderModal({
               value={folderDescription}
               onChange={(e) => setFolderDescription(e.target.value)}
               isModal
-              inputSize="medium"
               containerClassName={inputClass}
               labelClassName="font-bold leading-[140%]"
             />

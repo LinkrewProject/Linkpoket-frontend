@@ -93,8 +93,8 @@ export const Radio = ({
       {label && (
         <span
           className={cn(
-            'text-gray-90',
-            isModal ? 'text-[14px]' : 'text-[19px]',
+            'text-gray-70',
+
             disabled ? 'text-gray-50' : ''
           )}
         >

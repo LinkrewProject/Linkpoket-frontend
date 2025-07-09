@@ -10,8 +10,6 @@ import { COLOR_OPTIONS } from '@/styles/tokens';
 const ProfileChangeBody = ({ onBack }: { onBack: () => void }) => {
   const { nickname, colorCode } = useUserStore();
   const [profileColor, setProfileColor] = useState(colorCode || '');
-  const hasChanges = profileColor !== colorCode;
-
   const { mutate: updateColor, isPending } = useUpdateProfileColor();
 
   const handleSaveAndBack = () => {
@@ -37,22 +35,23 @@ const ProfileChangeBody = ({ onBack }: { onBack: () => void }) => {
   return (
     <>
       <Modal.Header>
-        <div className="relative text-center">
+        <div className="relative flex">
           <button
             disabled={isPending}
-            className={`absolute top-1/2 left-0 flex -translate-y-1/2 items-center pl-1 text-lg hover:cursor-pointer ${
+            className={`hover:cursor-pointer ${
               isPending ? 'cursor-not-allowed opacity-50' : ''
             }`}
             onClick={handleSaveAndBack}
             aria-label="변경사항 저장하고 닫기"
           >
             <ChevronLeft />
-            {hasChanges ? '저장' : '완료'}
           </button>
-          <h1 className="text-[22px] font-bold">프로필 변경</h1>
+          <h1 className="absolute left-1/2 -translate-x-1/2">
+            프로필 색상 변경
+          </h1>
         </div>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body hasFooter={false}>
         <div className="flex flex-col items-center">
           <div
             style={{ backgroundColor: profileColor }}

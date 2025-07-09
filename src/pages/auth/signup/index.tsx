@@ -199,7 +199,7 @@ const SignupPage = () => {
     <main className="flex min-h-screen min-w-screen flex-col items-center justify-center bg-white">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-[460px] max-w-md space-y-6"
+        className="w-[360px] max-w-md space-y-6"
       >
         <h2 className="mb-8 flex justify-center text-[26px] font-bold">
           링크모아 회원 가입
@@ -207,7 +207,7 @@ const SignupPage = () => {
 
         {/* 연령대 */}
         <div>
-          <label className="mb-2 block font-medium text-gray-700">연령대</label>
+          <label className="text-gray-70 mb-2 block font-medium">연령대</label>
           <div className="flex flex-row space-x-4">
             <Controller
               name="ageRange"
@@ -216,6 +216,7 @@ const SignupPage = () => {
                 <>
                   {AGE_OPTIONS.map((opt) => (
                     <Radio
+                      size="sm"
                       key={opt.value}
                       label={opt.label}
                       value={opt.value}
@@ -237,7 +238,7 @@ const SignupPage = () => {
 
         {/* 성별 */}
         <div>
-          <label className="mb-2 block font-medium text-gray-700">성별</label>
+          <label className="text-gray-70 mb-2 block font-medium">성별</label>
           <div className="flex flex-row space-x-4">
             <Controller
               name="gender"
@@ -246,6 +247,7 @@ const SignupPage = () => {
                 <>
                   {GENDER_OPTIONS.map((opt) => (
                     <Radio
+                      size="sm"
                       key={opt.value}
                       label={opt.label}
                       value={opt.value}
@@ -265,7 +267,7 @@ const SignupPage = () => {
 
         {/* 직업 */}
         <div>
-          <label className="mb-2 block font-medium text-gray-700">직업</label>
+          <label className="text-gray-70 mb-2 block font-medium">직업</label>
           <Controller
             name="job"
             control={control}
@@ -303,7 +305,7 @@ const SignupPage = () => {
 
         {/* 닉네임 */}
         <div>
-          <label className="mb-2 block font-medium text-gray-700">닉네임</label>
+          <label className="text-gray-70 mb-2 block font-medium">닉네임</label>
           <Controller
             name="nickname"
             control={control}

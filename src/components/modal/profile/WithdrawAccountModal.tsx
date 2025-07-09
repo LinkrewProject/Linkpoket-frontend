@@ -26,12 +26,12 @@ const WithdrawAccountModal = ({
       className="p-4 md:max-w-[544px]"
       data-ignore-outside-click
     >
-      <Modal.Header className="border-none text-[22px] font-bold">
-        <div className="flex items-center">
-          <Status className="mr-[10px] py-[2.5px]" />
-          회원 탈퇴
+      <Modal.Header>
+        <div className="flex items-center space-x-[10px]">
+          <Status />
+          <span>회원 탈퇴</span>
         </div>
-        <p className="text-gray-90 pl-9 text-base font-normal">
+        <p className="text-gray-90 mt-2 ml-9 text-base font-normal">
           탈퇴 시 모든 데이터가 삭제되며, 복구가 불가능합니다.
           <br />
           정말 탈퇴하시겠습니까?

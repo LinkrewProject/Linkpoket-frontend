@@ -43,7 +43,7 @@ const FolderTransferModal = forwardRef<HTMLDivElement, Props>((props, ref) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose} ref={ref}>
       <Modal.Header>폴더 전송</Modal.Header>
-      <Modal.Body className="py-4">
+      <Modal.Body hasFooter>
         <div>
           <div className="text-gray-90 mb-4 flex items-center px-[8px] py-[11px] text-sm font-semibold">
             <FolderItemIcon className="mr-[10px] h-[18px] w-[18px]" />
@@ -52,12 +52,11 @@ const FolderTransferModal = forwardRef<HTMLDivElement, Props>((props, ref) => {
 
           <div>
             <Input
-              label="받는 분 이메일"
-              placeholder="받는 분의 이메일 주소를 입력해 주세요"
+              label="받는 사용자 이메일"
+              placeholder="받는 사용자의 이메일 주소를 입력해 주세요"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               isModal={true}
-              inputSize="medium"
               containerClassName="w-full"
               labelClassName="font-bold leading-[140%]"
             />

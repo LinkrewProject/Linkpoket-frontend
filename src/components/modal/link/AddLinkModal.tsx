@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Input } from '@/components/common-ui/Input';
 import Modal from '@/components/common-ui/Modal';
-import { Textarea } from '@/components/common-ui/Textarea';
 
 const AddLinkModal = ({
   isOpen,
@@ -49,37 +48,27 @@ const AddLinkModal = ({
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <Modal.Header>링크 추가</Modal.Header>
+      <Modal.Header showCloseButton>링크 추가</Modal.Header>
 
-      <Modal.Body className="py-4">
+      <Modal.Body>
         <div className="space-y-4">
           <Input
-            label={
-              <>
-                링크명<span className="text-status-danger">*</span>
-              </>
-            }
-            placeholder="링크명을 입력해 주세요"
-            value={link}
-            onChange={(e) => setLink(e.target.value)}
-            isModal={true}
-            inputSize="medium"
-            containerClassName="w-full"
-            labelClassName="font-bold leading-[140%]"
-          />
-          <Textarea
-            label={
-              <>
-                URL<span className="text-status-danger">*</span>
-              </>
-            }
-            placeholder="해당 링크의 URL을 입력해 주세요"
+            label={'URL'}
+            placeholder="해당 링크의 URL을 입력해주세요."
             value={url}
             onChange={(e) => setUrl(e.target.value)}
             isModal={true}
             containerClassName="w-full"
-            labelClassName="font-bold leading-[140%]"
-            className="h-[116px]"
+            labelClassName="leading-[140%]"
+          />
+          <Input
+            label={'링크명'}
+            placeholder="링크명을 입력해 주세요"
+            value={link}
+            onChange={(e) => setLink(e.target.value)}
+            isModal={true}
+            containerClassName="w-full"
+            labelClassName="leading-[140%]"
           />
         </div>
       </Modal.Body>
@@ -96,7 +85,7 @@ const AddLinkModal = ({
           disabled={!link || isSubmitting}
           variant={link ? 'primary' : 'default'}
         >
-          {isSubmitting ? '전송 중...' : '전송'}
+          {isSubmitting ? '추가 중...' : '추가'}
         </Modal.ConfirmButton>
       </Modal.Footer>
     </Modal>
