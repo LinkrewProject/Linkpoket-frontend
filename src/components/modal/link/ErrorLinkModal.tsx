@@ -1,7 +1,7 @@
 import Modal from '@/components/common-ui/Modal';
 import Status from '@/assets/common-ui-assets/Status.svg?react';
 
-const ErrorModal = ({
+const ErrorLinkModal = ({
   isOpen,
   onClose,
 }: {
@@ -13,10 +13,10 @@ const ErrorModal = ({
       <Modal.Header>
         <div className="flex items-center space-x-[10px]">
           <Status />
-          <span>삭제 불가</span>
+          <span>링크 저장 불가</span>
         </div>
-        <p className="text-gray-90 mt-2 mb-6 ml-9 text-base font-normal">
-          해당 요청을 처리할 수 있는 권한이 없습니다.
+        <p className="text-gray-90 mt-2 ml-9 text-base font-normal">
+          차단된 URL 입니다. 저장할 수 없는 링크입니다.
         </p>
       </Modal.Header>
 
@@ -29,4 +29,4 @@ const ErrorModal = ({
   );
 };
 
-export default ErrorModal;
+export default ErrorLinkModal;

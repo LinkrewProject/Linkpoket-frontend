@@ -80,9 +80,7 @@ const InviteUserModal = ({ isOpen, onClose, pageId }: InviteUserModalProps) => {
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} className="p-[24px]">
-      <Modal.Header className="mb-[16px] text-[22px] font-bold">
-        멤버 초대
-      </Modal.Header>
+      <Modal.Header>멤버 초대</Modal.Header>
       <div>
         <div className="flex items-center gap-4">
           <EmailInputWithRole

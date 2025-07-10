@@ -3,17 +3,11 @@ import Modal from '@/components/common-ui/Modal';
 import { Button } from '@/components/common-ui/button';
 import ToggleButton from '@/components/common-ui/ToggleButton';
 import { Input } from '@/components/common-ui/Input';
-import { Radio } from '@/components/common-ui/Radio';
 import { useLocation, useParams } from 'react-router-dom';
 import useFetchSharedPageDashboard from '@/hooks/queries/useFetchSharedPageDashboard';
 import InviteUserModal from './InviteUserModal';
 import ModalOptions from '@/components/common-ui/ModalOptions';
-
-const TIERS = [
-  { label: '베이직(5명)', value: 'BASIC' },
-  { label: '스탠다드(10명)', value: 'STANDARD' },
-  { label: '프리미엄(20명)', value: 'PREMIUM' },
-];
+import ModalClose from '@/assets/common-ui-assets/ModalClose.svg?react';
 
 interface ManageSharedPageModalProps {
   isOpen: boolean;
@@ -101,13 +95,11 @@ const ManageSharedPageModal = ({
       onClose={handleClose}
       className="p-[24px] md:max-w-[562px]"
     >
-      <Modal.Header className="border-gray-40 mb-[16px] border-b-[1px] pb-[24px] text-[22px] font-bold">
-        공유 페이지 관리
-      </Modal.Header>
+      <Modal.Header showCloseButton>공유 페이지 관리</Modal.Header>
 
       <div className="mb-4">
         <div className="mb-2 flex items-center justify-between">
-          <span className="text-[16px] font-semibold">페이지 공개</span>
+          <span className="text-[16px] font-bold">페이지 공개</span>
           <ToggleButton
             checked={isPublic === 'PUBLIC'}
             onClick={() =>
@@ -131,25 +123,6 @@ const ManageSharedPageModal = ({
               링크 복사
             </Button>
           </div>
-        </div>
-      </div>
-
-      <div className="mb-6">
-        <div className="mb-2 text-[16px] font-bold">
-          공유 페이지 등급(멤버 초대 가능 수)
-        </div>
-        <div className="flex gap-4">
-          {TIERS.map((t) => (
-            <Radio
-              key={t.value}
-              name="tier"
-              value={t.value}
-              checked={sharedPageDashboardQuery.data?.data.pageType === t.value}
-              onChange={() => {}}
-              label={t.label}
-              isModal
-            />
-          ))}
         </div>
       </div>
 
@@ -186,16 +159,16 @@ const ManageSharedPageModal = ({
               className="border-gray-10 flex items-center gap-3 border-b py-2 last:border-b-0"
             >
               <div
-                className="text-primary-0 flex h-[40px] w-[40px] items-center justify-center rounded-full px-[16px] py-[10px] text-[22px] font-[500]"
+                className="text-primary-0 flex h-[32px] w-[32px] items-center justify-center rounded-full px-[16px] py-[10px] text-[22px] font-[500]"
                 style={{ backgroundColor: m.colorCode }}
               >
                 {m.nickName[0]}
               </div>
               <div className="flex-1">
-                <div className="text-gray-90 text-[18px] font-bold">
+                <div className="text-gray-90 text-sm font-bold">
                   {m.nickName}
                 </div>
-                <div className="text-[16px] text-gray-50">{m.email}</div>
+                <div className="text-sm text-gray-50">{m.email}</div>
               </div>
               <div className="relative">
                 {m.isWaiting === false ? (

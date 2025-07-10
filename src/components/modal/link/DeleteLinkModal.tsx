@@ -42,12 +42,12 @@ const DeleteLinkModal = forwardRef<HTMLDivElement, Props>(
         onClose={onClose}
         className="p-4 md:max-w-[544px]"
       >
-        <Modal.Header className="border-none text-[22px] font-bold">
-          <div className="flex items-center">
-            <Status className="mr-[10px] py-[2.5px]" />
-            링크 삭제
+        <Modal.Header>
+          <div className="flex items-center space-x-[10px]">
+            <Status />
+            <span>링크 삭제</span>
           </div>
-          <p className="text-gray-90 pl-9 text-base font-normal">
+          <p className="text-gray-90 mt-2 mb-6 ml-9 text-base font-normal">
             삭제하면 복구할 수 없습니다
           </p>
         </Modal.Header>

@@ -9,6 +9,7 @@ import React, {
 } from 'react';
 import { createPortal } from 'react-dom';
 import { cn } from '@/utils/cn';
+import ModalClose from '@assets/common-ui-assets/ModalClose.svg?react';
 
 // 모달 컨텍스트 생성
 const ModalContext = createContext<{
@@ -27,6 +28,7 @@ const BaseModal = forwardRef<
     isOpen: boolean;
     onClose: () => void;
     className?: string;
+    showCloseButton?: boolean;
   }
 >(({ children, isOpen, onClose, className }, ref) => {
   const modalRef = useRef<HTMLDivElement>(null);
@@ -67,7 +69,7 @@ const BaseModal = forwardRef<
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
         <div
           className={cn(
-            'flex w-full max-w-[70%] flex-col overflow-hidden rounded-2xl bg-white p-[24px] md:max-w-[530px]',
+            'relative flex w-full max-w-[70%] flex-col overflow-hidden rounded-2xl bg-white p-[24px] md:max-w-[530px]',
             className
           )}
           ref={modalRef}
@@ -85,19 +87,32 @@ const BaseModal = forwardRef<
 const Header = ({
   children,
   className,
+  showCloseButton = false,
 }: {
   children: React.ReactNode;
   className?: string;
+  showCloseButton?: boolean;
 }) => {
+  const { onClose } = useContext(ModalContext);
+
   return (
-    <h2
+    <div
       className={cn(
-        'border-b border-[var(--color-gray-40)] pb-4 text-[28px] font-bold text-[var(--color-gray-100)]',
+        `flex items-center ${showCloseButton ? 'justify-between' : 'justify-center'} text-[18px] font-bold text-[var(--color-gray-100)]`,
         className
       )}
     >
-      {children}
-    </h2>
+      <div className={`${showCloseButton || 'w-full'}`}>{children}</div>
+      {showCloseButton && (
+        <button
+          onClick={onClose}
+          className="cursor-pointer"
+          aria-label="모달 닫기"
+        >
+          <ModalClose />
+        </button>
+      )}
+    </div>
   );
 };
 
@@ -105,11 +120,17 @@ const Header = ({
 const Body = ({
   children,
   className,
+  hasFooter = true,
 }: {
   children: React.ReactNode;
   className?: string;
+  hasFooter?: boolean;
 }) => {
-  return <div className={cn('flex-1 py-8', className)}>{children}</div>;
+  return (
+    <div className={cn(`flex-1 ${hasFooter ? 'py-6' : 'pt-6'}`, className)}>
+      {children}
+    </div>
+  );
 };
 
 // 푸터 컴포넌트
