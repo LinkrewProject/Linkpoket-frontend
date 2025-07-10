@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { ContextMenu } from '../common-ui/ContextMenu';
 import { PageContentSectionProps } from '@/types/pageItems';
 import { useModalStore } from '@/stores/modalStore';
 
@@ -8,18 +7,8 @@ export default function SharedPageContentSection({
   contentData,
   searchResult,
 }: PageContentSectionProps) {
-  const { openLinkModal, openFolderModal } = useModalStore();
+  // const { openLinkModal, openFolderModal } = useModalStore();
   const [isBookmarkRerender, setIsBookmarkRerender] = useState(false);
-  const [contextMenu, setContextMenu] = useState<{
-    x: number;
-    y: number;
-  } | null>(null);
-
-  const handleContextMenu = (e: React.MouseEvent) => {
-    e.preventDefault();
-    setContextMenu({ x: e.clientX, y: e.clientY });
-  };
-  console.log('contentData:', contentData);
 
   const folderData = contentData?.directoryDetailRespons ?? [];
   const linkData = contentData?.siteDetailResponses ?? [];
@@ -35,30 +24,11 @@ export default function SharedPageContentSection({
   console.log('합친 데이터', mergedList);
 
   return (
-    <div
-      onContextMenu={handleContextMenu}
-      className={`mx-auto mt-[40px] w-full max-w-[1180px] flex-1 overflow-y-auto px-[104px] text-3xl font-bold`}
-    >
+    <div className={`w-full overflow-y-auto`}>
       <div
-        className={`w-full max-w-[1180px] min-w-[328px] ${
-          view === 'grid'
-            ? 'grid-cols-custom grid gap-4'
-            : 'flex flex-col gap-4'
-        }`}
+        className={`grid w-full grid-cols-2 justify-center gap-x-2 gap-y-8 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5`}
       >
-        {mergedList.map((item) => {
-          return null;
-        })}
-
-        {contextMenu && (
-          <ContextMenu
-            x={contextMenu.x}
-            y={contextMenu.y}
-            onClose={() => setContextMenu(null)}
-            onAddFolder={openFolderModal}
-            onAddLink={openLinkModal}
-          />
-        )}
+        {/* FolderCard혹은 LinkCard렌더링 */}
       </div>
     </div>
   );

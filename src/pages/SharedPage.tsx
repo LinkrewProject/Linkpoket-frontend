@@ -66,14 +66,11 @@ export default function SharedPage() {
       <PageHeaderSection pageTitle="폴더1" folderId={1} />
       <PageControllerSection />
 
-      {/* 테스트 영역 */}
-      <div className={`w-full overflow-y-auto`}>
-        <div
-          className={`grid w-full grid-cols-2 justify-center gap-x-2 gap-y-8 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5`}
-        >
-          {/* FolderCard혹은 LinkCard렌더링 */}
-        </div>
-      </div>
+      <SharedPageContentSection
+        view={view}
+        contentData={selectedPage}
+        searchResult={searchResult}
+      />
     </div>
   );
 }
