@@ -1,27 +1,5 @@
-import { PageContentSectionProps } from '@/types/pageItems';
-import { useModalStore } from '@/stores/modalStore';
-
-export default function PersonalPageContentSection({
-  searchResult,
-  pageDetails,
-}: PageContentSectionProps) {
+export default function PersonalPageContentSection({}) {
   // const { openLinkModal, openFolderModal } = useModalStore();
-
-  const folderData = pageDetails?.directoryDetailRespons ?? [];
-  const linkData = pageDetails?.siteDetailResponses ?? [];
-
-  const mergedList = searchResult
-    ? [
-        ...(searchResult.directorySimpleResponses ?? []),
-        ...(searchResult.siteSimpleResponses ?? []),
-      ].map((item, index) => ({
-        ...item,
-        orderIndex:
-          'orderIndex' in item && typeof item.orderIndex === 'number'
-            ? item.orderIndex
-            : index,
-      }))
-    : [...folderData, ...linkData].sort((a, b) => a.orderIndex - b.orderIndex);
 
   return (
     <div className={`w-full overflow-y-auto`}>
