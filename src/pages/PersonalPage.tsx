@@ -8,20 +8,25 @@ import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
 export default function PersonalPage() {
   const { data } = useFetchPersonalPage();
   console.log('pageDetails', data);
-  console.log('pageDetails', data);
   const refinedData = data?.data.pageDetails;
-  const pageTitle = refinedData?.pageTitle;
+
+  const pageId = refinedData?.pageId;
   const rootFolderId = refinedData?.rootFolderId;
-  const folderDataLength = refinedData?.directoryDetailRespons.length;
-  const linkDataLength = refinedData?.siteDetailResponses.length;
+
+  const pageTitle = refinedData?.pageTitle;
+
+  const folderData = refinedData?.directoryDetailRespons ?? [];
+  const linkData = refinedData?.siteDetailResponses ?? [];
+  const folderDataLength = folderData?.length;
+  const linkDataLength = linkData?.length;
 
   const { setPageInfo } = usePageStore();
   const { setParentsFolderId } = useParentsFolderIdStore();
 
   useEffect(() => {
-    setPageInfo(data?.data.pageId as string);
+    setPageInfo(pageId);
     setParentsFolderId(rootFolderId);
-  }, [data?.data.pageId, setPageInfo, setParentsFolderId, rootFolderId]);
+  }, [pageId, setPageInfo, setParentsFolderId, rootFolderId]);
 
   return (
     <div className="flex h-screen min-w-[328px] flex-col px-[64px] py-[56px] xl:px-[102px]">
@@ -30,7 +35,7 @@ export default function PersonalPage() {
         folderDataLength={folderDataLength}
         linkDataLength={linkDataLength}
       />
-      <PersonalPageContentSection />
+      <PersonalPageContentSection folderData={folderData} linkData={linkData} />
     </div>
   );
 }

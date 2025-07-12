@@ -44,6 +44,11 @@ export interface PageControllerSectionProps {
   linkDataLength: number;
 }
 
+export interface PageContentSectionProps {
+  folderData: FolderDetail[];
+  linkData: LinkDetail[];
+}
+
 export interface UpdateSharedPageInvitationData {
   baseRequest: {
     pageId: string;

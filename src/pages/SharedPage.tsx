@@ -15,8 +15,11 @@ export default function SharedPage() {
   const refinedData = data?.data;
   const rootFolderId = refinedData?.rootFolderId;
   const pageTitle = refinedData?.pageTitle;
-  const folderDataLength = refinedData?.directoryDetailRespons.length;
-  const linkDataLength = refinedData?.siteDetailResponses.length;
+
+  const folderData = refinedData?.directoryDetailRespons ?? [];
+  const linkData = refinedData?.siteDetailResponses ?? [];
+  const folderDataLength = folderData?.length;
+  const linkDataLength = linkData?.length;
 
   const { setPageInfo } = usePageStore();
   const { setParentsFolderId } = useParentsFolderIdStore();
@@ -36,7 +39,7 @@ export default function SharedPage() {
         folderDataLength={folderDataLength}
         linkDataLength={linkDataLength}
       />
-      <SharedPageContentSection />
+      <SharedPageContentSection folderData={folderData} linkData={linkData} />
     </div>
   );
 }

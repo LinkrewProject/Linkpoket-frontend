@@ -12,6 +12,7 @@ export interface LinkDetail {
   isFavorite: boolean;
   faviconUrl: string;
   orderIndex: number;
+  createdDate: string | number;
 }
 
 export type CreateLinkData = {
