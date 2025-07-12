@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { PageContentSectionProps } from '@/types/pages';
 import LinkCard from '../common-ui/LinkCard';
 import FolderCard from '../common-ui/FolderCard';
@@ -8,7 +7,6 @@ export default function SharedPageContentSection({
   linkData,
 }: PageContentSectionProps) {
   // const { openLinkModal, openFolderModal } = useModalStore();
-  const [isBookmarkRerender, setIsBookmarkRerender] = useState(false);
 
   const pageData = [...folderData, ...linkData].sort(
     (a, b) => a.orderIndex - b.orderIndex

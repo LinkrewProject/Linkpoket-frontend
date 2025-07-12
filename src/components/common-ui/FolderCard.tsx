@@ -4,6 +4,7 @@ import CardMenu from '@/assets/widget-ui-assets/CardMenu.svg?react';
 import { FolderDetail } from '@/types/folders';
 import { useNavigate } from 'react-router-dom';
 import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
+import useUpdateFolderBookmark from '@/hooks/mutations/useUpdateFolderBookmark';
 
 export default function FolderCard({
   isBookmark,
@@ -15,10 +16,21 @@ export default function FolderCard({
   const navigate = useNavigate();
   const { pageId } = usePageStore();
   const { setParentsFolderId } = useParentsFolderIdStore();
+  const folderId = item.folderId?.toString();
+
+  const { mutate: updateFolderBookmark } = useUpdateFolderBookmark({
+    folderId: folderId,
+    pageId: pageId as string,
+  });
 
   const handleDoubleClick = () => {
     navigate(`/folder/${item.folderId}`);
     setParentsFolderId(pageId as string);
+  };
+
+  const handleBookmarkClick = () => {
+    updateFolderBookmark();
+    console.log('isBookmark', isBookmark);
   };
 
   return (
@@ -38,7 +50,7 @@ export default function FolderCard({
           </p>
         </div>
         <div className="mt-2 flex items-center justify-between">
-          <button className="cursor-pointer">
+          <button className="cursor-pointer" onClick={handleBookmarkClick}>
             {isBookmark ? <ActiveBookmarkIcon /> : <InactiveBookmarkIcon />}
           </button>
           <button className="cursor-pointer">
