@@ -20,7 +20,7 @@ export default function Layout() {
     closeWithdrawModal,
   } = useProfileModalStore();
 
-  const isLoggedIn = useUserStore((s) => s.isLoggedIn);
+  const isLoggedIn = useUserStore((s) => !s.isLoggedIn);
 
   const isLoginPage = path === '/login';
   const isSignUpPage = path === '/signup';
