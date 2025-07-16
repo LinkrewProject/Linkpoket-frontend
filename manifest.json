@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "Linkrew",
+  "version": "1.0",
+  "description": "Linkrew to manage the links more comfortably",
+  "action": {
+    "default_popup": "extension.html",
+    "default_icon": "LinkrewForExtention.png",
+    "default_title": "Linkrew"
+  },
+  "icons": {
+    "16": "LinkrewForExtention.png",
+    "48": "LinkrewForExtention.png",
+    "128": "LinkrewForExtention.png"
+  },
+  "permissions": ["activeTab"],
+  "host_permissions": ["<all_urls>"]
+}
