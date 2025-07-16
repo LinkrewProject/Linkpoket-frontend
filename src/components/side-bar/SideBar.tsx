@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import BookMark from '@/assets/widget-ui-assets/BookMark.svg?react';
 import PersonalPage from '@/assets/widget-ui-assets/PersonalPage.svg?react';
 import PlusIcon from '@/assets/common-ui-assets/PlusIcon.svg?react';
@@ -30,6 +30,7 @@ const SideBar: React.FC<MenubarProps> = ({
   const isMobile = useMobile();
   const { pageId } = usePageStore();
   const { parentsFolderId } = useParentsFolderIdStore();
+  const isBookmarks = useLocation().pathname === '/bookmarks';
 
   //768px 이하의 경우, showSidebar를 false처리, 이외엔 true처리
   useEffect(() => {
@@ -99,8 +100,6 @@ const SideBar: React.FC<MenubarProps> = ({
       parentFolderId: parentsFolderId as string,
     });
   };
-
-  console.log('모바일?', isMobile);
 
   if (
     (showSidebar && !isFoldSidebar && !isMobile) ||
@@ -243,20 +242,28 @@ const SideBar: React.FC<MenubarProps> = ({
         </div>
 
         <div className="flex flex-col items-center gap-[8px]">
-          <div className="p-3">
-            <PersonalPage
-              width={20}
-              height={20}
-              className="group-focus:text-primary-50 text-gray-70"
-            />
-          </div>
-          <div className="p-3">
-            <BookMark
-              width={20}
-              height={20}
-              className="text-gray-70 group-focus:text-primary-50 my-[2px]"
-            />
-          </div>
+          <button
+            className={`cursor-pointer p-3 ${!isBookmarks && 'text-gray-70 bg-gray-5 rounded-[8px] text-[14px] font-[600]'}`}
+          >
+            <Link to="/">
+              <PersonalPage
+                width={20}
+                height={20}
+                className="group-focus:text-primary-50 text-gray-70"
+              />
+            </Link>
+          </button>
+          <button
+            className={`cursor-pointer p-3 ${isBookmarks && 'text-gray-70 bg-gray-5 rounded-[8px] text-[14px] font-[600]'}`}
+          >
+            <Link to="/bookmarks">
+              <BookMark
+                width={20}
+                height={20}
+                className="text-gray-70 group-focus:text-primary-50 my-[2px]"
+              />
+            </Link>
+          </button>
         </div>
       </aside>
     );
@@ -266,34 +273,3 @@ const SideBar: React.FC<MenubarProps> = ({
 };
 
 export default SideBar;
-
-// isFoldSiderbar && (
-//   // 반응형 (사이드바 접힘) 화면
-//   <aside className="border-gray-10 h-screen w-[80px] border-r p-4">
-//     <div className="flex justify-end">
-//       <button
-//         onClick={() => setShowSidebar(true)}
-//         className="mb-2 cursor-pointer"
-//       >
-//         <SidebarOpen />
-//       </button>
-//     </div>
-
-//     <div className="flex flex-col items-center gap-[8px]">
-//       <div className="p-3">
-//         <PersonalPage
-//           width={20}
-//           height={20}
-//           className="group-focus:text-primary-50 text-gray-70"
-//         />
-//       </div>
-//       <div className="p-3">
-//         <BookMark
-//           width={20}
-//           height={20}
-//           className="text-gray-70 group-focus:text-primary-50 my-[2px]"
-//         />
-//       </div>
-//     </div>
-//   </aside>
-// );
