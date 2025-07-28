@@ -16,7 +16,7 @@ const router = createBrowserRouter([
     children: [
       // 인증이 필요한 라우트들
       {
-        element: <ProtectedRoute />,
+        // element: <ProtectedRoute />,
         children: [
           { path: '/', element: <PersonalPage /> },
           { path: '/personal', element: <PersonalPage /> },
@@ -31,7 +31,7 @@ const router = createBrowserRouter([
 
       // 인증된 사용자는 접근할 필요 없는 라우트들
       {
-        element: <RedirectIfAuthenticated />,
+        // element: <RedirectIfAuthenticated />,
         children: [
           { path: 'login', element: <LoginPage /> },
           { path: 'signup', element: <SignupPage /> },
