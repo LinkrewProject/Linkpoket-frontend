@@ -5,7 +5,7 @@ import SignupPage from '@/pages/auth/signup';
 import { LandingPage } from '@/pages/landing/ui/LandingPage';
 import ReissuePage from '@/pages/reissue/page';
 import { ProtectedRoute } from './guards/ProtectedRoute';
-// import { RedirectIfAuthenticated } from './guards/RedirectIfAuthenticated';
+import { RedirectIfAuthenticated } from './guards/RedirectIfAuthenticated';
 import PersonalPage from '@/pages/PersonalPage';
 import BookmarkPage from '@/pages/BookmarkPage';
 import SharedPage from '@/pages/SharedPage';
@@ -31,7 +31,7 @@ const router = createBrowserRouter([
 
       // 인증된 사용자는 접근할 필요 없는 라우트들
       {
-        // element: <RedirectIfAuthenticated />,
+        element: <RedirectIfAuthenticated />,
         children: [
           { path: 'login', element: <LoginPage /> },
           { path: 'signup', element: <SignupPage /> },
@@ -39,6 +39,8 @@ const router = createBrowserRouter([
       },
 
       // 항상 접근 가능한 라우트들
+      { path: 'landing', element: <LandingPage /> },
+      { path: 'reissue', element: <ReissuePage /> },
       { path: 'landing', element: <LandingPage /> },
       { path: 'reissue', element: <ReissuePage /> },
     ],

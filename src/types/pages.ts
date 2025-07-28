@@ -2,27 +2,22 @@ import { FolderDetail } from './folders';
 import { LinkDetail } from './links';
 
 export interface CreateSharedPageData {
-  pageTitle: string;
-  pageDescription?: string;
-  pageType: string;
-  onSuccess?: () => void;
-  onError?: (error: any) => void;
+  pageType: 'SHARED';
 }
 
 export interface JoinedPageData {
   pageId: string;
   pageTitle: string;
-  pageType: string;
+  pageType: 'PERSONAL' | 'SHARED';
 }
 
 export interface PageParamsData {
-  pageId: number;
+  pageId: string;
 }
 
 export interface PageDetails {
-  pageId: number;
+  pageId: string;
   pageTitle: string;
-  pageDescription: string;
   rootFolderId: number;
   directoryDetailRespons: FolderDetail[];
   siteDetailResponses: LinkDetail[];
@@ -31,30 +26,32 @@ export interface PageDetails {
 
 export interface DeleteSharedPageData {
   baseRequest: {
-    pageId: number;
+    pageId: string;
     commandType: string;
   };
 }
 
 export interface UpdatePageTitleData {
   baseRequest: {
-    pageId: number;
+    pageId: string;
     commandType: string;
   };
   pageTitle: string;
 }
 
-export interface UpdatePageDescriptionData {
-  baseRequest: {
-    pageId: number;
-    commandType: string;
-  };
-  pageDescription: string;
+export interface PageControllerSectionProps {
+  folderDataLength: number;
+  linkDataLength: number;
+}
+
+export interface PageContentSectionProps {
+  folderData: FolderDetail[];
+  linkData: LinkDetail[];
 }
 
 export interface UpdateSharedPageInvitationData {
   baseRequest: {
-    pageId: number;
+    pageId: string;
     commandType: 'SHARED_PAGE_INVITATION';
   };
   receiverEmail: string;
@@ -63,15 +60,15 @@ export interface UpdateSharedPageInvitationData {
 
 export interface UpdateSharedPagePermissionData {
   baseRequest: {
-    pageId: number;
+    pageId: string;
     commandType: 'SHARED_PAGE_PERMISSION_CHANGE';
   };
-  targetMemberId: number;
-  permissionType: string;
+  targetMemberId: string;
+  permissionType: string | null;
 }
 
 export interface PatchSharedPageInvitationData {
-  requestId: number;
+  requestId: string;
   requestStatus: string;
   notificationType: string;
 }

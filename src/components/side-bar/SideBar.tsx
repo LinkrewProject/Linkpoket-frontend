@@ -1,33 +1,42 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Footer } from '../footer/Footer';
+import { Link, useLocation } from 'react-router-dom';
 import BookMark from '@/assets/widget-ui-assets/BookMark.svg?react';
 import PersonalPage from '@/assets/widget-ui-assets/PersonalPage.svg?react';
-import SharedPage from '@/assets/widget-ui-assets/SharedPage.svg?react';
 import PlusIcon from '@/assets/common-ui-assets/PlusIcon.svg?react';
+import SidebarOpen from '@/assets/widget-ui-assets/SidebarOpen.svg?react';
+import SidebarClose from '@/assets/widget-ui-assets/SidebarClose.svg?react';
 import { useMobile } from '@/hooks/useMobile';
-import { useUserStore } from '@/stores/userStore';
-import AddSharedPageModal from '../modal/page/AddSharedPageModal';
 import useFetchJoinedPage from '@/hooks/queries/useFetchJoinedPage';
-import { JoinedPageData } from '@/types/pages';
-import { useProfileModalStore } from '@/stores/profileModalStore';
+import { useCreateSharedPage } from '@/hooks/mutations/useCreateSharedPage';
+import { useCreateFolder } from '@/hooks/mutations/useCreateFolder';
+import { toast } from 'react-hot-toast';
+import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
+import useFetchFolderList from '@/hooks/queries/useFetchFolderList';
 
 type MenubarProps = {
   showSidebar: boolean;
   setShowSidebar: React.Dispatch<React.SetStateAction<boolean>>;
+  isFoldSidebar: boolean;
+  setIsFoldSidebar: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const SideBar: React.FC<MenubarProps> = ({ showSidebar, setShowSidebar }) => {
+const SideBar: React.FC<MenubarProps> = ({
+  showSidebar,
+  setShowSidebar,
+  isFoldSidebar,
+  setIsFoldSidebar,
+}) => {
   const sidebarRef = useRef<HTMLElement | null>(null);
   const isMobile = useMobile();
-  const { nickname, email, colorCode } = useUserStore();
-  const [showAddSharedPageModal, setShowAddSharedPageModal] = useState(false);
-  const { openProfileModal } = useProfileModalStore();
+  const { pageId } = usePageStore();
+  const { parentsFolderId } = useParentsFolderIdStore();
+  const isBookmarks = useLocation().pathname === '/bookmarks';
 
   //768px 이하의 경우, showSidebar를 false처리, 이외엔 true처리
   useEffect(() => {
     setShowSidebar(!isMobile);
-  }, [isMobile, setShowSidebar]);
+    setIsFoldSidebar(isMobile);
+  }, [isMobile, setShowSidebar, setIsFoldSidebar]);
 
   //useClickOutside 사용시 isMobile === false일 때도 계속 리스너가 등록되어 있어 명시적으로
   useEffect(() => {
@@ -48,135 +57,219 @@ const SideBar: React.FC<MenubarProps> = ({ showSidebar, setShowSidebar }) => {
     };
   }, [isMobile, setShowSidebar, showSidebar]);
 
-  // 현재 참여중인 페이지 호출
+  //사이드바 페이지 목록 조회
   const { joinedPage } = useFetchJoinedPage();
-  //첫 번째 항목은 항상 개인 페이지이므로 제외합니다
-  const joinedPageData = (joinedPage ?? []).slice(1);
 
-  //추후 지울 코드 (개발중 res값 확인용)
-  useEffect(() => {
-    if (joinedPage) {
-      console.log('참여중인 페이지', joinedPage);
-    }
-  }, [joinedPage]);
+  //사이드바 폴더 목록 조회
+  const { folderList } = useFetchFolderList(pageId as string);
+  const refinedFolderList = folderList?.data?.directories;
 
-  return showSidebar ? (
-    <aside
-      ref={sidebarRef}
-      className={`border-gray-30 flex h-screen w-[260px] flex-col justify-between border-r ${isMobile ? 'bg-gray-0 absolute top-0 left-0 z-50' : 'relative'} `}
-    >
-      {/* TODO: 유저 정보쪽 데이터 전달까지 스켈레톤 처리 필요 */}
-      <div className="flex flex-col gap-[16px] px-[12px] pt-[24px] pb-[8px]">
-        <div className="flex flex-col gap-[16px]">
-          <div
-            className="flex gap-[12px] p-[8px] hover:cursor-pointer"
-            onClick={() => openProfileModal()}
-          >
-            <div
-              style={{ backgroundColor: colorCode }}
-              className="flex h-[50px] w-[50px] items-center justify-center rounded-full p-[8px] text-[22px]"
+  //공유페이지 생성
+  const { mutate: createSharedPage } = useCreateSharedPage({
+    onSuccess: () => {
+      toast.success('공유페이지 생성 완료');
+    },
+    onError: () => {
+      toast.error('공유페이지 생성 실패');
+    },
+  });
+
+  const handleCreateSharedPage = () => {
+    createSharedPage({
+      pageType: 'SHARED',
+    });
+  };
+
+  //폴더 생성
+  const { mutate: createFolder } = useCreateFolder(pageId as string, {
+    onSuccess: () => {
+      toast.success('폴더 생성 완료');
+    },
+    onError: () => {
+      toast.error('폴더 생성 실패');
+    },
+  });
+
+  const handleCreateFolder = () => {
+    createFolder({
+      baseRequest: {
+        pageId: pageId as string,
+        commandType: 'CREATE',
+      },
+      folderName: '새 폴더',
+      parentFolderId: parentsFolderId as string,
+    });
+  };
+
+  if (
+    (showSidebar && !isFoldSidebar && !isMobile) ||
+    (isMobile && showSidebar)
+  ) {
+    return (
+      <aside
+        ref={sidebarRef}
+        className={`border-gray-10 flex h-screen w-[220px] flex-col justify-between border-r ${isMobile ? 'bg-gray-0 absolute top-0 left-0 z-50' : 'relative'} `}
+      >
+        <div className="flex flex-col gap-[8px] p-[16px]">
+          <div className="flex justify-end">
+            <button
+              onClick={() => {
+                setShowSidebar(false);
+                setIsFoldSidebar(true);
+              }}
+              className="cursor-pointer"
             >
-              {nickname.charAt(0).toUpperCase()}
-            </div>
-            <div>
-              <p className="text-gray-90 text-[18px] font-semibold">
-                {nickname}
-              </p>
-              <p className="text-[16px] font-[400] text-gray-50">{email}</p>
-            </div>
+              <SidebarClose />
+            </button>
           </div>
+          <ul>
+            <li>
+              <Link
+                to="/"
+                className="group hover:bg-primary-5 text-gray-70 focus:bg-primary-10 focus:text-primary-50 flex items-center gap-[12px] p-[8px] text-[14px] font-[600] hover:rounded-[8px] focus:rounded-[8px]"
+              >
+                <PersonalPage
+                  width={20}
+                  height={20}
+                  className="group-focus:text-primary-50 text-gray-70"
+                />
+                개인 페이지
+              </Link>
+
+              <Link
+                to="bookmarks"
+                className="hover:bg-primary-5 group text-gray-70 focus:bg-primary-10 focus:text-primary-50 flex items-center gap-[12px] p-[8px] text-[14px] font-[600] hover:rounded-[8px] focus:rounded-[8px]"
+              >
+                <BookMark
+                  width={20}
+                  height={20}
+                  className="text-gray-70 group-focus:text-primary-50 my-[2px]"
+                />
+                북마크
+              </Link>
+
+              <div className="mt-4 flex items-center px-[8px] py-[4px] text-[14px] font-[500] text-gray-50 hover:rounded-[8px] focus:rounded-[8px]">
+                <div className="group flex w-full items-center justify-between">
+                  <div className="flex gap-[20px]">
+                    <div>공유 페이지</div>
+                  </div>
+                  <PlusIcon
+                    className="text-gray-40 hover:text-gray-90 cursor-pointer"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      handleCreateSharedPage();
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* 공유페이지 리스트 */}
+              <div className="mt-2 flex flex-col gap-[2px]">
+                {joinedPage?.map((page: any) => (
+                  <Link
+                    key={page.pageId}
+                    to={`/shared/${page.pageId}`}
+                    className="text-gray-70 hover:bg-gray-5 focus:bg-gray-5 py-2 pr-3 pl-2 text-[14px] font-[600] hover:rounded-[8px] focus:rounded-[8px]"
+                  >
+                    {page.pageTitle}
+                  </Link>
+                ))}
+              </div>
+
+              {/* 공유페이지에 따른 폴더 생성  */}
+              <div className="mt-4 flex items-center px-[8px] py-[4px] text-[14px] font-[500] text-gray-50 hover:rounded-[8px] focus:rounded-[8px]">
+                <div className="group flex w-full items-center justify-between">
+                  <div className="flex gap-[20px]">
+                    <div>폴더</div>
+                  </div>
+                  <PlusIcon
+                    className="text-gray-40 hover:text-gray-90 cursor-pointer"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      handleCreateFolder();
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* 폴더 뎁스1  리스트 */}
+              <div className="mt-2 flex flex-col gap-[2px]">
+                {refinedFolderList?.map((folder: any) => (
+                  <Link
+                    key={folder.folderId}
+                    to={`/folder/${folder.folderId}`}
+                    className="text-gray-70 hover:text-primary-50 focus:text-primary-50 hover:bg-primary-5 focus:bg-primary-5 py-2 pr-3 pl-2 text-[14px] font-[600] hover:rounded-[8px] focus:rounded-[8px]"
+                  >
+                    {folder.folderTitle}
+                    {/* 폴더 뎁스2  리스트 */}
+                    {folder.children && (
+                      <div className="mt-2 flex flex-col gap-[2px]">
+                        {folder.children.map((child: any) => (
+                          <Link
+                            key={child.folderId}
+                            to={`/folder/${child.folderId}`}
+                            className="text-gray-70 hover:text-primary-50 focus:text-primary-50 hover:bg-primary-5 focus:bg-primary-5 py-2 pr-3 pl-2 text-[14px] font-[600] hover:rounded-[8px] focus:rounded-[8px]"
+                          >
+                            <span className="pr-2">•</span>
+                            <span>{child.folderTitle}</span>
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </Link>
+                ))}
+              </div>
+            </li>
+          </ul>
         </div>
-        {/* 메뉴 리스트 */}
-        <ul>
-          <li>
-            <Link
-              to="bookmarks"
-              className="hover:bg-primary-5 group text-gray-90 focus:bg-primary-10 focus:text-primary-50 flex items-center gap-[20px] px-[8px] py-[12px] text-[18px] font-[600] hover:rounded-[8px] focus:rounded-[8px]"
-            >
-              <BookMark
-                width={16}
-                height={20}
-                className="text-gray-90 group-focus:text-primary-50 mx-[4px] my-[2px]"
-              />
-              즐겨찾기 / 북마크
-            </Link>
-            <Link
-              to="/"
-              className="group hover:bg-primary-5 text-gray-90 focus:bg-primary-10 focus:text-primary-50 flex items-center gap-[20px] px-[8px] py-[14px] text-[18px] font-[600] hover:rounded-[8px] focus:rounded-[8px]"
-            >
+      </aside>
+    );
+  } else if (!showSidebar && isFoldSidebar && !isMobile) {
+    return (
+      <aside className="border-gray-10 h-screen w-[80px] border-r p-4">
+        <div className="flex justify-end">
+          <button
+            onClick={() => {
+              setShowSidebar(true);
+              setIsFoldSidebar(false);
+            }}
+            className="mb-2 cursor-pointer"
+          >
+            <SidebarOpen />
+          </button>
+        </div>
+
+        <div className="flex flex-col items-center gap-[8px]">
+          <button
+            className={`cursor-pointer p-3 ${!isBookmarks && 'text-gray-70 bg-gray-5 rounded-[8px] text-[14px] font-[600]'}`}
+          >
+            <Link to="/">
               <PersonalPage
                 width={20}
                 height={20}
-                className="group-focus:text-primary-50 m-[2px]"
+                className="group-focus:text-primary-50 text-gray-70"
               />
-              개인 페이지
             </Link>
-            <Link
-              to="#"
-              className="group hover:bg-primary-5 text-gray-90 focus:bg-primary-10 focus:text-primary-50 flex items-center px-[8px] py-[14px] text-[18px] font-[600] hover:rounded-[8px] focus:rounded-[8px]"
-            >
-              <div className="group flex w-full items-center justify-between">
-                <div className="flex gap-[20px]">
-                  <SharedPage
-                    width={20}
-                    height={20}
-                    className="group-focus:text-primary-50 m-[2px]"
-                  />
-                  <div>공유 페이지</div>
-                </div>
-                <PlusIcon
-                  className="text-gray-60 hover:text-gray-90 opacity-0 transition-opacity group-hover:opacity-100"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    setShowAddSharedPageModal(true);
-                  }}
-                />
-              </div>
-            </Link>
-            {showAddSharedPageModal && (
-              <AddSharedPageModal
-                isOpen={showAddSharedPageModal}
-                onClose={() => setShowAddSharedPageModal(false)}
+          </button>
+          <button
+            className={`cursor-pointer p-3 ${isBookmarks && 'text-gray-70 bg-gray-5 rounded-[8px] text-[14px] font-[600]'}`}
+          >
+            <Link to="/bookmarks">
+              <BookMark
+                width={20}
+                height={20}
+                className="text-gray-70 group-focus:text-primary-50 my-[2px]"
               />
-            )}
-
-            {joinedPageData.map((page: JoinedPageData) => (
-              <Link
-                to={`shared/${page.pageId}`}
-                key={page.pageId}
-                className="text-gray-70 hover:bg-primary-5 focus:bg-primary-10 focus:text-primary-50 flex py-[12px] pr-[8px] pl-[52px] text-[18px] font-[600] hover:rounded-[8px] focus:rounded-[8px]"
-              >
-                {page.pageTitle}
-              </Link>
-            ))}
-          </li>
-        </ul>
-      </div>
-
-      <Footer />
-    </aside>
-  ) : null;
+            </Link>
+          </button>
+        </div>
+      </aside>
+    );
+  } else if (isMobile && !showSidebar) {
+    return null;
+  }
 };
 
 export default SideBar;
-
-// 다음과 같이 사용함
-
-// import SideBar from '@/widgets/side-bar/SideBar';
-
-// const sharedPagesData = [
-//   { id: '1', title: '공유 페이지 1' },
-//   { id: '2', title: '공유 페이지 2' },
-// ];
-
-// export default function TEST() {
-//   return (
-//     <div>
-//       <SideBar
-//         sharedPages={sharedPagesData}
-//         showFooter={true}
-//       />
-//     </div>
-//   );
-// }

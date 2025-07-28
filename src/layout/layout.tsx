@@ -5,13 +5,20 @@ import { Outlet, useLocation } from 'react-router-dom';
 import { useUserStore } from '@/stores/userStore';
 import ProfileSettingsModal from '@/components/modal/profile/ProfileSettingsModal';
 import { useProfileModalStore } from '@/stores/profileModalStore';
+import WithdrawAccountModal from '@/components/modal/profile/WithdrawAccountModal';
 import { useNotificationSSE } from '@/hooks/useNotificationSSE';
 
 export default function Layout() {
   const location = useLocation();
   const path = location.pathname;
   const [showSidebar, setShowSidebar] = useState(true);
-  const { isProfileModalOpen, closeProfileModal } = useProfileModalStore();
+  const [isFoldSidebar, setIsFoldSidebar] = useState(false);
+  const {
+    isProfileModalOpen,
+    isWithdrawModalOpen,
+    closeProfileModal,
+    closeWithdrawModal,
+  } = useProfileModalStore();
 
   const isLoggedIn = useUserStore((s) => s.isLoggedIn);
 
@@ -40,7 +47,12 @@ export default function Layout() {
 
       <div className="flex">
         {!isHideSidebar ? (
-          <SideBar showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
+          <SideBar
+            showSidebar={showSidebar}
+            setShowSidebar={setShowSidebar}
+            isFoldSidebar={isFoldSidebar}
+            setIsFoldSidebar={setIsFoldSidebar}
+          />
         ) : null}
         <main className="flex-1">
           <Outlet context={{ showSidebar }} />
@@ -49,6 +61,13 @@ export default function Layout() {
             <ProfileSettingsModal
               isOpen={isProfileModalOpen}
               onClose={closeProfileModal}
+            />
+          )}
+
+          {isWithdrawModalOpen && (
+            <WithdrawAccountModal
+              isOpen={isWithdrawModalOpen}
+              onClose={closeWithdrawModal}
             />
           )}
         </main>

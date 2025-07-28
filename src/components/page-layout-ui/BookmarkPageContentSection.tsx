@@ -1,51 +1,37 @@
-import { PageContentSectionProps } from '@/types/pageItems';
-import FolderItem from './FolderItem';
-import LinkItem from './LinkItem';
+import { PageContentSectionProps } from '@/types/pages';
+import LinkCard from '../common-ui/LinkCard';
+import FolderCard from '../common-ui/FolderCard';
+
 export default function BookmarkPageContentSection({
-  view,
-  contentData,
+  folderData,
+  linkData,
 }: PageContentSectionProps) {
-  const folderData = contentData?.directorySimpleResponses ?? [];
-  const linkData = contentData?.siteSimpleResponses ?? [];
-  const mergedList = [...folderData, ...linkData];
+  const pageData = [...folderData, ...linkData].sort(
+    (a, b) => a.orderIndex - b.orderIndex
+  );
+
+  console.log('pageData', pageData);
 
   return (
-    <div
-      className={`mx-auto mt-[40px] w-full max-w-[1180px] flex-1 overflow-y-auto px-[104px] text-3xl font-bold`}
-    >
+    <div className={`h-screen w-full overflow-y-auto`}>
       <div
-        className={`w-full max-w-[1180px] min-w-[328px] ${
-          view === 'grid'
-            ? 'grid-cols-custom grid gap-4'
-            : 'flex flex-col gap-4'
-        }`}
+        className={`grid w-full grid-cols-2 justify-center gap-x-2 gap-y-8 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5`}
       >
-        {mergedList.map((item) => {
-          if ('folderId' in item) {
-            return (
-              <FolderItem
-                key={item.folderName}
-                isBookmark={item.isFavorite}
-                item={{ id: item.folderId, title: item.folderName }}
-                view={view}
-              />
-            );
-          } else if ('linkId' in item) {
-            return (
-              <LinkItem
-                key={item.linkName}
-                isBookmark={item.isFavorite}
-                item={{
-                  id: item.linkId,
-                  title: item.linkName,
-                  linkUrl: item.linkUrl,
-                }}
-                view={view}
-              />
-            );
-          }
-          return null;
-        })}
+        {pageData.map((item) =>
+          'folderId' in item ? (
+            <FolderCard
+              key={item.folderId}
+              isBookmark={item.isFavorite}
+              item={item}
+            />
+          ) : (
+            <LinkCard
+              key={item.linkId}
+              isBookmark={item.isFavorite}
+              item={item}
+            />
+          )
+        )}
       </div>
     </div>
   );

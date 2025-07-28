@@ -1,83 +1,73 @@
+import { useEffect } from 'react';
 import PageControllerSection from '@/components/page-layout-ui/PageControllerSection';
 import PageHeaderSection from '@/components/page-layout-ui/PageHeaderSection';
 import PersonalPageContentSection from '@/components/page-layout-ui/PersonalPageContentSection';
 import { useFetchPersonalPage } from '@/hooks/queries/useFetchPersonalPage';
-import { useMobile } from '@/hooks/useMobile';
-import { usePageSearch } from '@/hooks/usePageSearch';
 import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
 import { useUserStore } from '@/stores/userStore';
-import { useEffect, useState } from 'react';
 
 export default function PersonalPage() {
-  const { member, pageDetails, isLoading, error } = useFetchPersonalPage();
+  const { data } = useFetchPersonalPage();
+  console.log('pageDetails', data);
+  const refinedData = data?.data.pageDetails;
+
+  console.log('refinedData:', refinedData);
+
+  const pageId = refinedData?.pageId;
+  const rootFolderId = refinedData?.rootFolderId;
+
+  const pageTitle = refinedData?.pageTitle;
+
+  const folderData = refinedData?.directoryDetailRespons ?? [];
+  const linkData = refinedData?.siteDetailResponses ?? [];
+  const folderDataLength = folderData?.length;
+  const linkDataLength = linkData?.length;
+  const memberData = data?.data.member;
+  console.log('memberData', memberData);
+
+  const { setUser } = useUserStore();
   const { setPageInfo } = usePageStore();
   const { setParentsFolderId } = useParentsFolderIdStore();
-  const setUser = useUserStore((state) => state.setUser);
-
-  const resolvedPageId = pageDetails?.pageId;
-
-  const { searchKeyword, setSearchKeyword, searchResult } = usePageSearch(
-    resolvedPageId,
-    'TITLE'
-  );
-
-  const [view, setView] = useState<'grid' | 'list'>('grid');
-
-  const isMobile = useMobile();
 
   useEffect(() => {
-    if (isMobile) {
-      setView('list');
-    }
-  }, [isMobile]);
+    setPageInfo(pageId);
+    setParentsFolderId(rootFolderId);
+    setUser(memberData?.nickName, memberData?.email, memberData?.colorCode);
 
-  useEffect(() => {
-    if (member?.nickName && member?.email && member?.colorCode) {
-      const { nickName, email, colorCode } = member;
-      setUser(nickName, email, colorCode);
+    if (data?.data.pageDetails) {
+      localStorage.setItem(
+        'personalPageData',
+        JSON.stringify({
+          data,
+          lastUpdated: new Date().toISOString(),
+        })
+      );
     }
-  }, [member, setUser]);
 
-  useEffect(() => {
-    if (pageDetails?.pageId && pageDetails?.rootFolderId) {
-      setPageInfo(pageDetails.pageId, 'VIEW');
-      setParentsFolderId(pageDetails.rootFolderId);
+    if (memberData) {
+      setUser(memberData.nickName, memberData.email, memberData.colorCode);
     }
-  }, [pageDetails, setPageInfo, setParentsFolderId]);
-
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error loading data</div>;
-  if (!pageDetails) return <div>No page data</div>;
+  }, [
+    pageId,
+    rootFolderId,
+    setPageInfo,
+    setParentsFolderId,
+    setUser,
+    memberData?.nickName,
+    memberData?.email,
+    memberData?.colorCode,
+    data,
+    memberData,
+  ]);
 
   return (
-    <div className="flex h-screen flex-col">
-      {/* HEADER SECTION*/}
-      {pageDetails && (
-        <>
-          <PageHeaderSection
-            pageTitle={pageDetails.pageTitle}
-            pageDescription={pageDetails.pageDescription}
-            folderId={pageDetails.rootFolderId}
-          />
-          {/* Boundary line */}
-          <div className="border-b-gray-30 mb-[40px] w-full border-b" />
-        </>
-      )}
-
-      {/* CONTROLLER SECTION*/}
+    <div className="flex h-screen min-w-[328px] flex-col px-[64px] py-[56px] xl:px-[102px]">
+      <PageHeaderSection pageTitle={pageTitle} />
       <PageControllerSection
-        view={view}
-        setView={setView}
-        searchKeyword={searchKeyword}
-        setSearchKeyword={setSearchKeyword}
+        folderDataLength={folderDataLength}
+        linkDataLength={linkDataLength}
       />
-
-      {/*CONTENT SECTION*/}
-      <PersonalPageContentSection
-        view={view}
-        searchResult={searchResult}
-        pageDetails={pageDetails}
-      />
+      <PersonalPageContentSection folderData={folderData} linkData={linkData} />
     </div>
   );
 }

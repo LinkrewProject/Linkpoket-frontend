@@ -1,20 +1,19 @@
 export type CreateFolderData = {
   baseRequest: {
-    pageId: number;
+    pageId: string;
     commandType: string;
   };
   folderName: string;
-  parentFolderId: number;
-  folderDescription: string;
+  parentFolderId: string;
 };
 
 export type TransferFolderData = {
   baseRequest: {
-    pageId: number;
+    pageId: string;
     commandType: 'DIRECTORY_TRANSMISSION';
   };
   receiverEmail: string;
-  directoryId: number;
+  directoryId: string;
 };
 
 export type TransferFolderResponse = {
@@ -22,12 +21,12 @@ export type TransferFolderResponse = {
     receiverEmail: string;
     senderEmail: string;
     directoryName: string;
-    directoryTransmissionId: number;
+    directoryTransmissionId: string;
   };
 };
 
 export type FolderDetail = {
-  folderId: number;
+  folderId: string;
   folderName: string;
   isFavorite: boolean;
   orderIndex: number;
@@ -37,25 +36,25 @@ export type FolderDetailResponse = Array<FolderDetail>;
 
 export type UpdateFolderData = {
   baseRequest: {
-    pageId: number;
+    pageId: string;
     commandType: string;
   };
   folderName: string;
-  folderId: number;
+  folderId: string;
   folderDescription?: string;
 };
 
 export type DeleteFolderData = {
   baseRequest: {
-    pageId: number;
+    pageId: string;
     commandType: string;
   };
-  folderId: number;
+  folderId: string;
 };
 
 export interface FetchFolderDetailsProps {
-  pageId: number;
+  pageId: string;
   commandType: string;
-  folderId: number;
+  folderId: string;
   sortType: string;
 }

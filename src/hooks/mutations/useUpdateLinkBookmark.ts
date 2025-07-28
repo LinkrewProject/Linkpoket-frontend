@@ -10,9 +10,9 @@ export default function useUpdateLinkBookmark({
   pageId,
   options,
 }: {
-  linkId: number;
-  pageId: number;
-  options?: UseMutationOptions<any, Error, number, unknown>;
+  linkId: string;
+  pageId: string;
+  options?: UseMutationOptions<any, Error, string, unknown>;
 }) {
   const queryClient = useQueryClient();
 
@@ -20,10 +20,12 @@ export default function useUpdateLinkBookmark({
     ...options,
     mutationFn: updateLinkBookmark,
     onSuccess: (response, variables, context) => {
-      queryClient.invalidateQueries({ queryKey: ['bookmark', linkId] });
-      queryClient.invalidateQueries({ queryKey: ['sharedPage', pageId] });
-      queryClient.invalidateQueries({ queryKey: ['personalPage', pageId] });
-      queryClient.invalidateQueries({ queryKey: ['favorite'] });
+      Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['favorite'] }),
+        queryClient.invalidateQueries({ queryKey: ['bookmark', linkId] }),
+        queryClient.invalidateQueries({ queryKey: ['sharedPage', pageId] }),
+        queryClient.invalidateQueries({ queryKey: ['personalPage'] }),
+      ]);
       if (options?.onSuccess) {
         options.onSuccess(response, variables, context);
       }

@@ -72,9 +72,7 @@ export default function AddSharedPageModal({
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} className="p-[24px]">
-      <Modal.Header className="text-[22px] font-bold">
-        새 공유 페이지 생성
-      </Modal.Header>
+      <Modal.Header>새 공유 페이지 생성</Modal.Header>
       <Modal.Body>
         {error && (
           <div className="text-status-danger mb-2 text-center text-[15px] font-semibold">

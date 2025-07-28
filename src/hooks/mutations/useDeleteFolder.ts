@@ -7,7 +7,7 @@ import deleteFolder from '@/apis/folder-apis/deleteFolder';
 import { DeleteFolderData } from '@/types/folders';
 
 export default function useDeleteFolder(
-  pageId: number,
+  pageId: string,
   options?: UseMutationOptions<any, unknown, DeleteFolderData>
 ) {
   const queryClient = useQueryClient();
@@ -16,10 +16,20 @@ export default function useDeleteFolder(
     ...options,
     mutationFn: deleteFolder,
     onSuccess: async (response, variables, context) => {
-      await queryClient.invalidateQueries({
-        queryKey: ['sharedPage', pageId],
-        refetchType: 'active',
-      });
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ['sharedPage', pageId],
+          refetchType: 'active',
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ['folderList', pageId],
+          refetchType: 'active',
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ['favorite'],
+          refetchType: 'active',
+        }),
+      ]);
 
       if (options?.onSuccess) {
         options.onSuccess(response, variables, context);

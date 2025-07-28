@@ -120,7 +120,6 @@ const SignupPage = () => {
   // 직업 선택값과 커스텀 직업값 감시
   const navigate = useNavigate();
   const selectedJob = watch('job');
-  // const customJobValue = watch('customJob');
 
   // 개별 약관 동의 상태 관리
   const [termsStatus, setTermsStatus] = useState({
@@ -168,21 +167,16 @@ const SignupPage = () => {
         COLOR_OPTIONS[Math.floor(Math.random() * COLOR_OPTIONS.length)],
     };
 
-    // API 호출 시뮬레이션
-    console.log('회원가입 데이터:', submitData);
-
     try {
       const genderValue = data.gender === 'male' ? 1 : 2;
 
-      const response = await axiosInstance.post('/api/member/sign-up', {
+      await axiosInstance.post('/api/member/sign-up', {
         ageRange: data.ageRange,
         gender: genderValue,
         job: submitData.jobText,
         nickName: data.nickname,
         colorCode: submitData.colorCode,
       });
-
-      console.log('응답 성공:', response.data);
 
       navigate('/');
     } catch (error) {
@@ -199,7 +193,7 @@ const SignupPage = () => {
     <main className="flex min-h-screen min-w-screen flex-col items-center justify-center bg-white">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-[460px] max-w-md space-y-6"
+        className="w-[360px] max-w-md space-y-6"
       >
         <h2 className="mb-8 flex justify-center text-[26px] font-bold">
           링크모아 회원 가입
@@ -207,7 +201,7 @@ const SignupPage = () => {
 
         {/* 연령대 */}
         <div>
-          <label className="mb-2 block font-medium text-gray-700">연령대</label>
+          <label className="text-gray-70 mb-2 block font-medium">연령대</label>
           <div className="flex flex-row space-x-4">
             <Controller
               name="ageRange"
@@ -216,6 +210,7 @@ const SignupPage = () => {
                 <>
                   {AGE_OPTIONS.map((opt) => (
                     <Radio
+                      size="sm"
                       key={opt.value}
                       label={opt.label}
                       value={opt.value}
@@ -237,7 +232,7 @@ const SignupPage = () => {
 
         {/* 성별 */}
         <div>
-          <label className="mb-2 block font-medium text-gray-700">성별</label>
+          <label className="text-gray-70 mb-2 block font-medium">성별</label>
           <div className="flex flex-row space-x-4">
             <Controller
               name="gender"
@@ -246,6 +241,7 @@ const SignupPage = () => {
                 <>
                   {GENDER_OPTIONS.map((opt) => (
                     <Radio
+                      size="sm"
                       key={opt.value}
                       label={opt.label}
                       value={opt.value}
@@ -265,7 +261,7 @@ const SignupPage = () => {
 
         {/* 직업 */}
         <div>
-          <label className="mb-2 block font-medium text-gray-700">직업</label>
+          <label className="text-gray-70 mb-2 block font-medium">직업</label>
           <Controller
             name="job"
             control={control}
@@ -303,7 +299,7 @@ const SignupPage = () => {
 
         {/* 닉네임 */}
         <div>
-          <label className="mb-2 block font-medium text-gray-700">닉네임</label>
+          <label className="text-gray-70 mb-2 block font-medium">닉네임</label>
           <Controller
             name="nickname"
             control={control}

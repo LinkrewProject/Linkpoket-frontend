@@ -1,112 +1,50 @@
-import { useState, useEffect } from 'react';
-import FolderItem from './FolderItem';
-import LinkItem from './LinkItem';
-import { ContextMenu } from '../common-ui/ContextMenu';
-import { PageContentSectionProps } from '@/types/pageItems';
+import { PageContentSectionProps } from '@/types/pages';
+import LinkCard from '../common-ui/LinkCard';
+import FolderCard from '../common-ui/FolderCard';
+import AddLinkModal from '../modal/link/AddLinkModal';
 import { useModalStore } from '@/stores/modalStore';
-import { useBreadcrumbStore } from '@/stores/breadcrumb';
-import { useProfileModalStore } from '@/stores/profileModalStore';
-import ProfileSettingsModal from '../modal/profile/ProfileSettingsModal';
+import ErrorLinkModal from '../modal/link/ErrorLinkModal';
 
 export default function PersonalPageContentSection({
-  view,
-  searchResult,
-  pageDetails,
+  folderData,
+  linkData,
 }: PageContentSectionProps) {
-  const { openLinkModal, openFolderModal } = useModalStore();
-  const [contextMenu, setContextMenu] = useState<{
-    x: number;
-    y: number;
-  } | null>(null);
-  const { isProfileModalOpen, closeProfileModal } = useProfileModalStore();
+  const { isLinkModalOpen, closeLinkModal, isErrorModalOpen, closeErrorModal } =
+    useModalStore();
 
-  console.log('선택한 페이지 데이터:', pageDetails);
+  const pageData = [...folderData, ...linkData].sort(
+    (a, b) => a.orderIndex - b.orderIndex
+  );
 
-  const { resetBreadcrumbs } = useBreadcrumbStore();
-
-  useEffect(() => {
-    resetBreadcrumbs();
-  }, [resetBreadcrumbs]);
-
-  // 실제 사용할 데이터
-  const handleContextMenu = (e: React.MouseEvent) => {
-    e.preventDefault();
-    setContextMenu({ x: e.clientX, y: e.clientY });
-  };
-
-  const folderData = pageDetails?.directoryDetailRespons ?? [];
-  const linkData = pageDetails?.siteDetailResponses ?? [];
-
-  const mergedList = searchResult
-    ? [
-        ...(searchResult.directorySimpleResponses ?? []),
-        ...(searchResult.siteSimpleResponses ?? []),
-      ].map((item, index) => ({
-        ...item,
-        orderIndex:
-          'orderIndex' in item && typeof item.orderIndex === 'number'
-            ? item.orderIndex
-            : index,
-      }))
-    : [...folderData, ...linkData].sort((a, b) => a.orderIndex - b.orderIndex);
+  console.log('pageData', pageData);
 
   return (
-    <div
-      onContextMenu={handleContextMenu}
-      className={`mx-auto mt-[40px] w-full max-w-[1180px] flex-1 overflow-y-auto px-[104px] text-3xl font-bold`}
-    >
+    <div className={`h-screen w-full overflow-y-auto`}>
       <div
-        className={`w-full max-w-[1180px] min-w-[328px] ${
-          view === 'grid'
-            ? 'grid-cols-custom grid gap-4'
-            : 'flex flex-col gap-4'
-        }`}
+        className={`grid w-full grid-cols-2 justify-center gap-x-2 gap-y-8 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5`}
       >
-        {mergedList.map((item) => {
-          if ('folderId' in item) {
-            return (
-              <FolderItem
-                key={`folder-${item.folderId}`}
-                isBookmark={item.isFavorite}
-                item={{ id: Number(item.folderId), title: item.folderName }}
-                view={view}
-              />
-            );
-          } else if ('linkId' in item) {
-            return (
-              <LinkItem
-                key={`link-${item.linkId}`}
-                isBookmark={item.isFavorite}
-                item={{
-                  id: Number(item.linkId),
-                  title: item.linkName,
-                  linkUrl: item.linkUrl,
-                }}
-                view={view}
-              />
-            );
-          }
-          return null;
-        })}
-
-        {contextMenu && (
-          <ContextMenu
-            x={contextMenu.x}
-            y={contextMenu.y}
-            onClose={() => setContextMenu(null)}
-            onAddFolder={openFolderModal}
-            onAddLink={openLinkModal}
-          />
-        )}
-
-        {/* 프로필 세팅 모달 */}
-        {isProfileModalOpen && (
-          <ProfileSettingsModal
-            isOpen={isProfileModalOpen}
-            onClose={() => closeProfileModal()}
-          />
+        {pageData.map((item) =>
+          'folderId' in item ? (
+            <FolderCard
+              key={item.folderId}
+              isBookmark={item.isFavorite}
+              item={item}
+            />
+          ) : (
+            <LinkCard
+              key={item.linkId}
+              isBookmark={item.isFavorite}
+              item={item}
+            />
+          )
         )}
       </div>
+      {isLinkModalOpen && (
+        <AddLinkModal isOpen={isLinkModalOpen} onClose={closeLinkModal} />
+      )}
+      {isErrorModalOpen && (
+        <ErrorLinkModal isOpen={isErrorModalOpen} onClose={closeErrorModal} />
+      )}
     </div>
   );
 }

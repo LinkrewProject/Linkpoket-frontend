@@ -8,13 +8,15 @@ const inputVariants = cva(
   {
     variants: {
       variant: {
-        default: 'border-gray-30 focus:ring-primary-30 focus:border-primary-40',
+        default:
+          'border-gray-30 focus:ring-primary-30 focus:border-primary-40 placeholder:text-gray-50',
         error:
           'border-error-50 focus:ring-error-30 focus:border-error-50 text-status-danger',
-        disabled: 'bg-gray-10 text-gray-50 border-gray-30 cursor-not-allowed',
+        disabled: 'bg-gray-5 text-gray-50 border-gray-20 cursor-not-allowed',
+        completed: 'border-primary-50 text-gray-90 placeholder:text-gray-50',
       },
       inputSize: {
-        default: 'text-base',
+        default: 'text-sm',
         medium: 'text-[16px]',
       },
       isModal: {
@@ -60,16 +62,11 @@ export const Input = ({
       : '';
 
   return (
-    <div className={cn('flex flex-col space-y-4', containerClassName)}>
+    <div className={cn('flex flex-col space-y-2', containerClassName)}>
       {label && (
         <label
           htmlFor={props.id}
-          className={cn(
-            'text-gray-80 font-medium',
-            // 모달용 라벨 폰트 사이즈 조정
-            isModal || inputSize === 'medium' ? 'text-[16px]' : 'text-sm',
-            labelClassName
-          )}
+          className={cn('text-gray-70 text-sm font-medium', labelClassName)}
         >
           {label}
         </label>

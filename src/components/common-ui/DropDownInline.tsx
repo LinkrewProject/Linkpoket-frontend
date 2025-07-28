@@ -1,24 +1,24 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Transfer from '@/assets/common-ui-assets/Transfer.svg?react';
 import Copy from '@/assets/common-ui-assets/Copy.svg?react';
 import Delete from '@/assets/common-ui-assets/Delete.svg?react';
-import { useUpdateLink } from '@/hooks/mutations/useUpdateLink';
 import { usePageStore } from '@/stores/pageStore';
 import { useModalStore } from '@/stores/modalStore';
 import FolderTransferModal from '../modal/folder/FolderTransferModal';
 import { useTransferActionStore } from '@/stores/transferActionStore';
 import DeleteFolderModal from '../modal/folder/DeleteFolderModal';
 import DeleteLinkModal from '../modal/link/DeleteLinkModal';
-import useUpdateFolder from '@/hooks/mutations/useUpdateFolder';
 import { useClickOutsideMultiple } from '@/hooks/useClickOutsideMultiple';
+import { ToastCustom } from './ToastCustom';
+import { useTransferFolder } from '@/hooks/mutations/useTransferFolder';
 
 type DropDownInlineProps = {
-  id: number;
+  id: string;
   type: string;
   initialTitle: string;
   initialLink?: string;
-  onTitleChange?: (id: number, title: string) => void;
-  onLinkChange?: (id: number, link: string) => void;
+  onTitleChange?: (id: string, title: string) => void;
+  onLinkChange?: (id: string, link: string) => void;
   className?: string;
   isDropDownInline: boolean;
   setIsDropDownInline: React.Dispatch<React.SetStateAction<boolean>>;
@@ -38,6 +38,8 @@ const DropDownInline = ({
   const [title, setTitle] = useState(initialTitle);
   const [link, setLink] = useState(initialLink);
 
+  const { pageId } = usePageStore();
+
   const [isFolderDeleteOpen, setIsFolderDeleteOpen] = useState(false);
   const [isLinkDeleteOpen, setIsLinkDeleteOpen] = useState(false);
 
@@ -46,22 +48,16 @@ const DropDownInline = ({
   const { isTransferFolderModalOpen, closeTransferFolderModal } =
     useModalStore();
 
-  const transferFolder = useTransferActionStore((s) => s.transferFolder);
+  const { mutate: transferFolder } = useTransferFolder();
 
-  const isModifiedLink = title !== initialTitle || link !== initialLink;
-  const isModifiedFolder = title !== initialTitle;
-
-  const pageId = usePageStore((state) => state.pageId);
-
-  const { mutate: mutateLink } = useUpdateLink();
-  const { mutate: mutateFolder } = useUpdateFolder(pageId);
-
+  // TODO: 타이틀 변경은 공유페이지, 폴더에 있는걸 hook으로 만들어 여기서도 사용하면 좋을 것 같아요. 그래서 일단 버튼 제거했습니다
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setTitle(value);
     onTitleChange?.(id, value);
   };
 
+  // TODO: 타이틀 변경은 공유페이지, 폴더에 있는걸 hook으로 만들어 여기서도 사용하면 좋을 것 같아요. 그래서 일단 버튼 제거했습니다
   const handleLinkChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
     setLink(value);
@@ -93,7 +89,7 @@ const DropDownInline = ({
   return (
     <div
       ref={dropdownRef}
-      className={`border-gray-30 focus:bg-gray-30 focus:border-gray-30 bg-gray-0 z-50 inline-flex w-[214px] flex-col rounded-[10px] border p-[8px] text-[14px] font-[600] shadow ${className}`}
+      className={`border-gray-20 focus:bg-gray-30 focus:border-gray-30 bg-gray-0 z-50 inline-flex w-[214px] flex-col rounded-[10px] border p-[4px] text-[14px] font-[500] shadow ${className}`}
     >
       {type === 'folder' && (
         <div className="flex flex-col">
@@ -101,37 +97,9 @@ const DropDownInline = ({
             value={title}
             onChange={handleTitleChange}
             placeholder="디렉토리명 입력"
-            className="border-gray-30 rounded-lg border p-[8px] outline-none"
+            className="border-gray-20 mb-2 rounded-lg border px-[8px] py-[11px] outline-none"
           />
 
-          {isModifiedFolder && (
-            <button
-              onClick={() => {
-                mutateFolder(
-                  {
-                    baseRequest: {
-                      pageId,
-                      commandType: 'EDIT',
-                    },
-                    folderName: title,
-                    folderId: id,
-                  },
-                  {
-                    onSuccess: () => {
-                      setIsDropDownInline(false);
-                    },
-                    onError: (error) => {
-                      console.error('링크 수정 실패:', error);
-                      //Todo 사용자에게 에러 메시지 표시
-                    },
-                  }
-                );
-              }}
-              className="text-primary-60 flex cursor-pointer gap-[10px] p-[12px]"
-            >
-              수정 완료
-            </button>
-          )}
           <button
             onClick={() => {
               openTransferFolderModal();
@@ -167,12 +135,12 @@ const DropDownInline = ({
 
       {type === 'link' && (
         <div className="flex flex-col">
-          <div className="border-gray-30 flex flex-col overflow-hidden rounded-lg border">
+          <div className="border-gray-20 flex flex-col overflow-hidden rounded-lg border">
             <input
               value={title}
               onChange={handleTitleChange}
               placeholder="사이트명 입력"
-              className="border-gray-30 border-b p-[12px] outline-none"
+              className="border-gray-20 border-b p-[12px] outline-none"
             />
             <textarea
               value={link}
@@ -181,40 +149,27 @@ const DropDownInline = ({
               className="text-gray-60 resize-none p-[12px] text-[13px] font-[400] outline-none"
             />
           </div>
-          {isModifiedLink && (
-            <button
-              onClick={() => {
-                mutateLink(
-                  {
-                    baseRequest: {
-                      pageId,
-                      commandType: 'EDIT',
-                    },
-                    linkId: Number(id),
-                    linkName: title,
-                    linkUrl: link,
-                  },
-                  {
-                    onSuccess: () => {
-                      setIsDropDownInline(false);
-                    },
-                    onError: (error) => {
-                      console.error('링크 수정 실패:', error);
-                      //Todo 사용자에게 에러 메시지 표시
-                    },
-                  }
-                );
-              }}
-              className="text-primary-60 flex cursor-pointer gap-[10px] p-[12px]"
-            >
-              수정 완료
-            </button>
-          )}
+
           <button
             onClick={() => console.log('전송')}
             className="flex cursor-pointer items-center gap-[10px] p-[12px]"
           >
             <Transfer width={18} height={18} /> 전송하기
+          </button>
+          <button
+            onClick={() => {
+              navigator.clipboard
+                .writeText(link)
+                .then(() => {
+                  ToastCustom.success('링크가 복사되었습니다.');
+                })
+                .catch((err) => {
+                  console.error('복사 실패:', err);
+                });
+            }}
+            className="flex cursor-pointer items-center gap-[10px] px-[12px] py-[11px]"
+          >
+            <Copy width={18} height={18} /> 복사하기
           </button>
           <button
             onClick={() => handleLinkDeleteOpen()}
@@ -237,9 +192,18 @@ const DropDownInline = ({
         ref={transferModalRef}
         isOpen={isTransferFolderModalOpen}
         onClose={closeTransferFolderModal}
-        directoryId={Number(id)}
+        directoryId={id}
         folderName={title}
-        onSubmit={async (email) => transferFolder(email, Number(id))}
+        onSubmit={async (email) =>
+          transferFolder({
+            receiverEmail: email,
+            directoryId: id,
+            baseRequest: {
+              pageId,
+              commandType: 'DIRECTORY_TRANSMISSION',
+            },
+          })
+        }
       />
     </div>
   );

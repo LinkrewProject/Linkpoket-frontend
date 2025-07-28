@@ -3,18 +3,11 @@ import Modal from '@/components/common-ui/Modal';
 import { Button } from '@/components/common-ui/button';
 import ToggleButton from '@/components/common-ui/ToggleButton';
 import { Input } from '@/components/common-ui/Input';
-import { Radio } from '@/components/common-ui/Radio';
 import { useLocation, useParams } from 'react-router-dom';
 import useFetchSharedPageDashboard from '@/hooks/queries/useFetchSharedPageDashboard';
-import useUpdateSharedPageInvitation from '@/hooks/mutations/updateSharedPageInvitation';
 import InviteUserModal from './InviteUserModal';
 import ModalOptions from '@/components/common-ui/ModalOptions';
-
-const TIERS = [
-  { label: '베이직(5명)', value: 'BASIC' },
-  { label: '스탠다드(10명)', value: 'STANDARD' },
-  { label: '프리미엄(20명)', value: 'PREMIUM' },
-];
+import SiteIcon from '@/assets/common-ui-assets/SiteIcon.svg?react';
 
 interface ManageSharedPageModalProps {
   isOpen: boolean;
@@ -37,13 +30,15 @@ const ManageSharedPageModal = ({
     }
   };
 
-  const pathname = useLocation().pathname;
+  const path = useLocation().pathname;
+  const pathname = 'http://linkrew.com' + path;
   const { pageId } = useParams();
-  const numericId = Number.parseInt(pageId ?? '', 10);
-  const resolvedPageId = Number.isFinite(numericId) ? numericId : null;
+  const safePageId = pageId ?? '';
+  // const numericId = Number.parseInt(pageId ?? '', 10);
+  // const resolvedPageId = Number.isFinite(numericId) ? numericId : null;
 
   const sharedPageDashboardQuery = useFetchSharedPageDashboard({
-    pageId: resolvedPageId ?? -1,
+    pageId: safePageId,
   });
 
   // API 데이터가 로드된 후 state 업데이트
@@ -62,7 +57,7 @@ const ManageSharedPageModal = ({
   const handleCopyLink = async () => {
     try {
       const currentUrl = window.location.href;
-      await navigator.clipboard.writeText(currentUrl);
+      await navigator.clipboard.writeText(`http://linkrew.com${currentUrl}`);
     } catch (error) {
       console.error('링크 복사 실패:', error);
     }
@@ -75,7 +70,7 @@ const ManageSharedPageModal = ({
   );
 
   const MEMBERS: {
-    memberId: number;
+    memberId: string;
     nickName: string;
     email: string;
     colorCode: string;
@@ -100,15 +95,20 @@ const ManageSharedPageModal = ({
     <Modal
       isOpen={isOpen}
       onClose={handleClose}
-      className="p-[24px] md:max-w-[562px]"
+      className="p-[16px] md:max-w-[562px]"
     >
-      <Modal.Header className="border-gray-40 mb-[16px] border-b-[1px] pb-[24px] text-[22px] font-bold">
+      <Modal.Header
+        showCloseButton
+        className="mb-4 text-[18px] font-bold text-gray-100"
+      >
         공유 페이지 관리
       </Modal.Header>
 
-      <div className="mb-4">
-        <div className="mb-2 flex items-center justify-between">
-          <span className="text-[16px] font-semibold">페이지 공개</span>
+      <div>
+        <div className="mt-4 flex items-center justify-between">
+          <span className="text-gray-90 text-[18px] font-bold">
+            페이지 공개
+          </span>
           <ToggleButton
             checked={isPublic === 'PUBLIC'}
             onClick={() =>
@@ -116,11 +116,11 @@ const ManageSharedPageModal = ({
             }
           />
         </div>
-        <div className="text-gray-70 mb-4 text-[16px]">
+        <div className="text-gray-70 mt-[7px] mb-4 text-[16px] font-[400]">
           페이지를 공개하면, 링크를 가진 모든 사용자가 볼 수 있습니다.
         </div>
 
-        <div className="mb-2 flex gap-4">
+        <div className="mt-4 flex gap-4">
           <div className="flex w-full gap-2">
             <Input
               containerClassName="flex-1 min-w-0"
@@ -128,35 +128,24 @@ const ManageSharedPageModal = ({
               value={pathname}
               readOnly
             />
-            <Button size="sm" variant="secondary" onClick={handleCopyLink}>
+            <Button
+              size="lg"
+              variant="ghost"
+              className="flex gap-2"
+              onClick={handleCopyLink}
+            >
+              <SiteIcon />
               링크 복사
             </Button>
           </div>
         </div>
       </div>
 
-      <div className="mb-6">
-        <div className="mb-2 text-[16px] font-bold">
-          공유 페이지 등급(멤버 초대 가능 수)
+      <div className="mt-6">
+        <div className="text-gray-90 mb-2 text-[18px] font-bold">
+          공유 페이지 멤버
         </div>
-        <div className="flex gap-4">
-          {TIERS.map((t) => (
-            <Radio
-              key={t.value}
-              name="tier"
-              value={t.value}
-              checked={sharedPageDashboardQuery.data?.data.pageType === t.value}
-              onChange={() => {}}
-              label={t.label}
-              isModal
-            />
-          ))}
-        </div>
-      </div>
-
-      <div className="mb-2">
-        <div className="mb-2 text-[16px] font-bold">공유 페이지 멤버</div>
-        <div className="mb-2 flex gap-2">
+        <div className="mt-[7px] flex gap-4">
           <Input
             containerClassName="flex-1 min-w-0"
             className="!w-auto"
@@ -165,7 +154,7 @@ const ManageSharedPageModal = ({
             onChange={(e) => setSearch(e.target.value)}
           />
           <Button
-            size="sm"
+            size="lg"
             variant="primary"
             onClick={() => setIsOpenInviteUserModal(true)}
           >
@@ -175,7 +164,7 @@ const ManageSharedPageModal = ({
             <InviteUserModal
               isOpen={isOpenInviteUserModal}
               onClose={() => setIsOpenInviteUserModal(false)}
-              pageId={resolvedPageId ?? -1}
+              pageId={safePageId}
             />
           )}
         </div>
@@ -187,22 +176,22 @@ const ManageSharedPageModal = ({
               className="border-gray-10 flex items-center gap-3 border-b py-2 last:border-b-0"
             >
               <div
-                className="text-primary-0 flex h-[40px] w-[40px] items-center justify-center rounded-full px-[16px] py-[10px] text-[22px] font-[500]"
+                className="text-primary-0 flex h-[32px] w-[32px] items-center justify-center rounded-full px-[16px] py-[10px] text-[22px] font-[500]"
                 style={{ backgroundColor: m.colorCode }}
               >
                 {m.nickName[0]}
               </div>
               <div className="flex-1">
-                <div className="text-gray-90 text-[18px] font-bold">
+                <div className="text-gray-90 text-sm font-bold">
                   {m.nickName}
                 </div>
-                <div className="text-[16px] text-gray-50">{m.email}</div>
+                <div className="text-sm text-gray-50">{m.email}</div>
               </div>
               <div className="relative">
                 {m.isWaiting === false ? (
                   <ModalOptions
                     userRole={m.role}
-                    pageId={resolvedPageId ?? -1}
+                    pageId={safePageId}
                     email={m.email}
                     memberId={m.memberId}
                   />
@@ -219,11 +208,6 @@ const ManageSharedPageModal = ({
           ))}
         </div>
       </div>
-      <Modal.Footer className="pt-4">
-        <Button variant="ghost" onClick={handleClose}>
-          닫기
-        </Button>
-      </Modal.Footer>
     </Modal>
   );
 };

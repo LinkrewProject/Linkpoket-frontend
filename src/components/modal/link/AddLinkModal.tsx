@@ -1,20 +1,36 @@
 import { useState } from 'react';
 import { Input } from '@/components/common-ui/Input';
 import Modal from '@/components/common-ui/Modal';
-import { Textarea } from '@/components/common-ui/Textarea';
+import { useCreateLink } from '@/hooks/mutations/useCreateLink';
+import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
+import { useModalStore } from '@/stores/modalStore';
 
 const AddLinkModal = ({
   isOpen,
   onClose,
-  onSubmit,
 }: {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (link: string, url: string) => Promise<void>;
 }) => {
-  const [link, setLink] = useState('');
-  const [url, setUrl] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [linkUrl, setLinkUrl] = useState<string>('');
+  const [linkName, setLinkName] = useState<string>('');
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const { pageId } = usePageStore();
+  const { parentsFolderId } = useParentsFolderIdStore();
+  const { openErrorModal } = useModalStore();
+
+  const { mutate: createLinkMutate } = useCreateLink({
+    onSuccess: () => {
+      setLinkUrl('');
+      setLinkName('');
+      onClose();
+    },
+    onError: (err) => {
+      console.error('링크 생성 실패:', err);
+      // TODO: 사용자에게 에러 메시지 보여주기
+      openErrorModal();
+    },
+  });
 
   const isValidUrl = (urlString: string) => {
     try {
@@ -26,60 +42,54 @@ const AddLinkModal = ({
   };
 
   const handleSubmit = async () => {
-    if (!link) return;
+    if (!linkUrl) return;
 
-    if (url && !isValidUrl(url)) {
+    if (!isValidUrl(linkUrl)) {
       console.error('유효하지 않은 URL 형식입니다.');
-      // TODO 사용자에게 에러 메시지를 표시하는 로직 추가
       return;
     }
 
     setIsSubmitting(true);
-    try {
-      await onSubmit(link, url);
-      setLink('');
-      setUrl('');
-      onClose();
-    } catch (error) {
-      console.error('링크 전송 오류:', error);
-    } finally {
-      setIsSubmitting(false);
-    }
+    createLinkMutate(
+      {
+        linkUrl,
+        linkName,
+        directoryId: parentsFolderId ?? '',
+        baseRequest: {
+          pageId,
+          commandType: 'CREATE',
+        },
+      },
+      {
+        onSettled: () => {
+          setIsSubmitting(false);
+        },
+      }
+    );
   };
-
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <Modal.Header>링크 추가</Modal.Header>
+      <Modal.Header showCloseButton>링크 추가</Modal.Header>
 
-      <Modal.Body className="py-4">
+      <Modal.Body>
         <div className="space-y-4">
           <Input
-            label={
-              <>
-                링크명<span className="text-status-danger">*</span>
-              </>
-            }
-            placeholder="링크명을 입력해 주세요"
-            value={link}
-            onChange={(e) => setLink(e.target.value)}
+            label={'URL'}
+            placeholder="해당 링크의 URL을 입력해주세요."
+            value={linkUrl}
+            onChange={(e) => setLinkUrl(e.target.value)}
             isModal={true}
-            inputSize="medium"
             containerClassName="w-full"
-            labelClassName="font-bold leading-[140%]"
+            labelClassName="leading-[140%]"
           />
-          <Textarea
-            label={
-              <>
-                URL<span className="text-status-danger">*</span>
-              </>
-            }
-            placeholder="해당 링크의 URL을 입력해 주세요"
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
+          <Input
+            label={'링크명'}
+            placeholder="링크명을 입력해 주세요"
+            value={linkName}
+            onChange={(e) => setLinkName(e.target.value)}
             isModal={true}
             containerClassName="w-full"
-            labelClassName="font-bold leading-[140%]"
-            className="h-[116px]"
+            labelClassName="leading-[140%]"
           />
         </div>
       </Modal.Body>
@@ -87,16 +97,16 @@ const AddLinkModal = ({
       <Modal.Footer className="pt-0">
         <Modal.CancelButton
           onClick={() => {
-            setLink('');
-            setUrl('');
+            setLinkUrl('');
+            setLinkName('');
           }}
         />
         <Modal.ConfirmButton
           onClick={handleSubmit}
-          disabled={!link || isSubmitting}
-          variant={link ? 'primary' : 'default'}
+          disabled={!linkUrl || isSubmitting}
+          variant={linkUrl ? 'primary' : 'default'}
         >
-          {isSubmitting ? '전송 중...' : '전송'}
+          {isSubmitting ? '추가 중...' : '추가'}
         </Modal.ConfirmButton>
       </Modal.Footer>
     </Modal>

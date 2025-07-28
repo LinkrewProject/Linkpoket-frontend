@@ -7,7 +7,7 @@ import { createFolder } from '@/apis/folder-apis/createFolder';
 import { CreateFolderData } from '@/types/folders';
 import { useLocation } from 'react-router-dom';
 export function useCreateFolder(
-  pageId: number,
+  pageId: string,
   options?: UseMutationOptions<any, unknown, CreateFolderData>
 ) {
   const queryClient = useQueryClient();
@@ -28,6 +28,10 @@ export function useCreateFolder(
         // 폴더 상세 페이지 쿼리 무효화 (모든 폴더 ID에 대해)
         queryClient.invalidateQueries({
           queryKey: ['folderDetails', pageId],
+          refetchType: 'active',
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ['folderList', pageId],
           refetchType: 'active',
         }),
         // 메인 페이지에서만 personalPage 캐시 무효화
