@@ -9,7 +9,7 @@ const useRouteChangeTracker = () => {
   // 로컬에서는 기록하지 않음
   useEffect(() => {
     if (!window.location.href.includes('localhost')) {
-      ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID as string);
+      ReactGA.initialize(import.meta.env.VITE_GA_MEASUREMENT_ID as string);
       setInitialized(true);
     }
   }, []);
