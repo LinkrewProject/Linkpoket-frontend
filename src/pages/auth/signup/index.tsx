@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Button } from '@/components/common-ui/button';
-import { useAuth } from '@/hooks/useAuth';
 import { useSignupForm } from '@/hooks/useSignupForm';
 import { FormFields } from '@/components/signup/FormFields';
 import { TermsSection } from '@/components/signup/TermsSection';
@@ -8,7 +7,6 @@ import { TermsModal } from '@/components/modal/signup/TermsModal';
 import { PrivacyModal } from '@/components/modal/signup/PrivacyModal';
 
 const SignupPage = () => {
-  const { isAuthenticated } = useAuth();
   const {
     control,
     watch,
@@ -22,8 +20,6 @@ const SignupPage = () => {
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
 
   const selectedJob = watch('job');
-
-  console.log('사인업 페이지에서 isAuthenticated 상태', isAuthenticated);
 
   return (
     <main className="flex min-h-screen min-w-screen flex-col items-center justify-center bg-white">

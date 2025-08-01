@@ -86,9 +86,11 @@ const CtaSection: React.FC = () => {
         <div className="flex justify-center">
           <div className="my-20 flex flex-col-reverse md:w-full md:flex-row md:place-content-between">
             <div className="flex flex-col justify-center">
-              {feedbackData.map((feature) => {
+              {feedbackData.map((feature, idx) => {
                 return (
-                  <p className={feature.className}>{feature.description}</p>
+                  <p key={idx} className={feature.className}>
+                    {feature.description}
+                  </p>
                 );
               })}
 

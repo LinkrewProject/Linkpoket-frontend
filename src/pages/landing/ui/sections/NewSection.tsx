@@ -105,9 +105,9 @@ const NewSection = () => {
   return (
     <section className="mx-auto my-[100px] flex w-full max-w-[980px] flex-col px-[24px]">
       {/* 1번째 */}
-      {featureData.map((feature) => {
+      {featureData.map((feature, idx) => {
         return (
-          <p className={`${feature.className} text-center`}>
+          <p key={idx} className={`${feature.className} text-center`}>
             {feature.description}
           </p>
         );
@@ -117,9 +117,9 @@ const NewSection = () => {
       <div className="flex justify-center">
         <div className="mt-[138px] flex flex-col-reverse md:w-full md:flex-row md:place-content-between">
           <div className="flex flex-col justify-center">
-            {secondData.map((feature) => {
+            {secondData.map((feature, idx) => {
               return (
-                <p className={`${feature.className} text-left`}>
+                <p key={idx} className={`${feature.className} text-left`}>
                   {feature.item}
                 </p>
               );
@@ -140,9 +140,9 @@ const NewSection = () => {
             className="mb-12 w-[312px] rounded-3xl object-cover md:mb-0 md:w-[466px]"
           />
           <div className="flex flex-col justify-center">
-            {thirdData.map((feature) => {
+            {thirdData.map((feature, idx) => {
               return (
-                <p className={`${feature.className} text-left`}>
+                <p key={idx} className={`${feature.className} text-left`}>
                   {feature.item}
                 </p>
               );
@@ -155,9 +155,9 @@ const NewSection = () => {
       <div className="flex justify-center">
         <div className="mt-[138px] flex flex-col-reverse md:w-full md:flex-row md:place-content-between">
           <div className="flex flex-col justify-center">
-            {forthData.map((feature) => {
+            {forthData.map((feature, idx) => {
               return (
-                <p className={`${feature.className} text-left`}>
+                <p key={idx} className={`${feature.className} text-left`}>
                   {feature.item}
                 </p>
               );

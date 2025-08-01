@@ -30,6 +30,27 @@ export const useSignupSubmit = () => {
         colorCode: submitData.colorCode,
       });
 
+      const tokenResponse = await axiosInstance.get('/api/jwt/access-token');
+
+      const authAccessToken = tokenResponse.headers['authorization']?.replace(
+        'Bearer ',
+        ''
+      );
+
+      if (authAccessToken) {
+        localStorage.setItem('access_token', authAccessToken);
+      } else {
+        window.location.href = '/login';
+        return;
+      }
+
+      const sseToken = tokenResponse.data.data?.value;
+      if (sseToken) {
+        localStorage.setItem('sse_token', sseToken);
+      } else {
+        console.warn('SSE 토큰이 존재하지 않습니다.');
+      }
+
       navigate('/');
     } catch (error) {
       if (axios.isAxiosError(error)) {
