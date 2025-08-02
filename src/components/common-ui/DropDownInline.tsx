@@ -150,12 +150,14 @@ const DropDownInline = ({
             />
           </div>
 
-          <button
+          {/* 피그마에는 링크는 전송 기능이 있지만 POSTMAN에는 없어서 일단 주석처리 했습니다. */}
+          {/* <button
             onClick={() => console.log('전송')}
             className="flex cursor-pointer items-center gap-[10px] p-[12px]"
           >
             <Transfer width={18} height={18} /> 전송하기
-          </button>
+          </button> */}
+
           <button
             onClick={() => {
               navigator.clipboard
