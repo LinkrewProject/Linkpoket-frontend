@@ -21,8 +21,11 @@ export const useSignupSubmit = () => {
     try {
       const genderValue = data.gender === 'male' ? 1 : 2;
 
+      // 임시 토큰을 헤더에 추가하여 회원가입 요청
+      const tempAccessToken = localStorage.getItem('temp_access_token');
+
       await axios.post(
-        '/api/member/sign-up',
+        `${import.meta.env.VITE_API_URL}/api/member/sign-up`,
         {
           ageRange: data.ageRange,
           gender: genderValue,
@@ -32,35 +35,24 @@ export const useSignupSubmit = () => {
         },
         {
           withCredentials: true,
+          headers: tempAccessToken
+            ? {
+                Authorization: `Bearer ${tempAccessToken}`,
+              }
+            : {},
         }
       );
 
-      // Access Token 요청은 일반 axios 사용 (인터셉터 우회)
-      const tokenResponse = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/jwt/access-token`,
-        {
-          withCredentials: true,
-        }
-      );
-
-      const authAccessToken = tokenResponse.headers['authorization']?.replace(
-        'Bearer ',
-        ''
-      );
-
-      if (authAccessToken) {
-        localStorage.setItem('access_token', authAccessToken);
-      } else {
-        console.warn('Access Token이 없습니다.');
-        window.location.href = '/login';
-        return;
+      // 회원가입 완료 후 임시 토큰을 정식 토큰으로 이동
+      if (tempAccessToken) {
+        localStorage.setItem('access_token', tempAccessToken);
+        localStorage.removeItem('temp_access_token');
       }
 
-      const sseToken = tokenResponse.data.data?.value;
-      if (sseToken) {
-        localStorage.setItem('sse_token', sseToken);
-      } else {
-        console.warn('SSE 토큰이 존재하지 않습니다.');
+      const tempSseToken = localStorage.getItem('temp_sse_token');
+      if (tempSseToken) {
+        localStorage.setItem('sse_token', tempSseToken);
+        localStorage.removeItem('temp_sse_token');
       }
 
       navigate('/');
@@ -69,8 +61,6 @@ export const useSignupSubmit = () => {
       if (axios.isAxiosError(error)) {
         console.error('응답 상태 코드:', error.response?.status);
         console.error('응답 메시지:', error.response?.data);
-      } else {
-        console.error('기타 오류:', error);
       }
     }
   };
