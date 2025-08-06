@@ -1,25 +1,37 @@
-import { axiosInstance } from '@/apis/axiosInstance';
+import axios from 'axios';
 import { useEffect } from 'react';
 
 export default function ReissuePage() {
   useEffect(() => {
     const handleRedirection = async () => {
       try {
-        const response = await axiosInstance.get('/api/jwt/access-token', {
-          withCredentials: true,
-        });
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/jwt/access-token`,
+          {
+            withCredentials: true,
+          }
+        );
 
         const redirectUrl = response?.headers['redirect-url'];
+        const accessToken = response.headers['authorization']?.replace(
+          'Bearer ',
+          ''
+        );
+        const sseToken = response.data?.data?.value;
+
         const isNewUser = new URL(redirectUrl).pathname === '/signup';
 
         if (isNewUser) {
+          // 신규 회원: 임시 토큰으로 저장 (useAuth가 인식 안 함)
+          if (accessToken) {
+            localStorage.setItem('temp_access_token', accessToken);
+          }
+          if (sseToken) {
+            localStorage.setItem('temp_sse_token', sseToken);
+          }
           window.location.href = '/signup';
         } else {
-          const accessToken = response.headers['authorization']?.replace(
-            'Bearer ',
-            ''
-          );
-          const sseToken = response.data?.data?.value;
+          // 기존 회원: 정상 토큰으로 저장 (useAuth가 인식함)
           if (accessToken) {
             localStorage.setItem('access_token', accessToken);
           }
@@ -29,6 +41,7 @@ export default function ReissuePage() {
           window.location.href = '/';
         }
       } catch (error) {
+        console.log(error);
         window.location.href = '/login';
       }
     };
@@ -36,6 +49,5 @@ export default function ReissuePage() {
     handleRedirection();
   }, []);
 
-  // TODO: 로딩스피너 넣는게 좋을듯
   return <p>Reissuing access token... Please wait.</p>;
 }

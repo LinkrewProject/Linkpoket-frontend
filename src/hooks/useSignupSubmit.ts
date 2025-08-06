@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom';
-import { axiosInstance } from '@/apis/axiosInstance';
 import { COLOR_OPTIONS } from '@/styles/tokens';
 import { JOB_OPTIONS } from '@/constants/signup';
 import { FormData } from '@/schemas/signup';
@@ -22,42 +21,46 @@ export const useSignupSubmit = () => {
     try {
       const genderValue = data.gender === 'male' ? 1 : 2;
 
-      await axiosInstance.post('/api/member/sign-up', {
-        ageRange: data.ageRange,
-        gender: genderValue,
-        job: submitData.jobText,
-        nickName: data.nickname,
-        colorCode: submitData.colorCode,
-      });
+      // 임시 토큰을 헤더에 추가하여 회원가입 요청
+      const tempAccessToken = localStorage.getItem('temp_access_token');
 
-      const tokenResponse = await axiosInstance.get('/api/jwt/access-token');
-
-      const authAccessToken = tokenResponse.headers['authorization']?.replace(
-        'Bearer ',
-        ''
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/member/sign-up`,
+        {
+          ageRange: data.ageRange,
+          gender: genderValue,
+          job: submitData.jobText,
+          nickName: data.nickname,
+          colorCode: submitData.colorCode,
+        },
+        {
+          withCredentials: true,
+          headers: tempAccessToken
+            ? {
+                Authorization: `Bearer ${tempAccessToken}`,
+              }
+            : {},
+        }
       );
 
-      if (authAccessToken) {
-        localStorage.setItem('access_token', authAccessToken);
-      } else {
-        window.location.href = '/login';
-        return;
+      // 회원가입 완료 후 임시 토큰을 정식 토큰으로 이동
+      if (tempAccessToken) {
+        localStorage.setItem('access_token', tempAccessToken);
+        localStorage.removeItem('temp_access_token');
       }
 
-      const sseToken = tokenResponse.data.data?.value;
-      if (sseToken) {
-        localStorage.setItem('sse_token', sseToken);
-      } else {
-        console.warn('SSE 토큰이 존재하지 않습니다.');
+      const tempSseToken = localStorage.getItem('temp_sse_token');
+      if (tempSseToken) {
+        localStorage.setItem('sse_token', tempSseToken);
+        localStorage.removeItem('temp_sse_token');
       }
 
       navigate('/');
-    } catch (error) {
+    } catch (error: any) {
+      console.error('회원가입 에러:', error);
       if (axios.isAxiosError(error)) {
         console.error('응답 상태 코드:', error.response?.status);
         console.error('응답 메시지:', error.response?.data);
-      } else {
-        console.error('기타 오류:', error);
       }
     }
   };
