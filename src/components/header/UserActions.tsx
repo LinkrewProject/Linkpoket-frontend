@@ -59,7 +59,14 @@ export function UserActions() {
           setIsAlarmOpen((prev) => !prev);
         }}
       >
-        <Bell className="h-[20px] w-[20px]" />
+        <div className="relative">
+          <Bell className="h-[22px] w-[22px]" />
+          {notifications.length > 0 && (
+            <span className="bg-primary-40 text-gray-80 absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full text-xs">
+              {notifications.length}
+            </span>
+          )}
+        </div>
       </button>
       {isAlarmOpen && (
         <NotificationModal
