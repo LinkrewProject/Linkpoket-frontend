@@ -21,6 +21,9 @@
 /build
 dist/
 
+# extension
+src/extension
+
 # misc
 .DS_Store
 *.pem
