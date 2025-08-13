@@ -6,6 +6,7 @@ import useUpdateLinkBookmark from '@/hooks/mutations/useUpdateLinkBookmark';
 import { usePageStore } from '@/stores/pageStore';
 import { useState } from 'react';
 import DropDownInline from './DropDownInline';
+import defaultImage from '@assets/common-ui-assets/defaultImage.png';
 
 export default function LinkCard({
   isBookmark,
@@ -29,7 +30,21 @@ export default function LinkCard({
   const handleBookmarkClick = () => {
     updateLinkBookmark(item.linkId);
   };
-  console.log(item);
+
+  const imageUrl = (() => {
+    const url = item.representImageUrl?.toLowerCase();
+    if (url?.endsWith('.png') || url?.endsWith('.jpg')) {
+      return item.representImageUrl;
+    }
+
+    if (item.faviconUrl) {
+      return item.faviconUrl;
+    }
+
+    return defaultImage;
+  })();
+
+  console.log('링크 카드 아이템:', item);
 
   return (
     <div>
@@ -40,9 +55,9 @@ export default function LinkCard({
         <div className="bg-gray-40 flex h-[96px] w-full items-center justify-center overflow-hidden rounded-lg">
           <img
             loading="lazy"
-            src={item.representImageUrl || item.faviconUrl}
+            src={imageUrl}
             alt={item.linkName || '링크 이미지'}
-            className={`${item.representImageUrl && `h-full w-full object-cover`} h-10`}
+            className={`${imageUrl.endsWith('png') || (imageUrl.endsWith('jpg') && `h-full w-full object-cover`)} h-10`}
           />
         </div>
         <div className="flex flex-1 flex-col justify-between">

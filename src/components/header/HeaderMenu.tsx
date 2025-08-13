@@ -12,16 +12,19 @@ import SharedPage from '@/assets/widget-ui-assets/SharedPage.svg?react';
 import SiteIcon from '@/assets/common-ui-assets/SiteIcon.svg?react';
 import useFetchSharedPageDashboard from '@/hooks/queries/useFetchSharedPageDashboard';
 import toast from 'react-hot-toast';
+import { ContactDetail } from './ContactDetail';
 
 interface HeaderMenuProps {
   isHost: boolean;
   onWithDrawPage: () => void;
   onContact: () => void;
+  isContactOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function HeaderMenu({
   isHost,
+  isContactOpen,
   onContact,
   setIsOpen,
 }: HeaderMenuProps) {
@@ -42,6 +45,7 @@ export default function HeaderMenu({
       !isManageSharedPageModalOpen
     ) {
       setIsOpen(false);
+      if (isContactOpen) onContact();
     }
   });
 
@@ -160,7 +164,7 @@ export default function HeaderMenu({
           <HelpIcon /> <span className="text-[14px]">도움말</span>
         </button>
 
-        <div className="flex"></div>
+        {isContactOpen && <ContactDetail />}
       </div>
     </div>
   );

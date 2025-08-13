@@ -196,7 +196,11 @@ const DropDownInline = ({
         onClose={closeTransferFolderModal}
         directoryId={id}
         folderName={title}
-        onSubmit={async (email) =>
+        onSubmit={async (email) => {
+          if (!pageId || !id) {
+            ToastCustom.error('페이지/폴더 정보가 없습니다.');
+            return;
+          }
           transferFolder({
             receiverEmail: email,
             directoryId: id,
@@ -204,8 +208,8 @@ const DropDownInline = ({
               pageId,
               commandType: 'DIRECTORY_TRANSMISSION',
             },
-          })
-        }
+          });
+        }}
       />
     </div>
   );

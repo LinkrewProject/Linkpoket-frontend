@@ -13,6 +13,7 @@ import { useProfileModalStore } from '@/stores/profileModalStore';
 export function UserActions() {
   const [isAlarmOpen, setIsAlarmOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isContactOpen, setIsContactOpen] = useState(false);
   const { data: notifications = [] } = useFetchNotifications();
   const { nickname, colorCode } = useUserStore();
   const { openProfileModal } = useProfileModalStore();
@@ -49,73 +50,80 @@ export function UserActions() {
   );
 
   return (
-    <div className="flex items-center gap-[8px]">
-      {/* 알림 버튼 */}
-      <button
-        className={`hover:bg-gray-10 active:bg-gray-10 flex h-[32px] w-[32px] cursor-pointer items-center justify-center hover:rounded-[8px] active:rounded-[8px] ${isAlarmOpen ? 'bg-gray-10 rounded-[8px]' : ''} `}
-        onClick={(e) => {
-          e.stopPropagation();
-          setIsMenuOpen(false);
-          setIsAlarmOpen((prev) => !prev);
-        }}
-      >
-        <div className="relative">
-          <Bell className="h-[22px] w-[22px]" />
-          {notifications.length > 0 && (
-            <span className="bg-primary-40 text-gray-80 absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full text-xs">
-              {notifications.length}
-            </span>
-          )}
-        </div>
-      </button>
-      {isAlarmOpen && (
-        <NotificationModal
-          isOpen={isAlarmOpen}
-          setIsOpen={setIsAlarmOpen}
-          notifications={notifications}
-          isProcessing={isProcessing}
-          isShareProcessing={isShareProcessing}
-          onAccept={({ id, type }) => handleStatusChange(id, 'ACCEPTED', type)}
-          onReject={({ id, type }) => handleStatusChange(id, 'REJECTED', type)}
-          onDelete={(dispatchId) => deleteDirectoryRequest({ dispatchId })}
-        />
-      )}
-
-      {/* 프로필 버튼 */}
-      <button
-        className="flex h-[32px] w-[32px] cursor-pointer items-center justify-center hover:rounded-[8px] active:rounded-[8px]"
-        onClick={openProfileModal}
-      >
-        <div
-          className="flex h-[32px] w-[32px] items-center justify-center rounded-full"
-          style={{ backgroundColor: colorCode }}
+    <>
+      <div className="flex items-center gap-[8px]">
+        {/* 알림 버튼 */}
+        <button
+          className={`hover:bg-gray-10 active:bg-gray-10 flex h-[32px] w-[32px] cursor-pointer items-center justify-center hover:rounded-[8px] active:rounded-[8px] ${isAlarmOpen ? 'bg-gray-10 rounded-[8px]' : ''} `}
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsMenuOpen(false);
+            setIsAlarmOpen((prev) => !prev);
+          }}
         >
-          {nickname?.charAt(0).toUpperCase()}
-        </div>
-      </button>
+          <div className="relative">
+            <Bell className="h-[22px] w-[22px]" />
+            {notifications.length > 0 && (
+              <span className="bg-primary-40 text-gray-80 absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full text-xs">
+                {notifications.length}
+              </span>
+            )}
+          </div>
+        </button>
+        {isAlarmOpen && (
+          <NotificationModal
+            isOpen={isAlarmOpen}
+            setIsOpen={setIsAlarmOpen}
+            notifications={notifications}
+            isProcessing={isProcessing}
+            isShareProcessing={isShareProcessing}
+            onAccept={({ id, type }) =>
+              handleStatusChange(id, 'ACCEPTED', type)
+            }
+            onReject={({ id, type }) =>
+              handleStatusChange(id, 'REJECTED', type)
+            }
+            onDelete={(dispatchId) => deleteDirectoryRequest({ dispatchId })}
+          />
+        )}
 
-      {/* 메뉴 버튼 */}
-      <button
-        className={`hover:bg-gray-10 active:bg-gray-10 flex h-[32px] w-[32px] cursor-pointer items-center justify-center hover:rounded-[8px] active:rounded-[8px] ${isMenuOpen ? 'bg-gray-10 rounded-[8px]' : ''} `}
-        onClick={(e) => {
-          e.stopPropagation();
-          setIsAlarmOpen(false);
-          setIsMenuOpen((prev) => !prev);
-        }}
-      >
-        <Menu className="relative" />
-      </button>
+        {/* 프로필 버튼 */}
+        <button
+          className="flex h-[32px] w-[32px] cursor-pointer items-center justify-center hover:rounded-[8px] active:rounded-[8px]"
+          onClick={openProfileModal}
+        >
+          <div
+            className="flex h-[32px] w-[32px] items-center justify-center rounded-full"
+            style={{ backgroundColor: colorCode }}
+          >
+            {nickname?.charAt(0).toUpperCase()}
+          </div>
+        </button>
 
-      {isMenuOpen && (
-        <HeaderMenu
-          isHost={true}
-          // isDarkMode={isDarkMode}
-          // onToggleDarkMode={handleToggleDarkMode}
-          setIsOpen={() => setIsMenuOpen(!isMenuOpen)}
-          onWithDrawPage={() => console.log('탈퇴')}
-          onContact={() => console.log('문의')}
-        />
-      )}
-    </div>
+        {/* 메뉴 버튼 */}
+        <button
+          className={`hover:bg-gray-10 active:bg-gray-10 flex h-[32px] w-[32px] cursor-pointer items-center justify-center hover:rounded-[8px] active:rounded-[8px] ${isMenuOpen ? 'bg-gray-10 rounded-[8px]' : ''} `}
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsAlarmOpen(false);
+            setIsMenuOpen((prev) => !prev);
+          }}
+        >
+          <Menu className="relative" />
+        </button>
+
+        {isMenuOpen && (
+          <HeaderMenu
+            isHost={true}
+            // isDarkMode={isDarkMode}
+            // onToggleDarkMode={handleToggleDarkMode}
+            setIsOpen={() => setIsMenuOpen(!isMenuOpen)}
+            onWithDrawPage={() => console.log('탈퇴')}
+            onContact={() => setIsContactOpen(!isContactOpen)}
+            isContactOpen={isContactOpen}
+          />
+        )}
+      </div>
+    </>
   );
 }
