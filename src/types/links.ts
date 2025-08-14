@@ -36,12 +36,18 @@ export type UpdateLinkData = {
   linkId: string;
 };
 
+export type PreviewLinkData = {
+  baseRequest: BaseRequest;
+  linkUrl: string;
+};
+
 export type CommonApiResponse = {
   status: number;
   message: string;
-  data: number;
+  data: string;
 };
 
 export type CreateLinkResponse = CommonApiResponse;
 export type UpdateLinkResponse = CommonApiResponse;
 export type DeleteLinkResponse = CommonApiResponse;
+export type PreviewLinkResponse = CommonApiResponse;

@@ -40,6 +40,9 @@ export interface InputProps
   containerClassName?: string;
   inputSize?: 'default' | 'medium';
   isModal?: boolean;
+  maxLength?: number;
+  showCharCount?: boolean;
+  charCountClassName?: string;
 }
 
 export const Input = ({
@@ -52,6 +55,11 @@ export const Input = ({
   errorMessage,
   containerClassName,
   disabled,
+  maxLength,
+  showCharCount = false,
+  charCountClassName,
+  value,
+  onChange,
   ...props
 }: InputProps) => {
   const inputVariant = disabled ? 'disabled' : variant;
@@ -60,6 +68,17 @@ export const Input = ({
     variant === 'error'
       ? 'border-status-danger focus:ring-status-danger focus:border-status-danger'
       : '';
+
+  const currentLength = typeof value === 'string' ? value.length : 0;
+  const isNearLimit = maxLength && currentLength >= maxLength * 0.8;
+  const isAtLimit = maxLength && currentLength >= maxLength;
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (maxLength && e.target.value.length > maxLength) {
+      return;
+    }
+    onChange?.(e);
+  };
 
   return (
     <div className={cn('flex flex-col space-y-2', containerClassName)}>
@@ -72,21 +91,50 @@ export const Input = ({
         </label>
       )}
 
-      <input
-        className={cn(
-          inputVariants({ variant: inputVariant, inputSize, isModal }),
-          errorStyles,
-          className
+      <div className="relative">
+        <input
+          className={cn(
+            inputVariants({ variant: inputVariant, inputSize, isModal }),
+            errorStyles,
+            className
+          )}
+          disabled={disabled}
+          maxLength={maxLength}
+          value={value}
+          onChange={handleChange}
+          {...props}
+        />
+
+        {/* 글자수 표시 */}
+        {(showCharCount || maxLength) && (
+          <div
+            className={cn(
+              'pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-xs',
+              isAtLimit
+                ? 'text-status-danger'
+                : isNearLimit
+                  ? 'text-yellow-600'
+                  : 'text-gray-50',
+              charCountClassName
+            )}
+          >
+            {maxLength ? `${currentLength}/${maxLength}` : currentLength}
+          </div>
         )}
-        disabled={disabled}
-        {...props}
-      />
+      </div>
 
       {errorMessage && variant === 'error' && (
         <div className="mt-1 flex">
           <Status className="mr-1" />
           <p className="text-status-danger text-sm">{errorMessage}</p>
         </div>
+      )}
+
+      {/* 글자수 초과 경고 메시지 */}
+      {maxLength && isAtLimit && (
+        <p className="text-status-danger text-xs">
+          최대 {maxLength}자까지 입력 가능합니다.
+        </p>
       )}
     </div>
   );
