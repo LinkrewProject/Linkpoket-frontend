@@ -34,16 +34,13 @@ export default function LinkCard({
   const imageUrl = (() => {
     const url = item.representImageUrl;
 
-    // URL에서 쿼리 파라미터 제거 후 확장자 체크
-    if (url) {
-      const urlWithoutQuery = url.split('?')[0].toLowerCase();
-      if (
-        urlWithoutQuery.endsWith('.png') ||
-        urlWithoutQuery.endsWith('.jpg') ||
-        urlWithoutQuery.endsWith('.jpeg')
-      ) {
-        return item.representImageUrl;
-      }
+    if (
+      url &&
+      (url.toLowerCase().includes('.png') ||
+        url.toLowerCase().includes('.jpg') ||
+        url.toLowerCase().includes('.jpeg'))
+    ) {
+      return item.representImageUrl;
     }
 
     if (item.faviconUrl) {
