@@ -6,6 +6,7 @@ import useUpdateLinkBookmark from '@/hooks/mutations/useUpdateLinkBookmark';
 import { usePageStore } from '@/stores/pageStore';
 import { useState } from 'react';
 import DropDownInline from './DropDownInline';
+import defaultImage from '@assets/common-ui-assets/defaultImage.png';
 
 export default function LinkCard({
   isBookmark,
@@ -29,7 +30,29 @@ export default function LinkCard({
   const handleBookmarkClick = () => {
     updateLinkBookmark(item.linkId);
   };
-  console.log(item);
+
+  const imageUrl = (() => {
+    const url = item.representImageUrl;
+
+    if (
+      url &&
+      (url.toLowerCase().includes('.png') ||
+        url.toLowerCase().includes('.jpg') ||
+        url.toLowerCase().includes('.jpeg'))
+    ) {
+      return item.representImageUrl;
+    }
+
+    if (item.faviconUrl) {
+      return item.faviconUrl;
+    }
+
+    return defaultImage;
+  })();
+
+  const isFaviconOnly = !item.representImageUrl && item.faviconUrl;
+
+  console.log('링크 카드 아이템:', item);
 
   return (
     <div>
@@ -37,12 +60,15 @@ export default function LinkCard({
         className="border-gray-10 flex h-[242px] min-w-[156px] flex-col gap-4 rounded-[16px] border p-[16px]"
         onDoubleClick={handleDoubleClick}
       >
-        <div className="bg-gray-40 flex h-[96px] w-full items-center justify-center overflow-hidden rounded-lg">
+        <div className="bg-gray-10 flex h-[96px] w-full items-center justify-center overflow-hidden rounded-lg">
           <img
             loading="lazy"
-            src={item.representImageUrl || item.faviconUrl}
+            src={imageUrl}
             alt={item.linkName || '링크 이미지'}
-            className={`${item.representImageUrl && `h-full w-full object-cover`} h-10`}
+            onError={(e) => {
+              e.currentTarget.src = defaultImage;
+            }}
+            className={isFaviconOnly ? 'h-10' : 'h-full w-full object-cover'}
           />
         </div>
         <div className="flex flex-1 flex-col justify-between">

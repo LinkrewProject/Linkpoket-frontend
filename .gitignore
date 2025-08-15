@@ -21,7 +21,8 @@
 /build
 dist/
 
-src/extension/
+# extension
+src/extension
 
 # misc
 .DS_Store
