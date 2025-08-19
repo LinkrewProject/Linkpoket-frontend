@@ -9,20 +9,37 @@ import { usePatchDirectoryTransmissionStatus } from '@/hooks/mutations/usePatchD
 import { useDeleteDirectoryRequest } from '@/hooks/mutations/useDeleteDirectoryRequest';
 import { useUserStore } from '@/stores/userStore';
 import { useProfileModalStore } from '@/stores/profileModalStore';
+import { useNotificationStore } from '@/stores/notification';
 
 export function UserActions() {
   const [isAlarmOpen, setIsAlarmOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isContactOpen, setIsContactOpen] = useState(false);
-  const { data: notifications = [] } = useFetchNotifications();
+  const { data: notifications = [], refetch } = useFetchNotifications();
   const { nickname, colorCode } = useUserStore();
   const { openProfileModal } = useProfileModalStore();
+
+  const unreadCount = useNotificationStore((state) => state.unreadCount);
+
+  const displayCount = Math.max(unreadCount, notifications.length);
 
   const { mutate: patchShareInvitation, isPending: isShareProcessing } =
     usePatchShareInvitationStatus();
   const { mutate: patchDirectoryTransmission, isPending: isProcessing } =
     usePatchDirectoryTransmissionStatus();
   const { mutate: deleteDirectoryRequest } = useDeleteDirectoryRequest();
+
+  const handleAlarmClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsMenuOpen(false);
+
+    if (!isAlarmOpen) {
+      // 모달을 열 때만 최신 데이터 가져오기
+      refetch();
+    }
+
+    setIsAlarmOpen((prev) => !prev);
+  };
 
   const handleStatusChange = useCallback(
     (
@@ -55,21 +72,19 @@ export function UserActions() {
         {/* 알림 버튼 */}
         <button
           className={`hover:bg-gray-10 active:bg-gray-10 flex h-[32px] w-[32px] cursor-pointer items-center justify-center hover:rounded-[8px] active:rounded-[8px] ${isAlarmOpen ? 'bg-gray-10 rounded-[8px]' : ''} `}
-          onClick={(e) => {
-            e.stopPropagation();
-            setIsMenuOpen(false);
-            setIsAlarmOpen((prev) => !prev);
-          }}
+          onClick={handleAlarmClick}
         >
           <div className="relative">
             <Bell className="h-[22px] w-[22px]" />
-            {notifications.length > 0 && (
+            {/* 하이브리드 카운트 사용 */}
+            {displayCount > 0 && (
               <span className="bg-primary-40 text-gray-80 absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full text-xs">
-                {notifications.length}
+                {displayCount}
               </span>
             )}
           </div>
         </button>
+
         {isAlarmOpen && (
           <NotificationModal
             isOpen={isAlarmOpen}
@@ -115,8 +130,6 @@ export function UserActions() {
         {isMenuOpen && (
           <HeaderMenu
             isHost={true}
-            // isDarkMode={isDarkMode}
-            // onToggleDarkMode={handleToggleDarkMode}
             setIsOpen={() => setIsMenuOpen(!isMenuOpen)}
             onWithDrawPage={() => console.log('탈퇴')}
             onContact={() => setIsContactOpen(!isContactOpen)}
