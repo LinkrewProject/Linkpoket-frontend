@@ -14,6 +14,7 @@ const SignupPage = () => {
     termsStatus,
     handleTermChange,
     onSubmit,
+    handleToggleAll,
   } = useSignupForm();
 
   const [showTermsModal, setShowTermsModal] = useState(false);
@@ -41,6 +42,7 @@ const SignupPage = () => {
           handleTermChange={handleTermChange}
           setShowTermsModal={setShowTermsModal}
           setShowPrivacyModal={setShowPrivacyModal}
+          handleToggleAll={handleToggleAll}
         />
 
         <Button

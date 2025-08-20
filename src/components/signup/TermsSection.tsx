@@ -9,6 +9,7 @@ interface TermsSectionProps {
   handleTermChange: (termName: 'terms1' | 'terms2', checked: boolean) => void;
   setShowTermsModal: (show: boolean) => void;
   setShowPrivacyModal: (show: boolean) => void;
+  handleToggleAll: (checked: boolean) => void;
 }
 
 export const TermsSection = ({
@@ -18,6 +19,7 @@ export const TermsSection = ({
   handleTermChange,
   setShowTermsModal,
   setShowPrivacyModal,
+  handleToggleAll,
 }: TermsSectionProps) => {
   return (
     <div className="space-y-2">
@@ -29,7 +31,11 @@ export const TermsSection = ({
             label="아래 약관에 모두 동의합니다."
             name={field.name}
             checked={field.value}
-            onChange={(e) => field.onChange(e.target.checked)}
+            onChange={(e) => {
+              const checked = e.target.checked;
+              field.onChange(checked);
+              handleToggleAll(checked);
+            }}
           />
         )}
       />

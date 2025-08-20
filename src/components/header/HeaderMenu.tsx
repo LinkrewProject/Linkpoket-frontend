@@ -85,7 +85,7 @@ export default function HeaderMenu({
                 onClick={handleCopyLink}
                 className="hover:bg-gray-10 active:bg-gray-5 text-gray-90 flex cursor-pointer items-center gap-[10px] rounded-lg px-2 py-[11px] text-[14px] font-[500]"
               >
-                <SiteIcon />
+                <SiteIcon width={18} height={18} />
                 <span className="text-[14px]">링크 복사</span>
               </button>
               {isHost && (
@@ -93,7 +93,7 @@ export default function HeaderMenu({
                   onClick={() => setIsManageSharedPageModalOpen(true)}
                   className="hover:bg-gray-10 active:bg-gray-5 text-gray-90 flex cursor-pointer items-center gap-[10px] rounded-lg px-2 py-[11px] text-[14px] font-[500]"
                 >
-                  <SharedPage width={20} height={21} />
+                  <SharedPage width={18} height={18} />
                   <span className="text-[14px]">공유 페이지 관리</span>
                 </button>
               )}
@@ -104,7 +104,7 @@ export default function HeaderMenu({
                   onClick={() => setisWithdrawSharedPageModalOpen(true)}
                   className="text-status-danger hover:bg-gray-10 active:bg-gray-5 flex cursor-pointer items-center gap-[10px] rounded-lg px-2 py-[11px] text-[14px] font-[500]"
                 >
-                  <Withdraw />
+                  <Withdraw width={18} height={18} />
                   <span className="text-[14px]">공유 페이지 탈퇴</span>
                 </button>
               )}
@@ -122,7 +122,7 @@ export default function HeaderMenu({
                 onClick={() => setIsDeleteSharedPageModalOpen(true)}
                 className="text-status-danger hover:bg-gray-10 active:bg-gray-5 flex cursor-pointer items-center gap-[10px] rounded-lg px-2 py-[11px] text-[14px] font-[500]"
               >
-                <Deleted />
+                <Deleted width={18} height={18} />
                 <span className="text-[14px]">공유 페이지 삭제</span>
               </button>
             )}
@@ -151,10 +151,9 @@ export default function HeaderMenu({
               />
             )}
           </div>
+          <div className="border-gray-20 my-[4px] w-[166px] border" />
         </>
       )}
-
-      <div className="border-gray-20 my-[4px] w-[166px] border" />
 
       <div className="flex flex-col">
         <button

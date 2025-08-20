@@ -36,10 +36,16 @@ export const useSignupForm = () => {
     form.setValue('termsAgreed', allAgreed, { shouldValidate: true });
   };
 
+  const handleToggleAll = (checked: boolean) => {
+    setTermsStatus({ terms1: checked, terms2: checked });
+    form.setValue('termsAgreed', checked, { shouldValidate: true });
+  };
+
   return {
     ...form,
     termsStatus,
     handleTermChange,
+    handleToggleAll,
     onSubmit: form.handleSubmit(onSubmit),
   };
 };

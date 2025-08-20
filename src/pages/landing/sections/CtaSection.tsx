@@ -61,7 +61,7 @@ const CtaSection: React.FC = () => {
             {ctaTitles.map((title, index) => (
               <h2
                 key={index}
-                className="text-gray-0 cta-title-mobile cta-title-tablet cta-title-desktop text-[38px] leading-[1.4] font-bold"
+                className="text-gray-0 cta-title-mobile cta-title-tablet cta-title-desktop text-[28px] leading-[1.4] font-bold"
               >
                 {title}
               </h2>
