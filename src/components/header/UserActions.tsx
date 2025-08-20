@@ -1,6 +1,6 @@
 import Bell from '@/assets/widget-ui-assets/Bell.svg?react';
 import Menu from '@/assets/widget-ui-assets/Menu.svg?react';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import NotificationModal from '../modal/page/NotificationModal';
 import HeaderMenu from './HeaderMenu';
 import { useFetchNotifications } from '@/hooks/queries/useFetchNotification';
@@ -12,16 +12,20 @@ import { useProfileModalStore } from '@/stores/profileModalStore';
 import { useNotificationStore } from '@/stores/notification';
 
 export function UserActions() {
-  const [isAlarmOpen, setIsAlarmOpen] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isContactOpen, setIsContactOpen] = useState(false);
+  const [isAlarmOpen, setIsAlarmOpen] = useState<boolean>(false);
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const [isContactOpen, setIsContactOpen] = useState<boolean>(false);
   const { data: notifications = [], refetch } = useFetchNotifications();
   const { nickname, colorCode } = useUserStore();
   const { openProfileModal } = useProfileModalStore();
 
   const unreadCount = useNotificationStore((state) => state.unreadCount);
 
-  const displayCount = Math.max(unreadCount, notifications.length);
+  const rawCount = Math.max(unreadCount, notifications.length);
+
+  const displayCountText = useMemo(() => {
+    return rawCount > 99 ? '99+' : String(rawCount);
+  }, [rawCount]);
 
   const { mutate: patchShareInvitation, isPending: isShareProcessing } =
     usePatchShareInvitationStatus();
@@ -31,14 +35,16 @@ export function UserActions() {
 
   const handleAlarmClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setIsMenuOpen(false);
 
-    if (!isAlarmOpen) {
-      // 모달을 열 때만 최신 데이터 가져오기
+    setIsAlarmOpen((prev) => {
+      if (prev) {
+        // 이미 열려있으면 "그냥 닫기"만 한다 (다시 열지 않음)
+        return false;
+      }
+      // 닫혀있을 때만 refetch 후 열기
       refetch();
-    }
-
-    setIsAlarmOpen((prev) => !prev);
+      return true;
+    });
   };
 
   const handleStatusChange = useCallback(
@@ -72,14 +78,18 @@ export function UserActions() {
         {/* 알림 버튼 */}
         <button
           className={`hover:bg-gray-10 active:bg-gray-10 flex h-[32px] w-[32px] cursor-pointer items-center justify-center hover:rounded-[8px] active:rounded-[8px] ${isAlarmOpen ? 'bg-gray-10 rounded-[8px]' : ''} `}
+          onMouseDown={(e) => e.stopPropagation()}
           onClick={handleAlarmClick}
         >
           <div className="relative">
             <Bell className="h-[22px] w-[22px]" />
             {/* 하이브리드 카운트 사용 */}
-            {displayCount > 0 && (
-              <span className="bg-primary-40 text-gray-80 absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full text-xs">
-                {displayCount}
+            {rawCount > 0 && (
+              <span
+                className="bg-status-danger absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full text-xs text-white"
+                aria-label={`안읽은 알림 ${displayCountText}`}
+              >
+                {displayCountText}
               </span>
             )}
           </div>
