@@ -11,7 +11,7 @@ const CtaSection: React.FC = () => {
   const ctaButtons = [
     {
       text: '링크루 시작하기',
-      href: '/signup',
+      href: '/login',
       className:
         'bg-primary-0 text-primary-60 active:bg-primary-0 hover:bg-gray-5',
     },

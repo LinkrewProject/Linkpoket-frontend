@@ -1,5 +1,5 @@
 import { axiosInstance } from '../axiosInstance';
-import { UpdateDragandDropProps } from '@/types/pages';
+import { UpdateDragandDropProps } from '@/types/folders';
 
 export default async function updateDragandDrop(data: UpdateDragandDropProps) {
   try {

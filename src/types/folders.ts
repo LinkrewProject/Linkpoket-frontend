@@ -59,3 +59,14 @@ export interface FetchFolderDetailsProps {
   folderId: string;
   sortType: string;
 }
+
+export interface UpdateDragandDropProps {
+  baseRequest: {
+    pageId: string;
+    commandType: string;
+  };
+  targetId: string;
+  itemType: string;
+  targetOrderIndex: number;
+  parentFolderId: string;
+}

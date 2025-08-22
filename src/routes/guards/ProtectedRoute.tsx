@@ -10,7 +10,7 @@ export const ProtectedRoute = () => {
     return <div>로딩 중...</div>;
   }
 
-  // 인증되지 않은 경우 로그인 페이지로 리다이렉트 (현재 경로를 state로 저장)
+  // 인증되지 않은 경우 랜딩 페이지로 리다이렉트 (현재 경로를 state로 저장)
   if (!isAuthenticated) {
     return <Navigate to="/landing" state={{ from: location }} replace />;
   }
