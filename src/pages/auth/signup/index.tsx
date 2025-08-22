@@ -47,7 +47,7 @@ const SignupPage = () => {
 
         <Button
           type="submit"
-          className="h-12 w-full rounded-lg bg-orange-500 font-medium text-white transition-colors hover:bg-orange-600"
+          className="h-12 w-full rounded-lg font-medium text-white transition-colors"
           disabled={isSubmitting || !isValid}
         >
           {isSubmitting ? '처리 중...' : '회원 가입'}
