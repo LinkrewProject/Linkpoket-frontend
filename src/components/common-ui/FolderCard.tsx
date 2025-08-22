@@ -26,23 +26,29 @@ export default function FolderCard({
     pageId: pageId as string,
   });
 
-  const handleDoubleClick = () => {
+  const handleClick = () => {
     navigate(`/folder/${item.folderId}`);
     setParentsFolderId(pageId as string);
   };
 
-  const handleBookmarkClick = () => {
+  const handleBookmarkClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
     updateFolderBookmark();
+  };
+
+  const handleMenuClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsDropDownInline((v) => !v);
   };
 
   return (
     <div
-      className="bg-gray-0 border-gray-10 relative flex h-[242px] min-w-[156px] flex-col gap-4 rounded-[16px] border p-[16px] hover:cursor-pointer"
-      onDoubleClick={handleDoubleClick}
+      className="bg-gray-0 border-gray-10 group relative flex h-[242px] min-w-[156px] flex-col gap-4 rounded-[16px] border p-[16px] hover:cursor-pointer"
+      onClick={handleClick}
       onMouseDown={(e) => e.stopPropagation()}
     >
       <div className="bg-gray-10 flex h-[96px] w-full items-center justify-center overflow-hidden rounded-lg">
-        <div className="h-full w-full rounded-lg bg-[url('@/assets/common-ui-assets/FolderImage.svg')] bg-cover bg-center bg-no-repeat" />
+        <div className="h-full w-full rounded-lg bg-[url('@/assets/common-ui-assets/FolderImage.svg')] bg-cover bg-center bg-no-repeat transition-transform duration-300 ease-in-out group-hover:scale-110" />
       </div>
 
       <div className="flex flex-1 flex-col justify-between">
@@ -61,10 +67,7 @@ export default function FolderCard({
           </button>
 
           <div className="relative">
-            <button
-              className="cursor-pointer p-1"
-              onClick={() => setIsDropDownInline((v) => !v)}
-            >
+            <button className="cursor-pointer p-1" onClick={handleMenuClick}>
               <CardMenu />
             </button>
 
