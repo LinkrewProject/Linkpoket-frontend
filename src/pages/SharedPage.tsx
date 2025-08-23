@@ -26,7 +26,12 @@ export default function SharedPage() {
 
   useEffect(() => {
     setPageInfo(pageId as string);
-    setParentsFolderId(rootFolderId);
+
+    return () => {
+      if (rootFolderId) {
+        setParentsFolderId(rootFolderId);
+      }
+    };
   }, [pageId, setPageInfo, setParentsFolderId, rootFolderId]);
 
   return (

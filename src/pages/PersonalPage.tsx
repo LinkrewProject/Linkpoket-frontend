@@ -31,7 +31,6 @@ export default function PersonalPage() {
 
   useEffect(() => {
     setPageInfo(pageId);
-    setParentsFolderId(rootFolderId);
 
     if (memberData) {
       setUser(memberData.nickName, memberData.email, memberData.colorCode);
@@ -46,6 +45,12 @@ export default function PersonalPage() {
         })
       );
     }
+
+    return () => {
+      if (rootFolderId) {
+        setParentsFolderId(rootFolderId);
+      }
+    };
   }, [
     pageId,
     rootFolderId,
