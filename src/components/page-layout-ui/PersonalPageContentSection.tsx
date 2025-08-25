@@ -6,13 +6,66 @@ import AddLinkModal from '../modal/link/AddLinkModal';
 import { useModalStore } from '@/stores/modalStore';
 import ErrorLinkModal from '../modal/link/ErrorLinkModal';
 import {
-  DragDropContext,
-  Draggable,
-  Droppable,
-  DropResult,
-} from '@hello-pangea/dnd';
+  DndContext,
+  DragEndEvent,
+  MouseSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+  closestCenter,
+  DragOverlay,
+  DragStartEvent,
+} from '@dnd-kit/core';
+import {
+  SortableContext,
+  arrayMove,
+  rectSwappingStrategy,
+  useSortable,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import useUpdateDragandDrop from '@/hooks/mutations/useUpdateDragandDrop';
 import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
+import { FolderDetail } from '@/types/folders';
+import { LinkDetail } from '@/types/links';
+
+function SortableItem({ item }: { item: any; index: number }) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
+    id: 'folderId' in item ? item.folderId : item.linkId,
+  });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    zIndex: isDragging ? 50 : 0,
+    position: 'relative',
+    touchAction: 'none',
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style as React.CSSProperties}
+      {...attributes}
+      {...listeners}
+      className="touch-none"
+    >
+      {'folderId' in item ? (
+        <FolderCard isBookmark={item.isFavorite} item={item} />
+      ) : (
+        <LinkCard isBookmark={item.isFavorite} item={item} />
+      )}
+    </div>
+  );
+}
+
+//콘텐츠 카드 컴포넌트
 
 export default function PersonalPageContentSection({
   folderData = [],
@@ -42,20 +95,46 @@ export default function PersonalPageContentSection({
   );
 
   const [pageData, setPageData] = useState(initialData);
+  const [activeId, setActiveId] = useState<string | number | null>(null);
 
-  const onDragEnd = async (result: DropResult) => {
-    const { destination, source } = result;
-    if (!destination) return;
-    if (destination.index === source.index) return;
+  const sensors = useSensors(
+    useSensor(MouseSensor, {
+      activationConstraint: {
+        distance: 5,
+      },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 50,
+        tolerance: 5,
+      },
+    })
+  );
 
-    const movedItem = pageData[source.index];
+  const onDragStart = (event: DragStartEvent) => {
+    setActiveId(event.active.id);
+  };
+
+  const onDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event;
+    setActiveId(null);
+
+    if (!over) return;
+    if (active.id === over.id) return;
+
+    const oldIndex = pageData.findIndex(
+      (item) => ('folderId' in item ? item.folderId : item.linkId) === active.id
+    );
+    const newIndex = pageData.findIndex(
+      (item) => ('folderId' in item ? item.folderId : item.linkId) === over.id
+    );
+
+    const movedItem = pageData[oldIndex];
     const targetId =
       'folderId' in movedItem ? movedItem.folderId : movedItem.linkId;
     const itemType = 'folderId' in movedItem ? 'FOLDER' : 'LINK';
 
-    const newData = Array.from(pageData);
-    const [removed] = newData.splice(source.index, 1);
-    newData.splice(destination.index, 0, removed);
+    const newData = arrayMove(pageData, oldIndex, newIndex);
     setPageData(newData);
 
     try {
@@ -63,7 +142,7 @@ export default function PersonalPageContentSection({
         baseRequest: { pageId, commandType: 'EDIT' },
         targetId,
         itemType,
-        targetOrderIndex: destination.index + 1,
+        targetOrderIndex: newIndex + 1,
         parentFolderId: parentsFolderId ?? '',
       });
     } catch (error) {
@@ -72,44 +151,57 @@ export default function PersonalPageContentSection({
     }
   };
 
+  const getActiveItem = () => {
+    if (!activeId) return null;
+    return pageData.find(
+      (item) => ('folderId' in item ? item.folderId : item.linkId) === activeId
+    );
+  };
+
   return (
     <div className={`h-screen w-full overflow-y-auto`}>
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="grid" direction="horizontal">
-          {(provided) => (
-            <div
-              ref={provided.innerRef}
-              {...provided.droppableProps}
-              className={`grid w-full grid-cols-2 justify-center gap-x-2 gap-y-8 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5`}
-            >
-              {pageData.map((item, index) => (
-                <Draggable
-                  key={'folderId' in item ? item.folderId : item.linkId}
-                  draggableId={String(
-                    'folderId' in item ? item.folderId : item.linkId
-                  )}
-                  index={index}
-                >
-                  {(provided) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                    >
-                      {'folderId' in item ? (
-                        <FolderCard isBookmark={item.isFavorite} item={item} />
-                      ) : (
-                        <LinkCard isBookmark={item.isFavorite} item={item} />
-                      )}
-                    </div>
-                  )}
-                </Draggable>
-              ))}
-              {provided.placeholder}
-            </div>
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragStart={onDragStart}
+        onDragEnd={onDragEnd}
+      >
+        <SortableContext
+          items={pageData.map((item) =>
+            'folderId' in item ? item.folderId : item.linkId
           )}
-        </Droppable>
-      </DragDropContext>
+          strategy={rectSwappingStrategy}
+        >
+          <div
+            className={`grid w-full grid-cols-2 justify-center gap-x-2 gap-y-8 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5`}
+          >
+            {pageData.map((item, index) => (
+              <SortableItem
+                key={'folderId' in item ? item.folderId : item.linkId}
+                item={item}
+                index={index}
+              />
+            ))}
+          </div>
+        </SortableContext>
+        <DragOverlay>
+          {activeId && getActiveItem() ? (
+            <div style={{ zIndex: 1000 }}>
+              {'folderId' in getActiveItem()! ? (
+                <FolderCard
+                  isBookmark={getActiveItem()!.isFavorite}
+                  item={getActiveItem() as FolderDetail}
+                />
+              ) : (
+                <LinkCard
+                  isBookmark={getActiveItem()!.isFavorite}
+                  item={getActiveItem() as LinkDetail}
+                />
+              )}
+            </div>
+          ) : null}
+        </DragOverlay>
+      </DndContext>
       {isLinkModalOpen && (
         <AddLinkModal isOpen={isLinkModalOpen} onClose={closeLinkModal} />
       )}
