@@ -18,7 +18,7 @@ export default function PersonalPage() {
 
   const pageTitle = refinedData?.pageTitle;
 
-  const folderData = refinedData?.directoryDetailRespons ?? [];
+  const folderData = refinedData?.directoryDetailResponses ?? [];
   const linkData = refinedData?.siteDetailResponses ?? [];
   const folderDataLength = folderData?.length;
   const linkDataLength = linkData?.length;
@@ -59,6 +59,8 @@ export default function PersonalPage() {
     data,
     memberData,
   ]);
+
+  console.log('folderData:', folderData);
 
   return (
     <div className="bg-gray-5 flex h-screen min-w-[328px] flex-col px-[64px] py-[56px] xl:px-[102px]">

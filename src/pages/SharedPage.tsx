@@ -16,7 +16,7 @@ export default function SharedPage() {
   const rootFolderId = refinedData?.rootFolderId;
   const pageTitle = refinedData?.pageTitle;
 
-  const folderData = refinedData?.directoryDetailRespons ?? [];
+  const folderData = refinedData?.directoryDetailResponses ?? [];
   const linkData = refinedData?.siteDetailResponses ?? [];
   const folderDataLength = folderData?.length;
   const linkDataLength = linkData?.length;
