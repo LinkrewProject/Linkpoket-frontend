@@ -42,11 +42,13 @@ export interface UpdatePageTitleData {
 export interface PageControllerSectionProps {
   folderDataLength: number;
   linkDataLength: number;
+  onSortChange: (sortType: string) => void;
 }
 
 export interface PageContentSectionProps {
   folderData: FolderDetail[];
   linkData: LinkDetail[];
+  sortType: string;
 }
 
 export interface UpdateSharedPageInvitationData {

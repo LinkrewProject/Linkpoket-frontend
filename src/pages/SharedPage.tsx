@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import SharedPageContentSection from '@/components/page-layout-ui/SharedPageContentSection';
 import PageControllerSection from '@/components/page-layout-ui/PageControllerSection';
@@ -21,6 +21,8 @@ export default function SharedPage() {
   const folderDataLength = folderData?.length;
   const linkDataLength = linkData?.length;
 
+  const [sortType, setSortType] = useState('기본순');
+
   const { setPageInfo } = usePageStore();
   const { setParentsFolderId } = useParentsFolderIdStore();
 
@@ -34,6 +36,10 @@ export default function SharedPage() {
     };
   }, [pageId, setPageInfo, setParentsFolderId, rootFolderId]);
 
+  const handleSort = (selectedSortType: string) => {
+    setSortType(selectedSortType);
+  };
+
   return (
     <div className="bg-gray-5 flex h-screen min-w-[328px] flex-col px-[64px] py-[56px] xl:px-[102px]">
       <SharedPageHeaderSection
@@ -43,8 +49,13 @@ export default function SharedPage() {
       <PageControllerSection
         folderDataLength={folderDataLength}
         linkDataLength={linkDataLength}
+        onSortChange={handleSort}
       />
-      <SharedPageContentSection folderData={folderData} linkData={linkData} />
+      <SharedPageContentSection
+        folderData={folderData}
+        linkData={linkData}
+        sortType={sortType}
+      />
     </div>
   );
 }

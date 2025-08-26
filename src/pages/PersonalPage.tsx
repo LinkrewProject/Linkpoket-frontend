@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import PageControllerSection from '@/components/page-layout-ui/PageControllerSection';
 import PageHeaderSection from '@/components/page-layout-ui/PageHeaderSection';
 import PersonalPageContentSection from '@/components/page-layout-ui/PersonalPageContentSection';
@@ -15,7 +15,6 @@ export default function PersonalPage() {
 
   const pageId = refinedData?.pageId;
   const rootFolderId = refinedData?.rootFolderId;
-
   const pageTitle = refinedData?.pageTitle;
 
   const folderData = refinedData?.directoryDetailResponses ?? [];
@@ -23,6 +22,8 @@ export default function PersonalPage() {
   const folderDataLength = folderData?.length;
   const linkDataLength = linkData?.length;
   const memberData = data?.data.member;
+
+  const [sortType, setSortType] = useState('기본순');
 
   const { setUser } = useUserStore();
   const { setPageInfo } = usePageStore();
@@ -60,6 +61,10 @@ export default function PersonalPage() {
     memberData,
   ]);
 
+  const handleSort = (selectedSortType: string) => {
+    setSortType(selectedSortType);
+  };
+
   console.log('folderData:', folderData);
 
   return (
@@ -68,8 +73,13 @@ export default function PersonalPage() {
       <PageControllerSection
         folderDataLength={folderDataLength}
         linkDataLength={linkDataLength}
+        onSortChange={handleSort}
       />
-      <PersonalPageContentSection folderData={folderData} linkData={linkData} />
+      <PersonalPageContentSection
+        folderData={folderData}
+        linkData={linkData}
+        sortType={sortType}
+      />
     </div>
   );
 }

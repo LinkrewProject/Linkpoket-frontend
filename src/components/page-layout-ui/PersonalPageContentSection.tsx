@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { PageContentSectionProps } from '@/types/pages';
 import LinkCard from '../common-ui/LinkCard';
 import FolderCard from '../common-ui/FolderCard';
 import AddLinkModal from '../modal/link/AddLinkModal';
 import { useModalStore } from '@/stores/modalStore';
 import ErrorLinkModal from '../modal/link/ErrorLinkModal';
+import { PageContentSectionProps } from '@/types/pages';
 import {
   DndContext,
   DragEndEvent,
@@ -65,11 +65,10 @@ function SortableItem({ item }: { item: any; index: number }) {
   );
 }
 
-//콘텐츠 카드 컴포넌트
-
 export default function PersonalPageContentSection({
   folderData = [],
   linkData = [],
+  sortType,
 }: PageContentSectionProps) {
   const { isLinkModalOpen, closeLinkModal, isErrorModalOpen, closeErrorModal } =
     useModalStore();
@@ -88,19 +87,42 @@ export default function PersonalPageContentSection({
     parentFolderId: '',
   });
 
-  useEffect(() => {
-    const safeFolderData = Array.isArray(folderData) ? folderData : [];
-    const safeLinkData = Array.isArray(linkData) ? linkData : [];
-    const newInitialData = [...safeFolderData, ...safeLinkData].sort(
-      (a, b) => a.orderIndex - b.orderIndex
-    );
-    setPageData(newInitialData);
-  }, [folderData, linkData]);
-
   const [pageData, setPageData] = useState<(FolderDetail | LinkDetail)[] | []>(
     []
   );
   const [activeId, setActiveId] = useState<string | number | null>(null);
+
+  const sortData = (data: (FolderDetail | LinkDetail)[], sortType: string) => {
+    const sortedData = [...data];
+
+    switch (sortType) {
+      case '최신순':
+        return sortedData.sort(
+          (a, b) => (b.orderIndex || 0) - (a.orderIndex || 0)
+        );
+
+      case '이름순':
+        return sortedData.sort((a, b) => {
+          const nameA = ('folderId' in a ? a.folderName : a.linkName) || '';
+          const nameB = ('folderId' in b ? b.folderName : b.linkName) || '';
+          return nameA.localeCompare(nameB);
+        });
+
+      case '기본순':
+      default:
+        return sortedData.sort(
+          (a, b) => (a.orderIndex || 0) - (b.orderIndex || 0)
+        );
+    }
+  };
+
+  useEffect(() => {
+    const safeFolderData = Array.isArray(folderData) ? folderData : [];
+    const safeLinkData = Array.isArray(linkData) ? linkData : [];
+    const combinedData = [...safeFolderData, ...safeLinkData];
+    const sortedData = sortData(combinedData, sortType);
+    setPageData(sortedData);
+  }, [folderData, linkData, sortType]);
 
   const sensors = useSensors(
     useSensor(MouseSensor, {
@@ -152,7 +174,7 @@ export default function PersonalPageContentSection({
       });
     } catch (error) {
       console.error('드래그 앤 드롭 업데이트 실패:', error);
-      setPageData(pageData); // 실패 시 원상복구
+      setPageData(pageData);
     }
   };
 
