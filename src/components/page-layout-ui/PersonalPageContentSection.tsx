@@ -44,9 +44,9 @@ function SortableItem({ item }: { item: any; index: number }) {
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
-    zIndex: isDragging ? 50 : 0,
-    position: 'relative',
+    zIndex: isDragging ? 50 : 'auto',
     touchAction: 'none',
+    opacity: isDragging ? 0.3 : 1,
   };
 
   return (
@@ -235,7 +235,7 @@ export default function PersonalPageContentSection({
           )}
           strategy={rectSwappingStrategy}
         >
-          <div className="grid w-full grid-cols-2 justify-center gap-x-2 gap-y-8 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+          <div className="relative grid w-full grid-cols-2 justify-center gap-x-2 gap-y-8 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
             {pageData.length === 0 ? (
               <div className="col-span-full py-8 text-center text-gray-50">
                 {searchKeyword ? '검색 결과가 없습니다.' : '데이터가 없습니다.'}
