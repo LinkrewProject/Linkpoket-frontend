@@ -1,6 +1,6 @@
-import 확장프로그램이미지 from '@/assets/common-ui-assets/확장 프로그램 이미지.png';
-import 폴더별정리이미지 from '@/assets/common-ui-assets/폴더별정리이미지.png';
-import 공유페이지이미지 from '@/assets/common-ui-assets/공유페이지이미지.jpg';
+import 확장프로그램이미지 from '@/assets/common-ui-assets/확장 프로그램 이미지.webp';
+import 폴더별정리이미지 from '@/assets/common-ui-assets/폴더별정리이미지.webp';
+import 공유페이지이미지 from '@/assets/common-ui-assets/공유페이지이미지.webp';
 
 const NewSection = () => {
   const featureData = [
@@ -128,6 +128,8 @@ const NewSection = () => {
           <img
             src={확장프로그램이미지}
             className="mb-12 w-[312px] rounded-3xl object-cover md:mb-0 md:w-[466px]"
+            loading="eager"
+            fetchPriority="high"
           />
         </div>
       </div>
@@ -138,6 +140,8 @@ const NewSection = () => {
           <img
             src={폴더별정리이미지}
             className="mb-12 w-[312px] rounded-3xl object-cover md:mb-0 md:w-[466px]"
+            loading="lazy"
+            fetchPriority="low"
           />
           <div className="flex flex-col justify-center">
             {thirdData.map((feature, idx) => {
@@ -166,6 +170,8 @@ const NewSection = () => {
           <img
             src={공유페이지이미지}
             className="mb-12 w-[312px] rounded-3xl object-cover md:mb-0 md:w-[466px]"
+            loading="lazy"
+            fetchPriority="low"
           />
         </div>
       </div>
