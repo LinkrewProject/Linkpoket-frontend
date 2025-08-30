@@ -1,5 +1,10 @@
-@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css?ver=1.0.0');
 @import 'tailwindcss';
+
+html {
+  font-family: 'Pretendard Variable', sans-serif;
+  font-weight: 400;
+}
 
 @theme {
   --color-primary-0: #ffffff;

@@ -65,6 +65,8 @@ const HeroSection: React.FC = () => {
             src={히어로이미지}
             alt="Landing page main illustration"
             className="w-[454px] rounded-3xl"
+            loading="eager"
+            fetchPriority="high"
           />
         </div>
       </div>
