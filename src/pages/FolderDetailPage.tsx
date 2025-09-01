@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { usePageStore } from '@/stores/pageStore';
+import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
 import SharedPageContentSection from '@/components/page-layout-ui/SharedPageContentSection';
 import PageHeaderSection from '@/components/page-layout-ui/PageHeaderSection';
 import PageControllerSection from '@/components/page-layout-ui/PageControllerSection';
@@ -8,10 +8,15 @@ import useFetchFolderDetails from '@/hooks/queries/useFetchFolderDetails';
 
 export default function FolderDetailPage() {
   const [sortType, setSortType] = useState<string>('기본순');
-
   const { pageId } = usePageStore();
-
   const { folderId } = useParams();
+  const { setParentsFolderId } = useParentsFolderIdStore();
+
+  useEffect(() => {
+    if (folderId) {
+      setParentsFolderId(folderId);
+    }
+  }, [folderId, setParentsFolderId]);
 
   const requestParams = {
     pageId,
