@@ -1,7 +1,9 @@
 import React, { useEffect, useRef } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import BookMark from '@/assets/widget-ui-assets/BookMark.svg?react';
+import BookMarkActive from '@/assets/widget-ui-assets/BookMarkActive.svg?react';
 import PersonalPage from '@/assets/widget-ui-assets/PersonalPage.svg?react';
+import PersonalPageActive from '@/assets/widget-ui-assets/PersonalPageActive.svg?react';
 import PlusIcon from '@/assets/common-ui-assets/PlusIcon.svg?react';
 import SidebarOpen from '@/assets/widget-ui-assets/SidebarOpen.svg?react';
 import SidebarClose from '@/assets/widget-ui-assets/SidebarClose.svg?react';
@@ -30,8 +32,51 @@ const SideBar: React.FC<MenubarProps> = ({
   const isMobile = useMobile();
   const { pageId } = usePageStore();
   const { parentsFolderId } = useParentsFolderIdStore();
-  const isBookmarks = useLocation().pathname === '/bookmarks';
   const location = useLocation();
+  const params = useParams();
+
+  // 현재 컨텍스트 파악
+  const getCurrentContext = () => {
+    const path = location.pathname;
+    if (path === '/') return 'personal';
+    if (path.startsWith('/shared/')) return 'shared';
+    if (path.startsWith('/bookmarks')) return 'bookmarks';
+    if (path.startsWith('/personal/')) return 'personal';
+    return 'personal'; // 기본값
+  };
+
+  const currentContext = getCurrentContext();
+
+  // 메뉴 활성 상태 확인
+  const isPersonalActive =
+    location.pathname === '/' || location.pathname.startsWith('/personal/');
+  const isBookmarksActive =
+    location.pathname === '/bookmarks' ||
+    location.pathname.startsWith('/bookmarks/');
+  const isSharedPageActive = (pageId: string) => {
+    return (
+      location.pathname === `/shared/${pageId}` ||
+      location.pathname.startsWith(`/shared/${pageId}/`)
+    );
+  };
+
+  // 폴더 링크 생성 헬퍼 함수
+  const getFolderLink = (folderId: string) => {
+    switch (currentContext) {
+      case 'shared':
+        return `/shared/${params.pageId}/folder/${folderId}`;
+      case 'bookmarks':
+        return `/bookmarks/folder/${folderId}`;
+      case 'personal':
+      default:
+        return `/personal/folder/${folderId}`;
+    }
+  };
+
+  // 현재 폴더가 활성화되어 있는지 확인
+  const isFolderActive = (folderId: string) => {
+    return location.pathname === getFolderLink(folderId);
+  };
 
   //768px 이하의 경우, showSidebar를 false처리, 이외엔 true처리
   useEffect(() => {
@@ -119,6 +164,7 @@ const SideBar: React.FC<MenubarProps> = ({
                 setIsFoldSidebar(true);
               }}
               className="cursor-pointer"
+              aria-label="사이드바 닫기"
             >
               <SidebarClose />
             </button>
@@ -128,40 +174,44 @@ const SideBar: React.FC<MenubarProps> = ({
               <Link
                 to="/"
                 className={`group flex items-center gap-[12px] rounded-[8px] p-[8px] text-[14px] font-[600] ${
-                  location.pathname === '/'
-                    ? 'bg-primary-10 text-primary-50'
-                    : 'text-gray-70 hover:bg-primary-5 hover:text-primary-50 hover:rounded-[8px]'
+                  isPersonalActive
+                    ? 'bg-gray-10 text-gray-90'
+                    : 'text-gray-70 hover:bg-gray-5 hover:text-gray-70 hover:rounded-[8px]'
                 }`}
               >
-                <PersonalPage
-                  width={20}
-                  height={20}
-                  className={`${
-                    location.pathname === '/'
-                      ? 'text-primary-50'
-                      : 'text-gray-70'
-                  }`}
-                />
+                {isPersonalActive ? (
+                  <PersonalPageActive
+                    width={20}
+                    height={20}
+                    className={`${
+                      isPersonalActive ? 'text-primary-50' : 'text-gray-70'
+                    }`}
+                  />
+                ) : (
+                  <PersonalPage
+                    width={20}
+                    height={20}
+                    className={`${
+                      isPersonalActive ? 'text-primary-50' : 'text-gray-70'
+                    }`}
+                  />
+                )}
                 개인 페이지
               </Link>
 
               <Link
-                to="bookmarks"
+                to="/bookmarks"
                 className={`group flex items-center gap-[12px] rounded-[8px] p-[8px] text-[14px] font-[600] ${
-                  location.pathname === '/bookmarks'
-                    ? 'bg-primary-10 text-primary-50'
-                    : 'text-gray-70 hover:bg-primary-5 hover:text-primary-50 hover:rounded-[8px]'
+                  isBookmarksActive
+                    ? 'bg-gray-10 text-gray-90'
+                    : 'text-gray-70 hover:bg-gray-5 hover:text-gray-70 hover:rounded-[8px]'
                 }`}
               >
-                <BookMark
-                  width={20}
-                  height={20}
-                  className={`my-[2px] ${
-                    location.pathname === '/bookmarks'
-                      ? 'text-primary-50'
-                      : 'text-gray-70'
-                  }`}
-                />
+                {isBookmarksActive ? (
+                  <BookMarkActive width={20} height={20} />
+                ) : (
+                  <BookMark width={20} height={20} />
+                )}
                 북마크
               </Link>
 
@@ -177,6 +227,7 @@ const SideBar: React.FC<MenubarProps> = ({
                       e.preventDefault();
                       handleCreateSharedPage();
                     }}
+                    aria-label="공유페이지 추가"
                     height={18}
                     width={18}
                   />
@@ -190,9 +241,9 @@ const SideBar: React.FC<MenubarProps> = ({
                     key={page.pageId}
                     to={`/shared/${page.pageId}`}
                     className={`block rounded-[8px] py-2 pr-3 pl-2 text-[14px] font-[600] ${
-                      location.pathname === `/shared/${page.pageId}`
+                      isSharedPageActive(page.pageId)
                         ? 'bg-gray-10 text-gray-90'
-                        : 'text-gray-70 hover:bg-gray-5 hover:rounded-[8px]'
+                        : 'text-gray-70 hover:bg-gray-5 hover:text-gray-70 hover:rounded-[8px]'
                     }`}
                   >
                     {page.pageTitle}
@@ -200,61 +251,127 @@ const SideBar: React.FC<MenubarProps> = ({
                 ))}
               </div>
 
-              {/* 공유페이지에 따른 폴더 생성  */}
-              <div className="mt-4 flex items-center px-[8px] py-[4px] text-[14px] font-[500] text-gray-50 hover:rounded-[8px] active:rounded-[8px]">
-                <div className="group flex w-full items-center justify-between">
-                  <div className="flex gap-[20px]">
-                    <div>폴더</div>
-                  </div>
-                  <PlusIcon
-                    className="text-gray-40 hover:text-gray-90 cursor-pointer"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      e.preventDefault();
-                      handleCreateFolder();
-                    }}
-                    height={18}
-                    width={18}
-                  />
-                </div>
-              </div>
-
-              {/* 폴더 뎁스1  리스트 */}
-              <div className="mt-2 flex flex-col gap-[2px]">
-                {refinedFolderList?.map((folder: any) => (
-                  <div key={folder.folderId}>
-                    <Link
-                      to={`/folder/${folder.folderId}`}
-                      className={`block rounded-[8px] py-2 pr-3 pl-2 text-[14px] font-[600] ${
-                        location.pathname === `/folder/${folder.folderId}`
-                          ? 'bg-primary-10 text-primary-50'
-                          : 'text-gray-70 hover:bg-primary-5 hover:text-primary-50 hover:rounded-[8px]'
-                      }`}
-                    >
-                      {folder.folderTitle}
-                    </Link>
-                    {/* 폴더 뎁스2  리스트 */}
-                    {folder.children && (
-                      <div className="mt-1 ml-4 flex flex-col gap-[2px]">
-                        {folder.children.map((child: any) => (
-                          <Link
-                            key={child.folderId}
-                            to={`/folder/${child.folderId}`}
-                            className={`block rounded-[8px] py-2 pr-3 pl-2 text-[14px] font-[600] ${
-                              location.pathname === `/folder/${child.folderId}`
-                                ? 'bg-primary-10 text-primary-50'
-                                : 'text-gray-70 hover:bg-primary-5 hover:text-primary-50 hover:rounded-[8px]'
-                            }`}
-                          >
-                            <span className="pr-2">•</span>
-                            <span>{child.folderTitle}</span>
-                          </Link>
-                        ))}
+              {/* 폴더 섹션 - 개인페이지나 북마크에서만 표시 */}
+              {(currentContext === 'personal' ||
+                currentContext === 'bookmarks') && (
+                <>
+                  <div className="mt-4 flex items-center px-[8px] py-[4px] text-[14px] font-[500] text-gray-50 hover:rounded-[8px] active:rounded-[8px]">
+                    <div className="group flex w-full items-center justify-between">
+                      <div className="flex gap-[20px]">
+                        <div>폴더</div>
                       </div>
-                    )}
+                      <PlusIcon
+                        className="text-gray-40 hover:text-gray-90 cursor-pointer"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          e.preventDefault();
+                          handleCreateFolder();
+                        }}
+                        aria-label="폴더 추가"
+                        height={18}
+                        width={18}
+                      />
+                    </div>
                   </div>
-                ))}
-              </div>
+
+                  {/* 폴더 뎁스1 리스트 */}
+                  <div className="mt-2 flex flex-col gap-[2px]">
+                    {refinedFolderList?.map((folder: any) => (
+                      <div key={folder.folderId}>
+                        <Link
+                          to={getFolderLink(folder.folderId)}
+                          className={`block rounded-[8px] py-2 pr-3 pl-2 text-[14px] font-[600] ${
+                            isFolderActive(folder.folderId)
+                              ? 'bg-primary-5 text-primary-50'
+                              : 'text-gray-70 hover:bg-primary-5 hover:text-gray-70 hover:rounded-[8px]'
+                          }`}
+                        >
+                          {folder.folderTitle}
+                        </Link>
+                        {/* 폴더 뎁스2 리스트 */}
+                        {folder.children && (
+                          <div className="mt-1 ml-4 flex flex-col gap-[2px]">
+                            {folder.children.map((child: any) => (
+                              <Link
+                                key={child.folderId}
+                                to={getFolderLink(child.folderId)}
+                                className={`block rounded-[8px] py-2 pr-3 pl-2 text-[14px] font-[600] ${
+                                  isFolderActive(child.folderId)
+                                    ? 'bg-primary-5 text-primary-50'
+                                    : 'text-gray-70 hover:bg-primary-5 hover:text-gray-70 hover:rounded-[8px]'
+                                }`}
+                              >
+                                <span className="pr-2">•</span>
+                                <span>{child.folderTitle}</span>
+                              </Link>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
+
+              {/* 공유페이지 내 폴더 표시 */}
+              {currentContext === 'shared' && params.pageId && (
+                <>
+                  <div className="mt-4 flex items-center px-[8px] py-[4px] text-[14px] font-[500] text-gray-50 hover:rounded-[8px] active:rounded-[8px]">
+                    <div className="group flex w-full items-center justify-between">
+                      <div className="flex gap-[20px]">
+                        <div>폴더</div>
+                      </div>
+                      <PlusIcon
+                        className="text-gray-40 hover:text-gray-90 cursor-pointer"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          e.preventDefault();
+                          handleCreateFolder();
+                        }}
+                        aria-label="폴더 추가"
+                        height={18}
+                        width={18}
+                      />
+                    </div>
+                  </div>
+                  <div className="mt-2 flex flex-col gap-[2px]">
+                    {refinedFolderList?.map((folder: any) => (
+                      <div key={folder.folderId}>
+                        <Link
+                          to={`/shared/${params.pageId}/folder/${folder.folderId}`}
+                          className={`block rounded-[8px] py-2 pr-3 pl-2 text-[14px] font-[600] ${
+                            location.pathname ===
+                            `/shared/${params.pageId}/folder/${folder.folderId}`
+                              ? 'bg-primary-5 text-primary-50'
+                              : 'text-gray-70 hover:bg-primary-5 hover:text-gray-70 hover:rounded-[8px]'
+                          }`}
+                        >
+                          {folder.folderTitle}
+                        </Link>
+                        {folder.children && (
+                          <div className="mt-1 ml-4 flex flex-col gap-[2px]">
+                            {folder.children.map((child: any) => (
+                              <Link
+                                key={child.folderId}
+                                to={`/shared/${params.pageId}/folder/${child.folderId}`}
+                                className={`block rounded-[8px] py-2 pr-3 pl-2 text-[14px] font-[600] ${
+                                  location.pathname ===
+                                  `/shared/${params.pageId}/folder/${child.folderId}`
+                                    ? 'bg-primary-5 text-primary-50'
+                                    : 'text-gray-70 hover:bg-primary-5 hover:text-gray-70 hover:rounded-[8px]'
+                                }`}
+                              >
+                                <span className="pr-2">•</span>
+                                <span>{child.folderTitle}</span>
+                              </Link>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
             </li>
           </ul>
         </div>
@@ -270,6 +387,7 @@ const SideBar: React.FC<MenubarProps> = ({
               setIsFoldSidebar(false);
             }}
             className="mb-2 cursor-pointer"
+            aria-label="사이드바 열기"
           >
             <SidebarOpen />
           </button>
@@ -278,36 +396,28 @@ const SideBar: React.FC<MenubarProps> = ({
         <div className="flex flex-col items-center gap-[8px]">
           <button
             className={`cursor-pointer rounded-[8px] p-3 text-[14px] font-[600] ${
-              location.pathname === '/' && !isBookmarks
-                ? 'bg-gray-5 text-gray-70'
-                : 'text-gray-70'
+              isPersonalActive ? 'bg-gray-5' : 'hover:bg-gray-5'
             }`}
           >
             <Link to="/">
-              <PersonalPage
-                width={20}
-                height={20}
-                className={`${
-                  location.pathname === '/' ? 'text-primary-50' : 'text-gray-70'
-                }`}
-              />
+              {isPersonalActive ? (
+                <PersonalPageActive width={20} height={20} />
+              ) : (
+                <PersonalPage width={20} height={20} />
+              )}
             </Link>
           </button>
           <button
             className={`cursor-pointer rounded-[8px] p-3 text-[14px] font-[600] ${
-              isBookmarks ? 'bg-gray-5 text-gray-70' : 'text-gray-70'
+              isBookmarksActive ? 'bg-gray-5' : 'hover:bg-gray-5'
             }`}
           >
             <Link to="/bookmarks">
-              <BookMark
-                width={20}
-                height={20}
-                className={`my-[2px] ${
-                  location.pathname === '/bookmarks'
-                    ? 'text-primary-50'
-                    : 'text-gray-70'
-                }`}
-              />
+              {isBookmarksActive ? (
+                <BookMarkActive width={20} height={20} />
+              ) : (
+                <BookMark width={20} height={20} />
+              )}
             </Link>
           </button>
         </div>

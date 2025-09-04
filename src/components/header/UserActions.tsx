@@ -94,6 +94,7 @@ export function UserActions() {
           className={`hover:bg-gray-10 active:bg-gray-10 flex h-[32px] w-[32px] cursor-pointer items-center justify-center hover:rounded-[8px] active:rounded-[8px] ${isAlarmOpen ? 'bg-gray-10 rounded-[8px]' : ''} `}
           onMouseDown={(e) => e.stopPropagation()}
           onClick={handleAlarmClick}
+          aria-label="알림 보기"
         >
           <div className="relative">
             <Bell className="h-[22px] w-[22px]" />
@@ -130,6 +131,7 @@ export function UserActions() {
         <button
           className="flex h-[32px] w-[32px] cursor-pointer items-center justify-center hover:rounded-[8px] active:rounded-[8px]"
           onClick={openProfileModal}
+          aria-label="프로필 열기"
         >
           <div
             className="flex h-[32px] w-[32px] items-center justify-center rounded-full"
@@ -147,6 +149,7 @@ export function UserActions() {
             setIsAlarmOpen(false);
             setIsMenuOpen((prev) => !prev);
           }}
+          aria-label="메뉴 열기"
         >
           <Menu className="relative" />
         </button>
