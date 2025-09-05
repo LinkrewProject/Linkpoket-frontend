@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, lazy, Suspense } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
 import useUpdateFolderBookmark from '@/hooks/mutations/useUpdateFolderBookmark';
@@ -6,7 +6,9 @@ import InactiveBookmarkIcon from '@/assets/common-ui-assets/InactiveBookmark.svg
 import ActiveBookmarkIcon from '@/assets/common-ui-assets/ActiveBookmark.svg?react';
 import CardMenu from '@/assets/widget-ui-assets/CardMenu.svg?react';
 import { FolderDetail } from '@/types/folders';
-import DropDownInline from './DropDownInline';
+import { DropDownInlineSkeleton } from '../skeleton/DropdownInlineSkeleton';
+
+const DropDownInline = lazy(() => import('./DropDownInline'));
 
 export default function FolderCard({
   isBookmark,
@@ -110,13 +112,15 @@ export default function FolderCard({
             </button>
 
             {isDropDownInline && (
-              <DropDownInline
-                id={folderId}
-                type="folder"
-                initialTitle={item.folderName}
-                isDropDownInline={isDropDownInline}
-                setIsDropDownInline={setIsDropDownInline}
-              />
+              <Suspense fallback={<DropDownInlineSkeleton />}>
+                <DropDownInline
+                  id={folderId}
+                  type="folder"
+                  initialTitle={item.folderName}
+                  isDropDownInline={isDropDownInline}
+                  setIsDropDownInline={setIsDropDownInline}
+                />
+              </Suspense>
             )}
           </div>
         </div>

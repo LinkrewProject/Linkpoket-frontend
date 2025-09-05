@@ -1,15 +1,20 @@
-import { useEffect, useRef, useState } from 'react';
+import { lazy, useEffect, useRef, useState } from 'react';
 import Transfer from '@/assets/common-ui-assets/Transfer.svg?react';
 import Copy from '@/assets/common-ui-assets/Copy.svg?react';
 import Delete from '@/assets/common-ui-assets/Delete.svg?react';
 import { usePageStore } from '@/stores/pageStore';
 import { useModalStore } from '@/stores/modalStore';
-import FolderTransferModal from '../modal/folder/FolderTransferModal';
-import DeleteFolderModal from '../modal/folder/DeleteFolderModal';
-import DeleteLinkModal from '../modal/link/DeleteLinkModal';
 import { useClickOutsideMultiple } from '@/hooks/useClickOutsideMultiple';
 import { useTransferFolder } from '@/hooks/mutations/useTransferFolder';
 import toast from 'react-hot-toast';
+
+const FolderTransferModal = lazy(
+  () => import('../modal/folder/FolderTransferModal')
+);
+const DeleteFolderModal = lazy(
+  () => import('../modal/folder/DeleteFolderModal')
+);
+const DeleteLinkModal = lazy(() => import('../modal/link/DeleteLinkModal'));
 
 type DropDownInlineProps = {
   id: string;
@@ -119,7 +124,7 @@ const DropDownInline = ({
     <div
       ref={dropdownRef}
       data-dropdown
-      className={`border-gray-20 focus:bg-gray-30 focus:border-gray-30 bg-gray-0 absolute top-[15px] right-[-6px] z-[1000] mt-2 inline-flex w-[214px] flex-col rounded-[10px] border p-[4px] text-[14px] font-[500] shadow ${className}`}
+      className={`border-gray-20 bg-gray-0 absolute top-[15px] right-[-6px] z-[1000] mt-2 inline-flex w-[214px] flex-col rounded-[10px] border p-[4px] text-[14px] font-[500] shadow ${className}`}
     >
       {type === 'folder' && (
         <div className="flex flex-col">

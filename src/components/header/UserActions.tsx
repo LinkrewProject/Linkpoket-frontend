@@ -1,7 +1,6 @@
 import Bell from '@/assets/widget-ui-assets/Bell.svg?react';
 import Menu from '@/assets/widget-ui-assets/Menu.svg?react';
-import { useCallback, useMemo, useState } from 'react';
-import NotificationModal from '../modal/page/NotificationModal';
+import { lazy, Suspense, useCallback, useMemo, useState } from 'react';
 import HeaderMenu from './HeaderMenu';
 import { useFetchNotifications } from '@/hooks/queries/useFetchNotification';
 import { usePatchShareInvitationStatus } from '@/hooks/mutations/usePatchShareInvitationStatus';
@@ -11,6 +10,9 @@ import { useUserStore } from '@/stores/userStore';
 import { useProfileModalStore } from '@/stores/profileModalStore';
 import { useNotificationStore } from '@/stores/notification';
 import { useDeleteInvitation } from '@/hooks/mutations/useDeleteInvitation';
+import { NotificationModalSkeleton } from '../skeleton/NotificationModalSkeleton';
+
+const NotificationModal = lazy(() => import('../modal/page/NotificationModal'));
 
 export function UserActions() {
   const [isAlarmOpen, setIsAlarmOpen] = useState<boolean>(false);
@@ -110,20 +112,22 @@ export function UserActions() {
         </button>
 
         {isAlarmOpen && (
-          <NotificationModal
-            isOpen={isAlarmOpen}
-            setIsOpen={setIsAlarmOpen}
-            notifications={notifications}
-            isProcessing={isProcessing}
-            isShareProcessing={isShareProcessing}
-            onAccept={({ id, type }) =>
-              handleStatusChange(id, 'ACCEPTED', type)
-            }
-            onReject={({ id, type }) =>
-              handleStatusChange(id, 'REJECTED', type)
-            }
-            onDelete={handleDelete}
-          />
+          <Suspense fallback={<NotificationModalSkeleton />}>
+            <NotificationModal
+              isOpen={isAlarmOpen}
+              setIsOpen={setIsAlarmOpen}
+              notifications={notifications}
+              isProcessing={isProcessing}
+              isShareProcessing={isShareProcessing}
+              onAccept={({ id, type }) =>
+                handleStatusChange(id, 'ACCEPTED', type)
+              }
+              onReject={({ id, type }) =>
+                handleStatusChange(id, 'REJECTED', type)
+              }
+              onDelete={handleDelete}
+            />
+          </Suspense>
         )}
 
         {/* 프로필 버튼 */}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { lazy, useEffect, useState, Suspense } from 'react';
 import {
   DndContext,
   DragEndEvent,
@@ -18,13 +18,15 @@ import { CSS } from '@dnd-kit/utilities';
 import { PageContentSectionProps } from '@/types/pages';
 import LinkCard from '../common-ui/LinkCard';
 import FolderCard from '../common-ui/FolderCard';
-import AddLinkModal from '../modal/link/AddLinkModal';
 import { useModalStore } from '@/stores/modalStore';
 import { useSearchStore } from '@/stores/searchStore';
 import useUpdateDragandDrop from '@/hooks/mutations/useUpdateDragandDrop';
 import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
 import { LinkDetail } from '@/types/links';
 import { FolderDetail } from '@/types/folders';
+import { AddLinkModalSkeleton } from '../skeleton/AddLinkModalSkeleton';
+
+const AddLinkModal = lazy(() => import('../modal/link/AddLinkModal'));
 
 function SortableItem({ item }: { item: any; index: number }) {
   const {
@@ -232,7 +234,9 @@ export default function SharedPageContentSection({
       </DndContext>
 
       {isLinkModalOpen && (
-        <AddLinkModal isOpen={isLinkModalOpen} onClose={closeLinkModal} />
+        <Suspense fallback={<AddLinkModalSkeleton />}>
+          <AddLinkModal isOpen={isLinkModalOpen} onClose={closeLinkModal} />
+        </Suspense>
       )}
     </div>
   );

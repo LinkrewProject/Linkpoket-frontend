@@ -1,13 +1,21 @@
+import { lazy, Suspense, useState } from 'react';
 import { Header } from '@/components/header/Header';
 import SideBar from '@/components/side-bar/SideBar';
-import { useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { useUserStore } from '@/stores/userStore';
-import ProfileSettingsModal from '@/components/modal/profile/ProfileSettingsModal';
 import { useProfileModalStore } from '@/stores/profileModalStore';
-import WithdrawAccountModal from '@/components/modal/profile/WithdrawAccountModal';
 import { useNotificationSSE } from '@/hooks/useNotificationSSE';
 import useRouteChangeTracker from '@/hooks/useRouteChangeTracker';
+import { ProfileSettingsModalSkeleton } from '@/components/skeleton/ProfileSettingModal';
+import { DeleteModalSkeleton } from '@/components/skeleton/DeleteModalSkeleton';
+
+const ProfileSettingsModal = lazy(
+  () => import('@/components/modal/profile/ProfileSettingsModal')
+);
+
+const WithdrawAccountModal = lazy(
+  () => import('@/components/modal/profile/WithdrawAccountModal')
+);
 
 export default function Layout() {
   useRouteChangeTracker();
@@ -57,20 +65,32 @@ export default function Layout() {
           />
         ) : null}
         <main className="flex-1 overflow-auto">
-          <Outlet context={{ showSidebar }} />
+          <Suspense
+            fallback={
+              <div className="flex h-screen items-center justify-center">
+                <div>로딩 중...</div>
+              </div>
+            }
+          >
+            <Outlet context={{ showSidebar }} />
+          </Suspense>
 
           {isProfileModalOpen && (
-            <ProfileSettingsModal
-              isOpen={isProfileModalOpen}
-              onClose={closeProfileModal}
-            />
+            <Suspense fallback={<ProfileSettingsModalSkeleton />}>
+              <ProfileSettingsModal
+                isOpen={isProfileModalOpen}
+                onClose={closeProfileModal}
+              />
+            </Suspense>
           )}
 
           {isWithdrawModalOpen && (
-            <WithdrawAccountModal
-              isOpen={isWithdrawModalOpen}
-              onClose={closeWithdrawModal}
-            />
+            <Suspense fallback={<DeleteModalSkeleton />}>
+              <WithdrawAccountModal
+                isOpen={isWithdrawModalOpen}
+                onClose={closeWithdrawModal}
+              />
+            </Suspense>
           )}
         </main>
       </div>
