@@ -21,10 +21,88 @@ export default function useDeleteFolder(
   return useMutation({
     ...options,
     mutationFn: deleteFolder,
-    onSuccess: (response, variables, context) => {
-      // 현재 페이지의 모든 관련 쿼리 무효화
 
-      // 일반 페이지 쿼리 무효화
+    onMutate: async (variables) => {
+      const context: Record<string, any> = {};
+
+      // 관련 쿼리 취소
+      if (isSharedPage)
+        await queryClient.cancelQueries({ queryKey: ['sharedPage', pageId] });
+      if (isFolderPage)
+        await queryClient.cancelQueries({
+          queryKey: ['folderDetails', pageId],
+        });
+      if (isMainPage)
+        await queryClient.cancelQueries({ queryKey: ['personalPage'] });
+
+      // 기존 데이터 저장
+      if (isSharedPage) {
+        context.sharedPage = queryClient.getQueryData(['sharedPage', pageId]);
+      }
+      if (isFolderPage) {
+        context.folderDetails = queryClient.getQueryData([
+          'folderDetails',
+          pageId,
+        ]);
+      }
+      if (isMainPage) {
+        context.personalPage = queryClient.getQueryData(['personalPage']);
+      }
+
+      //임시 UI 업데이트
+
+      if (isSharedPage) {
+        queryClient.setQueryData(['sharedPage', pageId], (old: any) => {
+          if (!old) return old;
+          return {
+            ...old,
+            data: {
+              ...old.data,
+              directoryDetailResponses:
+                old.data.directoryDetailResponses.filter(
+                  (f: any) => f.folderId !== variables.folderId
+                ),
+            },
+          };
+        });
+      }
+
+      if (isFolderPage) {
+        queryClient.setQueryData(['folderDetails', pageId], (old: any) => {
+          if (!old) return old;
+          return {
+            ...old,
+            data: {
+              ...old.data,
+              directoryDetailResponses:
+                old.data.directoryDetailResponses.filter(
+                  (f: any) => f.folderId !== variables.folderId
+                ),
+            },
+          };
+        });
+      }
+
+      if (isMainPage) {
+        queryClient.setQueryData(['personalPage'], (old: any) => {
+          if (!old) return old;
+          return {
+            ...old,
+            data: {
+              ...old.data,
+              directoryDetailResponses:
+                old.data.directoryDetailResponses.filter(
+                  (f: any) => f.folderId !== variables.folderId
+                ),
+            },
+          };
+        });
+      }
+
+      return context;
+    },
+
+    onSettled: () => {
       if (isSharedPage) {
         queryClient.invalidateQueries({
           queryKey: ['sharedPage', pageId],
@@ -52,15 +130,20 @@ export default function useDeleteFolder(
           refetchType: 'active',
         });
       }
-      if (options?.onSuccess) {
-        options.onSuccess(response, variables, context);
-      }
     },
-    onError: (error, variables, context) => {
-      console.error('폴더 삭제 에러:', error);
-      if (options?.onError) {
-        options.onError(error, variables, context);
-      }
+
+    onError: (error, context: any) => {
+      // rollback
+      if (context?.sharedPage)
+        queryClient.setQueryData(['sharedPage', pageId], context.sharedPage);
+      if (context?.folderDetails)
+        queryClient.setQueryData(
+          ['folderDetails', pageId],
+          context.folderDetails
+        );
+      if (context?.personalPage)
+        queryClient.setQueryData(['personalPage'], context.personalPage);
+      console.error('폴더 생성 에러:', error);
     },
   });
 }
