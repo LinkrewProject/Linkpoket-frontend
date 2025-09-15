@@ -14,7 +14,7 @@ export function useDeleteSharedPage(
   return useMutation({
     mutationFn: deleteSharedPage,
     onSuccess: (data, variables, context) => {
-      queryClient.refetchQueries({ queryKey: ['joinedPage'] });
+      queryClient.invalidateQueries({ queryKey: ['joinedPage'] });
       options?.onSuccess?.(data, variables, context);
     },
     onError: options?.onError,

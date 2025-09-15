@@ -74,3 +74,16 @@ export interface PatchSharedPageInvitationData {
   requestStatus: string;
   notificationType: string;
 }
+
+export interface PageData {
+  status: number;
+  message: string;
+  data: {
+    pageId: string;
+    pageTitle: string;
+    rootFolderId: string;
+    directoryDetailRespons: any[];
+    siteDetailResponses: any[];
+    fullPath: string;
+  };
+}
