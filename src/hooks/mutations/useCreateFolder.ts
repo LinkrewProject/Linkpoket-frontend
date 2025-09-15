@@ -124,7 +124,7 @@ export function useCreateFolder(
       console.error('폴더 생성 에러:', error);
     },
 
-    onSettled: () => {
+    onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['folderList', pageId],
         refetchType: 'active',

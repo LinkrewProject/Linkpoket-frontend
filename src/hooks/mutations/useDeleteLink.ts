@@ -104,22 +104,7 @@ export function useDeleteLink(
       return context;
     },
 
-    onError: (error, variables, context) => {
-      if (context?.sharedPage)
-        queryClient.setQueryData(
-          ['sharedPage', variables.baseRequest.pageId],
-          context.sharedPage
-        );
-      if (context?.folderDetails)
-        queryClient.setQueryData(
-          ['folderDetails', variables.baseRequest.pageId],
-          context.folderDetails
-        );
-      if (context?.personalPage)
-        queryClient.setQueryData(['personalPage'], context.personalPage);
-      console.error('폴더 생성 에러:', error);
-    },
-    onSettled: (data, error, variables, context) => {
+    onSuccess: (data, error, variables) => {
       // 일반 페이지 쿼리 무효화
       if (isSharedPage) {
         queryClient.invalidateQueries({
@@ -147,7 +132,23 @@ export function useDeleteLink(
           refetchType: 'active',
         });
       }
-      options?.onSettled?.(data, error, variables, context);
+      options?.onSuccess?.(data, error, variables);
+    },
+
+    onError: (error, variables, context) => {
+      if (context?.sharedPage)
+        queryClient.setQueryData(
+          ['sharedPage', variables.baseRequest.pageId],
+          context.sharedPage
+        );
+      if (context?.folderDetails)
+        queryClient.setQueryData(
+          ['folderDetails', variables.baseRequest.pageId],
+          context.folderDetails
+        );
+      if (context?.personalPage)
+        queryClient.setQueryData(['personalPage'], context.personalPage);
+      console.error('폴더 생성 에러:', error);
     },
   });
 }

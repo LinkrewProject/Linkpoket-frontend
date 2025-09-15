@@ -105,7 +105,7 @@ export default function useDeleteFolder(
       return context;
     },
 
-    onSettled: () => {
+    onSuccess: () => {
       if (isSharedPage) {
         queryClient.invalidateQueries({
           queryKey: ['sharedPage', pageId],

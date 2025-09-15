@@ -23,8 +23,6 @@ export default function useUpdateFolder(
     ...options,
     mutationFn: updateFolder,
     onSuccess: (response, variables, context) => {
-      console.log('폴더 업데이트 성공 응답:', response);
-
       // 폴더 상세, 공유페이지, 개인페이지 캐시 무효화
       if (isFolderPage) {
         queryClient.invalidateQueries({
@@ -59,7 +57,6 @@ export default function useUpdateFolder(
       }
     },
     onError: (error, variables, context) => {
-      console.error('폴더 업데이트 에러:', error);
       if (options?.onError) {
         options.onError(error, variables, context);
       }
