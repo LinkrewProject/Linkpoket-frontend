@@ -52,7 +52,7 @@ export function useCreateFolder(
         folderId: uuid(),
         folderName: '새폴더',
         orderIndex: 9999,
-        createdDate: new Date().toISOString(),
+        createdDate: new Date().toISOString().split('T')[0],
         isFavorite: false,
       };
 
