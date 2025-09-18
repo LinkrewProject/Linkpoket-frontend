@@ -44,12 +44,12 @@ export default function useUpdateFolderBookmark({
           queryKey: ['folderDetails', pageId],
           refetchType: 'active',
         });
-        if (isMainPage) {
-          queryClient.invalidateQueries({
-            queryKey: ['personalPage'],
-            refetchType: 'active',
-          });
-        }
+      }
+      if (isMainPage) {
+        queryClient.invalidateQueries({
+          queryKey: ['personalPage'],
+          refetchType: 'active',
+        });
       }
     },
   });

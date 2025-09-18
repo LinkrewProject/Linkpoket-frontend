@@ -21,7 +21,7 @@ export type CreateLinkData = {
   baseRequest: BaseRequest;
   linkName: string;
   linkUrl: string;
-  directoryId: string;
+  folderId: string;
   description: string;
 };
 

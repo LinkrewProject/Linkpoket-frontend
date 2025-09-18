@@ -110,7 +110,7 @@ const SideBar: React.FC<MenubarProps> = ({
 
   //사이드바 폴더 목록 조회
   const { folderList } = useFetchFolderList(pageId);
-  const refinedFolderList = folderList?.data?.directories;
+  const refinedFolderList = folderList?.data?.folders;
 
   //공유페이지 생성
   const { mutate: createSharedPage } = useCreateSharedPage({
@@ -284,7 +284,7 @@ const SideBar: React.FC<MenubarProps> = ({
                 ))}
               </div>
 
-              {/* 폴더 섹션 - 개인페이지만 표시 */}
+              {/* 폴더 섹션 - 개인페이지 내 폴더 표시 */}
               {currentContext === 'personal' && (
                 <>
                   <div className="mt-4 flex items-center px-[8px] py-[4px] text-[14px] font-[500] text-gray-50 hover:rounded-[8px] active:rounded-[8px]">
