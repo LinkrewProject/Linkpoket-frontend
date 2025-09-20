@@ -2,14 +2,10 @@ version: '3.8'
 
 services:
   linkrew-server:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        - SPRING_PROFILE=${SPRING_PROFILE}
     container_name: linkrew-server
+    image: parkjihyeon/linkrew-server:latest # ← build 제거하고 image만 사용
     env_file:
-      - ${ENV_FILE} # 환경 변수 파일 설정
+      - ${ENV_FILE} # 예: .env.local
     ports:
-      - ${SPRING_PORT}:${SPRING_PORT} # Spring Boot 포트 매핑
+      - ${SPRING_PORT}:${SPRING_PORT}
     restart: always
