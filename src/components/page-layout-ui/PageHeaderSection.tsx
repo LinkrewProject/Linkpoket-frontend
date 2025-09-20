@@ -43,7 +43,7 @@ export default function PageHeaderSection({
 
     updateFolder(updateData, {
       onSuccess: (response) => {
-        console.log('폴더 업데이트 성공 응답:', response);
+        // console.log('폴더 업데이트 성공 응답:', response);
         lastUpdateRef.current = { title };
       },
       onError: (error) => {
@@ -53,7 +53,7 @@ export default function PageHeaderSection({
   };
 
   const handleDebouncedUpdate = (data: FolderUpdateData) => {
-    console.log('디바운스된 업데이트:', data);
+    // console.log('디바운스된 업데이트:', data);
     lastUpdateRef.current = { title };
   };
 
@@ -64,7 +64,7 @@ export default function PageHeaderSection({
 
   // 초기 마운트 시에만 props로 상태 초기화
   useEffect(() => {
-    console.log('초기 마운트 상태 초기화:', { pageTitle });
+    // console.log('초기 마운트 상태 초기화:', { pageTitle });
     setTitle(pageTitle ?? '');
     const newState = {
       title: pageTitle ?? '',
@@ -78,9 +78,9 @@ export default function PageHeaderSection({
       return;
     }
 
-    console.log('포커스 아웃:', {
-      current: { title },
-    });
+    // console.log('포커스 아웃:', {
+    //   current: { title },
+    // });
 
     const currentState = { title };
     lastUpdateRef.current = currentState;

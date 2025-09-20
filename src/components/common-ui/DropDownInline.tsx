@@ -88,7 +88,7 @@ const DropDownInline = ({
 
   const handleCopyClick = () => {
     if (type === 'folder') {
-      console.log('복사');
+      // console.log('복사');
     } else {
       navigator.clipboard
         .writeText(link)

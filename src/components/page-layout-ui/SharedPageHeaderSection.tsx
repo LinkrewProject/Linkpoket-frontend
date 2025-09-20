@@ -29,11 +29,11 @@ export default function SharedPageHeaderSection({
       pageTitle: title,
     };
 
-    console.log('타이틀업데이트', updateSharedPageTitleData);
+    // console.log('타이틀업데이트', updateSharedPageTitleData);
 
     updateSharedPageTitle(updateSharedPageTitleData, {
       onSuccess: (response) => {
-        console.log('타이틀 성공 응답:', response);
+        // console.log('타이틀 성공 응답:', response);
         lastUpdateTitle.current = { title };
       },
       onError: (error) => {
@@ -78,11 +78,11 @@ export default function SharedPageHeaderSection({
             }
           }}
           onFocus={() => {
-            console.log('title input focus');
+            // console.log('title input focus');
             setIsFocused('title');
           }}
           onBlur={(e) => {
-            console.log('title input blur', e.target.value);
+            // console.log('title input blur', e.target.value);
             setIsFocused(null);
             handleBlur();
           }}
