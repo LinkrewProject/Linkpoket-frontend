@@ -65,7 +65,6 @@ export default defineConfig({
             'react-router-dom',
             '@tanstack/react-query',
           ],
-          'ui-components': ['@/components/common-ui', '@/components/modal'],
         },
       },
     },
