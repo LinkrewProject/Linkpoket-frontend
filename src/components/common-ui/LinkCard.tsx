@@ -109,7 +109,7 @@ export default function LinkCard({
               {isBookmark ? <ActiveBookmarkIcon /> : <InactiveBookmarkIcon />}
             </button>
 
-            <div className="relative">
+            <div className="relative hidden md:block">
               <button
                 data-card-button
                 className="cursor-pointer p-1"
