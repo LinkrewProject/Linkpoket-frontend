@@ -1,7 +1,7 @@
 import { Button } from '@/components/common-ui/button';
-import FooterBg from '@/assets/common-ui-assets/FooterBg.svg?react';
 import { useMobile } from '@/hooks/useMobile';
 import { CHROME_EXTENSION_URL } from '@/constants/urls';
+import FooterBg from '@/assets/common-ui-assets/FooterBg.webp';
 
 const CtaSection: React.FC = () => {
   const isMobile = useMobile();
@@ -50,10 +50,7 @@ const CtaSection: React.FC = () => {
     <>
       <section className="cta-section-mobile cta-section-tablet cta-section-desktop relative mt-[100px]">
         <div className="absolute inset-0 z-0 overflow-hidden">
-          <FooterBg
-            className="h-full w-full object-cover"
-            preserveAspectRatio="xMidYMid slice"
-          />
+          <img src={FooterBg} className="h-full w-full object-cover" />{' '}
         </div>
 
         <div className="relative z-10 mx-auto max-w-[1600px] px-4 md:px-8">
