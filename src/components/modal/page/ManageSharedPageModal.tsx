@@ -68,12 +68,11 @@ const ManageSharedPageModal = ({
     'http://linkrew.com/api/public/pages?pageId=' + safePageId;
 
   // 링크 복사 함수
-  const handleCopyLink = async () => {
-    try {
-      const currentUrl = window.location.href;
-      await navigator.clipboard.writeText(`${currentUrl}`);
-    } catch (error) {
-      console.error('링크 복사 실패:', error);
+  const handleCopyLink = () => {
+    if (isPublic === 'PUBLIC') {
+      navigator.clipboard.writeText(publicPathName);
+    } else {
+      navigator.clipboard.writeText(pathname);
     }
   };
 
