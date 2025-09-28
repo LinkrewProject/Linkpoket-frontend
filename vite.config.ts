@@ -16,7 +16,6 @@ export default defineConfig({
       mozjpeg: { quality: 80 },
       pngquant: { quality: [0.8, 0.9] },
       webp: { quality: 80 },
-      svgo: false,
     }),
     visualizer({
       filename: './dist/stats.html',
