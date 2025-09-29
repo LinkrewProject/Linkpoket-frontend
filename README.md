@@ -1,6 +1,6 @@
-# 🔗 Linkrew
+# Linkrew
 
-## 🔗 링크
+## 링크
 
 - **배포 URL**: https://linkrew.com/
 - **Organization**: https://github.com/LinkrewProject
