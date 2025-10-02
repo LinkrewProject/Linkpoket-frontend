@@ -35,15 +35,18 @@ const DropDownInline = ({
   type,
   initialTitle = '',
   initialLink = '',
-  onTitleChange,
   onLinkChange,
   setIsDropDownInline,
   className = '',
 }: DropDownInlineProps) => {
   const [title, setTitle] = useState(initialTitle);
-  const { debouncedUpdate, handleBlur } = useUpdateTitle(id, title, type);
-
   const [link, setLink] = useState(initialLink);
+  const { debouncedUpdate, debouncedUpdateLink, handleBlur } = useUpdateTitle(
+    id,
+    title,
+    type,
+    link
+  );
 
   const { pageId } = usePageStore();
 
@@ -70,13 +73,6 @@ const DropDownInline = ({
       }
     },
   });
-
-  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.stopPropagation();
-    const value = e.target.value;
-    setTitle(value);
-    onTitleChange?.(id, value);
-  };
 
   const handleLinkChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
@@ -184,7 +180,11 @@ const DropDownInline = ({
           <div className="border-gray-20 flex flex-col overflow-hidden rounded-lg border">
             <input
               value={title}
-              onChange={handleTitleChange}
+              onChange={(e) => {
+                const value = e.target.value;
+                setTitle(value);
+                debouncedUpdateLink({ title: value });
+              }}
               placeholder="사이트명 입력"
               className="border-gray-20 border-b p-[12px] outline-none"
             />

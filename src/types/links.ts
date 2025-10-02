@@ -1,4 +1,4 @@
-type CommandType = 'CREATE' | 'EDIT' | 'DELETE' | 'VIEW';
+export type CommandType = 'CREATE' | 'EDIT' | 'DELETE' | 'VIEW';
 
 export type BaseRequest = {
   pageId: string;
