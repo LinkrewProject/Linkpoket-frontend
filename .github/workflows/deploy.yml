@@ -1,0 +1,78 @@
+name: Deploy Linkrew
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      APP_DIR: ${{ secrets.APP_DIR }}
+      TEMP_DIR: ${{ secrets.TEMP_DIR }}
+      BASTION_HOST: ${{ secrets.BASTION_HOST }}
+      BASTION_PORT: ${{ secrets.BASTION_PORT }}
+      BASTION_USER: ${{ secrets.BASTION_USER }}
+      APP_SERVER_HOST: ${{ secrets.APP_SERVER_HOST }}
+      APP_SERVER_USER: ${{ secrets.APP_SERVER_USER }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Create .env.production
+        run: |
+          echo "VITE_API_BASE_URL=${{ secrets.VITE_API_BASE_URL }}" >> .env.production
+          echo "VITE_API_URL=${{ secrets.VITE_API_URL }}" >> .env.production
+          echo "VITE_GA_MEASUREMENT_ID=${{ secrets.VITE_GA_MEASUREMENT_ID }}" >> .env.production
+
+      - run: |
+          npm ci
+          npm run build
+
+      - uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Setup .ssh/config7
+        run: |
+          mkdir -p ~/.ssh
+          echo "
+          Host bastion
+            HostName $BASTION_HOST
+            Port $BASTION_PORT
+            User $BASTION_USER
+
+          Host linkrew-web-dev
+            HostName $APP_SERVER_HOST
+            User $APP_SERVER_USER
+            ProxyJump bastion
+          " > ~/.ssh/config
+          chmod 600 ~/.ssh/config
+
+      - name: Add known hosts
+        run: |
+          ssh-keyscan -p $BASTION_PORT $BASTION_HOST >> ~/.ssh/known_hosts || true
+          ssh-keyscan $APP_SERVER_HOST >> ~/.ssh/known_hosts || true
+
+      - name: Remove old files and Upload build files
+        run: |
+          ssh -F ~/.ssh/config app-server "rm -rf $TEMP_DIR && mkdir -p $TEMP_DIR"
+          scp -F ~/.ssh/config -r ./dist/* app-server:$TEMP_DIR/
+
+      - name: Deploy to app server
+        run: |
+          ssh -F ~/.ssh/config app-server << 'EOF'
+            ls -la $TEMP_DIR/
+            sudo /bin/rm -rf $APP_DIR/*
+            sudo /bin/cp -r $TEMP_DIR/* $APP_DIR/
+            sudo /bin/chown -R $APP_SERVER_USER:$APP_SERVER_USER $APP_DIR/
+            sudo /bin/chmod -R 755 $APP_DIR/
+            ls -la $APP_DIR/
+            sudo /usr/bin/systemctl reload nginx
+          EOF
