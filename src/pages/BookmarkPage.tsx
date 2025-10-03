@@ -4,7 +4,7 @@ import PageHeaderSection from '@/components/page-layout-ui/PageHeaderSection';
 import PageControllerSection from '@/components/page-layout-ui/PageControllerSection';
 import useFetchFavorite from '@/hooks/queries/useFetchFavorite';
 import { usePageLayout } from '@/hooks/usePageLayout';
-import { usePageData } from '@/hooks/usePageData';
+import { getPageDataLength } from '@/utils/pageData';
 import { PageLayout } from '@/components/common-ui/PageLayout';
 
 const BookmarkPageContentSection = lazy(
@@ -17,7 +17,7 @@ export default function BookmarkPage() {
 
   const folderData = refinedData?.directorySimpleResponses ?? [];
   const linkData = refinedData?.siteSimpleResponses ?? [];
-  const { folderDataLength, linkDataLength } = usePageData(
+  const { folderDataLength, linkDataLength } = getPageDataLength(
     folderData,
     linkData
   );
