@@ -120,7 +120,8 @@ const ManageSharedPageModal = ({
             checked={isPublic === 'PUBLIC'}
             onClick={() => {
               handleUpdateSharedPageVisibility();
-              toast.success('링크 복사 주소가 변경되었습니다');
+              // toast.success('링크 복사 주소가 변경되었습니다'); 만약 공개 페이지 수정되면 해당 toast로 변경
+              toast.success('공개 페이지를 준비중입니다..');
             }}
           />
         </div>
@@ -133,7 +134,8 @@ const ManageSharedPageModal = ({
             <Input
               containerClassName="flex-1 min-w-0"
               className="w-full"
-              value={isPublic === 'PUBLIC' ? publicPathName : pathname}
+              // value={isPublic === 'PUBLIC' ? publicPathName : pathname} 만약 공개 페이지 수정되면 해당 value로 변경
+              value={isPublic === 'PUBLIC' ? pathname : pathname}
               readOnly
             />
             <Button

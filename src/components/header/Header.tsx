@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import Logo from '@/assets/widget-ui-assets/Logo.svg?react';
 import { HamburgerButton } from './HamburgerButton';
@@ -9,7 +9,7 @@ import { Search } from '../common-ui/Search';
 import { useSearchStore } from '@/stores/searchStore';
 import { usePageStore } from '@/stores/pageStore';
 import { useSearchPageItems } from '@/hooks/queries/useSearchPageItems';
-import { useDebounceValue } from '@/hooks/useDebounceValue';
+import { useDebounce } from '@/hooks/useDebounce';
 
 interface Props {
   isLoggedIn: boolean;
@@ -36,7 +36,15 @@ export function Header({
     clearSearch,
   } = useSearchStore();
 
-  const debouncedKeyword = useDebounceValue(searchKeyword, 300);
+  const [debouncedKeyword, setDebouncedKeyword] = useState(searchKeyword);
+
+  const debouncedSetKeyword = useDebounce((value: string) => {
+    setDebouncedKeyword(value);
+  }, 300);
+
+  useEffect(() => {
+    debouncedSetKeyword(searchKeyword);
+  }, [searchKeyword, debouncedSetKeyword]);
 
   // API 호출
   const { pageItems: searchResult, isLoading } = useSearchPageItems({

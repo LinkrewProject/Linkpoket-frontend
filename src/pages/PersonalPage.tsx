@@ -6,7 +6,7 @@ import { useFetchPersonalPage } from '@/hooks/queries/useFetchPersonalPage';
 import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
 import { useUserStore } from '@/stores/userStore';
 import { usePageLayout } from '@/hooks/usePageLayout';
-import { usePageData } from '@/hooks/usePageData';
+import { getPageDataLength } from '@/utils/pageData';
 import { PageLayout } from '@/components/common-ui/PageLayout';
 
 const PersonalPageContentSection = lazy(
@@ -24,7 +24,7 @@ export default function PersonalPage() {
 
   const folderData = refinedData?.directoryDetailResponses ?? [];
   const linkData = refinedData?.linkDetailResponses ?? [];
-  const { folderDataLength, linkDataLength } = usePageData(
+  const { folderDataLength, linkDataLength } = getPageDataLength(
     folderData,
     linkData
   );
