@@ -41,11 +41,9 @@ export default function FolderCard({
     }
 
     if (currentPath.startsWith('/bookmarks')) {
-      // 북마크 페이지인 경우
       return `/bookmarks/folder/${folderId}`;
     }
 
-    // 개인페이지인 경우 (기본값)
     return `/personal/folder/${folderId}`;
   };
 
@@ -101,7 +99,7 @@ export default function FolderCard({
             {isBookmark ? <ActiveBookmarkIcon /> : <InactiveBookmarkIcon />}
           </button>
 
-          <div className="relative hidden md:block">
+          <div className="relative">
             <button
               data-card-button
               className="cursor-pointer p-1"
