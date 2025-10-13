@@ -1,5 +1,4 @@
 import { useState } from 'react';
-
 import { Button } from '../common-ui/button';
 import { useModalStore } from '@/stores/modalStore';
 import { useLocation } from 'react-router-dom';
@@ -25,7 +24,7 @@ export default function PageHeaderSection({
 
   return (
     <div className="mb-[24px] flex w-full items-center justify-between md:min-w-[328px]">
-      <div>
+      <div className="flex w-full">
         <input
           id="page-title"
           type="text"
@@ -42,8 +41,6 @@ export default function PageHeaderSection({
           }}
           className="outline-nontext-gray-90 inline-block w-full text-[22px] font-bold"
         />
-      </div>
-      <div>
         {isLinkButtonVisible && (
           <Button
             size="sm"

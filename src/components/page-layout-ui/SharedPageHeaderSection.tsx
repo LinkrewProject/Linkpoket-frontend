@@ -61,7 +61,7 @@ export default function SharedPageHeaderSection({
 
   return (
     <div className="mb-[24px] flex w-full min-w-[328px] items-center justify-between">
-      <div className="relative w-full">
+      <div className="flex w-full">
         <input
           type="text"
           value={title}
@@ -77,8 +77,6 @@ export default function SharedPageHeaderSection({
           }}
           className={`outline-nonetext-gray-90' } inline-block w-full text-[22px] font-bold`}
         />
-      </div>
-      <div>
         <Button size="sm" className="whitespace-nowrap" onClick={openLinkModal}>
           + 링크추가
         </Button>
