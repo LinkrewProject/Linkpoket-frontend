@@ -52,9 +52,9 @@ export default function NotificationModal({
   }, [selectedTab, notifications]);
 
   return (
-    <div className="absolute top-14 right-16 z-20" ref={modalRef}>
+    <div className="absolute top-14 right-4 z-20 md:right-16" ref={modalRef}>
       <div
-        className="border-gray-30 bg-gray-0 max-h-[590px] w-[434px] rounded-2xl border p-[24px] pt-[8px]"
+        className="border-gray-30 bg-gray-0 max-h-[590px] w-[calc(100vw-32px)] max-w-[434px] rounded-2xl border p-[16px] pt-[8px] md:w-[434px] md:p-[24px]"
         style={{ boxShadow: '0px 4px 8px 0px rgba(0, 0, 0, 0.08)' }}
       >
         {/* 탭: 전체 / 페이지 초대 / 받은 폴더 */}
@@ -106,7 +106,7 @@ export default function NotificationModal({
                   key={`${item.notificationType}-${item.id}`}
                   className={`py-4 ${shown.length - 1 === idx ? '' : 'border-b-gray-30 border-b'}`}
                 >
-                  <div className="flex items-start gap-[10px]">
+                  <div className="h-[30px] w-[30px] rounded-full object-cover md:h-[34px] md:w-[34px]">
                     {/* 프로필 */}
                     <img
                       src={profile}

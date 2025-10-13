@@ -81,7 +81,12 @@ export const Input = ({
   };
 
   return (
-    <div className={cn('flex flex-col space-y-2', containerClassName)}>
+    <div
+      className={cn(
+        'flex w-full flex-col space-y-2 sm:w-auto',
+        containerClassName
+      )}
+    >
       {label && (
         <label
           htmlFor={props.id}

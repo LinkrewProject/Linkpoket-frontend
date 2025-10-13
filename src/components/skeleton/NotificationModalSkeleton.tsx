@@ -4,7 +4,7 @@ export const NotificationModalSkeleton = () => {
   return (
     <div className="absolute top-14 right-16 z-20">
       <div
-        className="border-gray-30 bg-gray-0 max-h-[590px] w-[434px] rounded-2xl border p-[24px] pt-[8px]"
+        className="border-gray-30 bg-gray-0 max-h-[590px] w-[calc(100vw-32px)] max-w-[434px] rounded-2xl border p-[16px] pt-[8px] md:w-[434px] md:p-[24px]"
         style={{ boxShadow: '0px 4px 8px 0px rgba(0, 0, 0, 0.08)' }}
       >
         {/* 탭 스켈레톤 */}

@@ -75,10 +75,10 @@ export default function SharedPageHeaderSection({
           onBlur={() => {
             handleBlur();
           }}
-          className={`outline-nonetext-gray-90' } inline-block text-[22px] font-bold`}
+          className={`outline-nonetext-gray-90' } inline-block w-full text-[22px] font-bold`}
         />
       </div>
-      <div className="hidden md:block">
+      <div>
         <Button size="sm" className="whitespace-nowrap" onClick={openLinkModal}>
           + 링크추가
         </Button>

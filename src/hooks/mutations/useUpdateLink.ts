@@ -16,6 +16,7 @@ export function useUpdateLink(
   const isMainPage = location.pathname === '/';
   const isSharedPage = locationSplit.includes('shared');
   const isFolderPage = locationSplit.includes('folder');
+  const isBookmarksPage = location.pathname === '/bookmarks';
 
   return useMutation({
     mutationFn: updateLink,
@@ -44,6 +45,22 @@ export function useUpdateLink(
         queryClient.invalidateQueries({
           queryKey: ['personalPage'],
           refetchType: 'active',
+        });
+      }
+
+      if (isBookmarksPage) {
+        queryClient.invalidateQueries({
+          queryKey: ['favorite'],
+          refetchType: 'active',
+        });
+        queryClient.invalidateQueries({
+          queryKey: ['folderDetails', variables.baseRequest.pageId],
+        });
+        queryClient.invalidateQueries({
+          queryKey: ['sharedPage', variables.baseRequest.pageId],
+        });
+        queryClient.invalidateQueries({
+          queryKey: ['personalPage'],
         });
       }
       if (options?.onSuccess) {

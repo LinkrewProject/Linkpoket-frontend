@@ -24,8 +24,8 @@ export default function PageHeaderSection({
   const isLinkButtonVisible = currentLocation !== '/bookmarks';
 
   return (
-    <div className="mb-[24px] flex w-full min-w-[328px] items-center justify-between">
-      <div className="relative w-full">
+    <div className="mb-[24px] flex w-full items-center justify-between md:min-w-[328px]">
+      <div>
         <input
           id="page-title"
           type="text"
@@ -40,10 +40,10 @@ export default function PageHeaderSection({
           onBlur={() => {
             handleBlur(title);
           }}
-          className="outline-nontext-gray-90 inline-block text-[22px] font-bold"
+          className="outline-nontext-gray-90 inline-block w-full text-[22px] font-bold"
         />
       </div>
-      <div className="hidden md:block">
+      <div>
         {isLinkButtonVisible && (
           <Button
             size="sm"

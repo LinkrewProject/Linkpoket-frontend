@@ -56,15 +56,19 @@ export const ProfileSettingsModal = ({
   if (!isOpen) return null;
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} className="w-[500px]">
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      className="w-[calc(100vw-32px)] max-w-[500px] md:w-[500px]"
+    >
       {isEditingProfile ? (
         <ProfileChangeBody onBack={() => setIsEditingProfile(false)} />
       ) : (
         <>
           <Modal.Header showCloseButton>프로필</Modal.Header>
           <Modal.Body hasFooter={false}>
-            <div className="mb-4 flex gap-[12px]">
-              <div className="flex flex-col">
+            <div className="mb-4 flex flex-col gap-[12px] sm:flex-row">
+              <div className="flex flex-col items-center">
                 <div
                   style={{ backgroundColor: colorCode }}
                   className="flex h-[50px] w-[50px] items-center justify-center rounded-full p-[8px]"
@@ -79,9 +83,9 @@ export const ProfileSettingsModal = ({
                 </button>
               </div>
               <div className="flex w-full flex-col">
-                <div className="flex flex-wrap items-center gap-2">
+                <div className="flex flex-col flex-wrap items-start gap-2 sm:flex-row sm:items-center">
                   <Input
-                    className="w-[295px] min-w-0 flex-1"
+                    className="w-full sm:w-auto md:w-[295px]"
                     placeholder="닉네임을 입력해 주세요"
                     value={inputValue}
                     onChange={handleChange}
@@ -89,7 +93,7 @@ export const ProfileSettingsModal = ({
                     isModal
                   />
                   <Button
-                    className="whitespace-nowrap"
+                    className="w-full sm:w-auto"
                     disabled={
                       isPending || isNicknameInvalid || isNicknameUnchanged
                     }
