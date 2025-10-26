@@ -28,6 +28,7 @@ import { AddLinkModalSkeleton } from '../skeleton/AddLinkModalSkeleton';
 import { toast } from 'react-hot-toast';
 
 const AddLinkModal = lazy(() => import('../modal/link/AddLinkModal'));
+const AddFolderModal = lazy(() => import('../modal/folder/AddFolderModal'));
 
 function SortableItem({ item }: { item: any; index: number }) {
   const {
@@ -70,7 +71,12 @@ export default function SharedPageContentSection({
   linkData = [],
   sortType,
 }: PageContentSectionProps) {
-  const { isLinkModalOpen, closeLinkModal } = useModalStore();
+  const {
+    isLinkModalOpen,
+    closeLinkModal,
+    isFolderModalOpen,
+    closeFolderModal,
+  } = useModalStore();
 
   // 검색 스토어 구독
   const searchKeyword = useSearchStore((state) => state.searchKeyword);
@@ -240,6 +246,15 @@ export default function SharedPageContentSection({
       {isLinkModalOpen && (
         <Suspense fallback={<AddLinkModalSkeleton />}>
           <AddLinkModal isOpen={isLinkModalOpen} onClose={closeLinkModal} />
+        </Suspense>
+      )}
+
+      {isFolderModalOpen && (
+        <Suspense fallback={<AddLinkModalSkeleton />}>
+          <AddFolderModal
+            isOpen={isFolderModalOpen}
+            onClose={closeFolderModal}
+          />
         </Suspense>
       )}
     </div>

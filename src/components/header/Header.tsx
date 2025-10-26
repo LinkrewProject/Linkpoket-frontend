@@ -78,8 +78,9 @@ export function Header({
   return !isMobile ? (
     <header className="border-b-gray-10 flex h-[62px] justify-between border-b px-[24px] py-[12px]">
       <div className="flex items-center gap-[24px]">
-        <Link to="/">
-          <Logo className="h-[24px]" />
+        <Link to="/" className="flex items-center">
+          <Logo className="h-[36px]" />
+          <span className="text-[24px] font-[800]">LINKPOKET</span>
         </Link>
       </div>
       <div className="flex items-center gap-[24px]">

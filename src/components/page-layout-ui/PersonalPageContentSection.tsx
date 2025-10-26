@@ -30,6 +30,7 @@ import { AddLinkModalSkeleton } from '../skeleton/AddLinkModalSkeleton';
 import { toast } from 'react-hot-toast';
 
 const AddLinkModal = lazy(() => import('../modal/link/AddLinkModal'));
+const AddFolderModal = lazy(() => import('../modal/folder/AddFolderModal'));
 
 function SortableItem({ item }: { item: any; index: number }) {
   const {
@@ -73,7 +74,12 @@ export default function PersonalPageContentSection({
   linkData = [],
   sortType,
 }: PageContentSectionProps) {
-  const { isLinkModalOpen, closeLinkModal } = useModalStore();
+  const {
+    isLinkModalOpen,
+    closeLinkModal,
+    isFolderModalOpen,
+    closeFolderModal,
+  } = useModalStore();
 
   const searchKeyword = useSearchStore((state) => state.searchKeyword);
   const searchResult = useSearchStore((state) => state.searchResult);
@@ -276,6 +282,14 @@ export default function PersonalPageContentSection({
       {isLinkModalOpen && (
         <Suspense fallback={<AddLinkModalSkeleton />}>
           <AddLinkModal isOpen={isLinkModalOpen} onClose={closeLinkModal} />
+        </Suspense>
+      )}
+      {isFolderModalOpen && (
+        <Suspense fallback={<AddLinkModalSkeleton />}>
+          <AddFolderModal
+            isOpen={isFolderModalOpen}
+            onClose={closeFolderModal}
+          />
         </Suspense>
       )}
     </div>

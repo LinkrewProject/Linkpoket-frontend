@@ -3,6 +3,7 @@ import { useDebounce } from '@/hooks/useDebounce';
 import useUpdateSharedPageTitle from '@/hooks/mutations/useUpdateSharedPageTitle';
 import { Button } from '../common-ui/button';
 import { useModalStore } from '@/stores/modalStore';
+import { useLocation } from 'react-router-dom';
 
 type PageHeaderSectionProps = {
   pageTitle: string;
@@ -17,8 +18,11 @@ export default function SharedPageHeaderSection({
 }: PageHeaderSectionProps) {
   const [title, setTitle] = useState(pageTitle ?? '');
   const lastUpdateTitle = useRef({ title });
-  const { openLinkModal } = useModalStore();
+  const { openLinkModal, openFolderModal } = useModalStore();
   const { mutate: updateSharedPageTitle } = useUpdateSharedPageTitle(pageId);
+  const location = useLocation();
+  const currentLocation = location.pathname;
+  const isLinkButtonVisible = currentLocation !== '/bookmarks';
 
   const updateSharedPageTitleImmediately = () => {
     if (!pageId) return;
@@ -77,9 +81,26 @@ export default function SharedPageHeaderSection({
           }}
           className={`outline-nonetext-gray-90' } inline-block w-full text-[22px] font-bold`}
         />
-        <Button size="sm" className="whitespace-nowrap" onClick={openLinkModal}>
-          + 링크추가
-        </Button>
+        {isLinkButtonVisible && (
+          <div className="flex items-center gap-[8px]">
+            <Button
+              size="sm"
+              variant="forHeader"
+              className="font-[500] whitespace-nowrap"
+              onClick={openLinkModal}
+            >
+              + 링크추가
+            </Button>
+            <Button
+              size="sm"
+              variant="forHeader"
+              className="font-[500] whitespace-nowrap"
+              onClick={openFolderModal}
+            >
+              + 폴더추가
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );

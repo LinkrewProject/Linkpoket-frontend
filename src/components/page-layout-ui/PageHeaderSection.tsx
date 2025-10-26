@@ -17,7 +17,7 @@ export default function PageHeaderSection({
 }: PageHeaderSectionProps) {
   const [title, setTitle] = useState(pageTitle ?? '');
   const { debouncedUpdate, handleBlur } = useUpdateTitle(folderId, title);
-  const { openLinkModal } = useModalStore();
+  const { openLinkModal, openFolderModal } = useModalStore();
   const location = useLocation();
   const currentLocation = location.pathname;
   const isLinkButtonVisible = currentLocation !== '/bookmarks';
@@ -42,13 +42,24 @@ export default function PageHeaderSection({
           className="outline-nontext-gray-90 inline-block w-full text-[22px] font-bold"
         />
         {isLinkButtonVisible && (
-          <Button
-            size="sm"
-            className="whitespace-nowrap"
-            onClick={openLinkModal}
-          >
-            + 링크추가
-          </Button>
+          <div className="flex items-center gap-[8px]">
+            <Button
+              size="sm"
+              variant="forHeader"
+              className="font-[500] whitespace-nowrap"
+              onClick={openLinkModal}
+            >
+              + 링크추가
+            </Button>
+            <Button
+              size="sm"
+              variant="forHeader"
+              className="font-[500] whitespace-nowrap"
+              onClick={openFolderModal}
+            >
+              + 폴더추가
+            </Button>
+          </div>
         )}
       </div>
     </div>
