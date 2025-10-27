@@ -31,6 +31,7 @@ export default function PageHeaderSection({
         <input
           id="page-title"
           type="text"
+          disabled={title === '개인 페이지' || title === '북마크'}
           value={title}
           onChange={(e) => {
             const value = e.target.value;
