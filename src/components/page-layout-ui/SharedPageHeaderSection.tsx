@@ -88,25 +88,47 @@ export default function SharedPageHeaderSection({
           <div className="flex items-center gap-[8px]">
             <Button
               size="sm"
-              variant="forHeader"
               style={{
                 borderColor: currentFolderColor.previewColor,
                 color: currentFolderColor.previewColor,
               }}
-              className="rounded-lg border-2 bg-white text-sm whitespace-nowrap transition-colors"
+              className="rounded-lg border-2 bg-white text-sm font-medium whitespace-nowrap transition-colors"
               onClick={openLinkModal}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = `${currentFolderColor.previewColor}15`;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'white';
+              }}
+              onMouseDown={(e) => {
+                e.currentTarget.style.backgroundColor = `${currentFolderColor.previewColor}25`;
+              }}
+              onMouseUp={(e) => {
+                e.currentTarget.style.backgroundColor = `${currentFolderColor.previewColor}15`;
+              }}
             >
               + 링크추가
             </Button>
             <Button
               size="sm"
-              variant="forHeader"
               style={{
                 borderColor: currentFolderColor.previewColor,
                 color: currentFolderColor.previewColor,
               }}
-              className="rounded-lg border-2 bg-white text-sm whitespace-nowrap transition-colors"
+              className="rounded-lg border-2 bg-white text-sm font-medium whitespace-nowrap transition-colors"
               onClick={openFolderModal}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = `${currentFolderColor.previewColor}15`;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'white';
+              }}
+              onMouseDown={(e) => {
+                e.currentTarget.style.backgroundColor = `${currentFolderColor.previewColor}25`;
+              }}
+              onMouseUp={(e) => {
+                e.currentTarget.style.backgroundColor = `${currentFolderColor.previewColor}15`;
+              }}
             >
               + 폴더추가
             </Button>
