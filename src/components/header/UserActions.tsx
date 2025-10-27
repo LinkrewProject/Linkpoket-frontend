@@ -18,6 +18,8 @@ export function UserActions() {
   const [isAlarmOpen, setIsAlarmOpen] = useState<boolean>(false);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [isContactOpen, setIsContactOpen] = useState<boolean>(false);
+  const [isFolderColorModalOpen, setIsFolderColorModalOpen] =
+    useState<boolean>(false);
   const { data: notifications = [], refetch } = useFetchNotifications();
   const { nickname, colorCode } = useUserStore();
   const { openProfileModal } = useProfileModalStore();
