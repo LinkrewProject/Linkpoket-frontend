@@ -14,9 +14,8 @@ import SidebarClose from '@/assets/widget-ui-assets/SidebarClose.svg?react';
 import { useMobile } from '@/hooks/useMobile';
 import useFetchJoinedPage from '@/hooks/queries/useFetchJoinedPage';
 import { useCreateSharedPage } from '@/hooks/mutations/useCreateSharedPage';
-import { useCreateFolder } from '@/hooks/mutations/useCreateFolder';
 import { toast } from 'react-hot-toast';
-import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
+import { usePageStore } from '@/stores/pageStore';
 import useFetchFolderList from '@/hooks/queries/useFetchFolderList';
 
 type MenubarProps = {
@@ -32,10 +31,10 @@ const SideBar: React.FC<MenubarProps> = ({
   isFoldSidebar,
   setIsFoldSidebar,
 }) => {
+  const [isFolderListOpen, setIsFolderListOpen] = useState(true);
   const sidebarRef = useRef<HTMLElement | null>(null);
   const isMobile = useMobile();
   const { pageId } = usePageStore();
-  const { parentsFolderId } = useParentsFolderIdStore();
   const location = useLocation();
   const params = useParams();
 
@@ -128,25 +127,8 @@ const SideBar: React.FC<MenubarProps> = ({
     });
   };
 
-  //폴더 생성
-  const { mutate: createFolder } = useCreateFolder(pageId as string, {
-    onSuccess: () => {
-      toast.success('폴더 생성 완료');
-    },
-    onError: (error: any) => {
-      toast.error((error as any).response.data.detail);
-    },
-  });
-
-  const handleCreateFolder = () => {
-    createFolder({
-      baseRequest: {
-        pageId: pageId as string,
-        commandType: 'CREATE',
-      },
-      folderName: '새 폴더',
-      parentFolderId: parentsFolderId as string,
-    });
+  const handleToggleFolderList = () => {
+    setIsFolderListOpen(!isFolderListOpen);
   };
 
   // 펼쳐진 폴더들의 ID를 저장 (초기값: 빈 Set = 모든 폴더 접힌 상태)
@@ -292,84 +274,110 @@ const SideBar: React.FC<MenubarProps> = ({
                       <div className="flex gap-[20px]">
                         <div>폴더</div>
                       </div>
-                      <PlusIcon
-                        className="text-gray-40 hover:text-gray-90 cursor-pointer"
-                        onClick={(e) => {
-                          if (location.pathname === '/bookmarks') {
-                            toast.error(
-                              '북마크에서는 폴더를 생성할 수 없습니다.'
-                            );
-                          }
-                          e.stopPropagation();
-                          e.preventDefault();
-                          handleCreateFolder();
-                        }}
-                        aria-label="폴더 추가"
-                        height={18}
-                        width={18}
-                      />
+                      {isFolderListOpen ? (
+                        <NoColorUp
+                          className="text-gray-40 hover:text-gray-90 cursor-pointer"
+                          onClick={(e) => {
+                            if (location.pathname === '/bookmarks') {
+                              toast.error(
+                                '북마크에서는 폴더를 생성할 수 없습니다.'
+                              );
+                            }
+                            e.stopPropagation();
+                            e.preventDefault();
+                            handleToggleFolderList();
+                          }}
+                          aria-label="폴더 추가"
+                          height={18}
+                          width={18}
+                        />
+                      ) : (
+                        <NoColorDown
+                          className="text-gray-40 hover:text-gray-90 cursor-pointer"
+                          onClick={(e) => {
+                            if (location.pathname === '/bookmarks') {
+                              toast.error(
+                                '북마크에서는 폴더를 생성할 수 없습니다.'
+                              );
+                            }
+                            e.stopPropagation();
+                            e.preventDefault();
+                            handleToggleFolderList();
+                          }}
+                          aria-label="폴더 추가"
+                          height={18}
+                          width={18}
+                        />
+                      )}
                     </div>
                   </div>
 
-                  {/* 폴더 뎁스1 리스트 */}
-                  <div className="mt-2 flex flex-col gap-[2px]">
-                    {refinedFolderList?.map((folder: any) => (
-                      <div key={folder.folderId}>
-                        <div className="flex items-center">
-                          {/* 하위 폴더가 있는 경우 화살표 표시 */}
+                  {isFolderListOpen && (
+                    <>
+                      {/* 폴더 뎁스1 리스트 */}
+                      <div className="mt-2 flex flex-col gap-[2px]">
+                        {refinedFolderList?.map((folder: any) => (
+                          <div key={folder.folderId}>
+                            <div className="flex items-center">
+                              {/* 하위 폴더가 있는 경우 화살표 표시 */}
 
-                          <Link
-                            to={getFolderLink(folder.folderId)}
-                            className={`flex w-full items-center justify-between rounded-[8px] py-2 pr-3 pl-2 text-[14px] font-[600] ${
-                              isFolderActive(folder.folderId)
-                                ? 'bg-primary-5 text-primary-50'
-                                : 'text-gray-70 hover:bg-primary-5'
-                            }`}
-                          >
-                            {folder.folderTitle}
-                            {folder.children && folder.children.length > 0 ? (
-                              <button
-                                onClick={() => toggleFolder(folder.folderId)}
-                                className="hover:text-gray-70 mr-1 flex h-4 w-4 cursor-pointer items-center justify-center text-gray-50"
-                                aria-label={`${folder.folderTitle} 폴더 ${expandedFolders.has(folder.folderId) ? '접기' : '펼치기'}`}
+                              <Link
+                                to={getFolderLink(folder.folderId)}
+                                className={`flex w-full items-center justify-between rounded-[8px] py-2 pr-3 pl-2 text-[14px] font-[600] ${
+                                  isFolderActive(folder.folderId)
+                                    ? 'bg-primary-5 text-primary-50'
+                                    : 'text-gray-70 hover:bg-primary-5'
+                                }`}
                               >
-                                <FolderToggleIcon
-                                  isCollapsed={
-                                    !expandedFolders.has(folder.folderId)
-                                  }
-                                  folderId={folder.folderId}
-                                />
-                              </button>
-                            ) : (
-                              <div className="mr-1 h-4 w-4" />
-                            )}
-                          </Link>
-                        </div>
-
-                        {/* 폴더 뎁스2 리스트 - 펼쳐져 있을 때만 표시 */}
-                        {folder.children &&
-                          folder.children.length > 0 &&
-                          expandedFolders.has(folder.folderId) && (
-                            <div className="mt-1 ml-5 flex flex-col gap-[2px]">
-                              {folder.children.map((child: any) => (
-                                <Link
-                                  key={child.folderId}
-                                  to={getFolderLink(child.folderId)}
-                                  className={`block rounded-[8px] py-2 pr-3 pl-2 text-[14px] font-[600] ${
-                                    isFolderActive(child.folderId)
-                                      ? 'bg-primary-5 text-primary-50'
-                                      : 'text-gray-70 hover:bg-primary-5'
-                                  }`}
-                                >
-                                  <span className="pr-2">•</span>
-                                  <span>{child.folderTitle}</span>
-                                </Link>
-                              ))}
+                                {folder.folderTitle}
+                                {folder.children &&
+                                folder.children.length > 0 ? (
+                                  <button
+                                    onClick={() =>
+                                      toggleFolder(folder.folderId)
+                                    }
+                                    className="hover:text-gray-70 mr-1 flex h-4 w-4 cursor-pointer items-center justify-center text-gray-50"
+                                    aria-label={`${folder.folderTitle} 폴더 ${expandedFolders.has(folder.folderId) ? '접기' : '펼치기'}`}
+                                  >
+                                    <FolderToggleIcon
+                                      isCollapsed={
+                                        !expandedFolders.has(folder.folderId)
+                                      }
+                                      folderId={folder.folderId}
+                                    />
+                                  </button>
+                                ) : (
+                                  <div className="mr-1 h-4 w-4" />
+                                )}
+                              </Link>
                             </div>
-                          )}
+
+                            {/* 폴더 뎁스2 리스트 - 펼쳐져 있을 때만 표시 */}
+                            {folder.children &&
+                              folder.children.length > 0 &&
+                              expandedFolders.has(folder.folderId) && (
+                                <div className="mt-1 ml-5 flex flex-col gap-[2px]">
+                                  {folder.children.map((child: any) => (
+                                    <Link
+                                      key={child.folderId}
+                                      to={getFolderLink(child.folderId)}
+                                      className={`block rounded-[8px] py-2 pr-3 pl-2 text-[14px] font-[600] ${
+                                        isFolderActive(child.folderId)
+                                          ? 'bg-primary-5 text-primary-50'
+                                          : 'text-gray-70 hover:bg-primary-5'
+                                      }`}
+                                    >
+                                      <span className="pr-2">•</span>
+                                      <span>{child.folderTitle}</span>
+                                    </Link>
+                                  ))}
+                                </div>
+                              )}
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
+                    </>
+                  )}
                 </>
               )}
 
@@ -381,79 +389,110 @@ const SideBar: React.FC<MenubarProps> = ({
                       <div className="flex gap-[20px]">
                         <div>폴더</div>
                       </div>
-                      <PlusIcon
-                        className="text-gray-40 hover:text-gray-90 cursor-pointer"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          e.preventDefault();
-                          handleCreateFolder();
-                        }}
-                        aria-label="폴더 추가"
-                        height={18}
-                        width={18}
-                      />
+                      {isFolderListOpen ? (
+                        <NoColorUp
+                          className="text-gray-40 hover:text-gray-90 cursor-pointer"
+                          onClick={(e) => {
+                            if (location.pathname === '/bookmarks') {
+                              toast.error(
+                                '북마크에서는 폴더를 생성할 수 없습니다.'
+                              );
+                            }
+                            e.stopPropagation();
+                            e.preventDefault();
+                            handleToggleFolderList();
+                          }}
+                          aria-label="폴더 추가"
+                          height={18}
+                          width={18}
+                        />
+                      ) : (
+                        <NoColorDown
+                          className="text-gray-40 hover:text-gray-90 cursor-pointer"
+                          onClick={(e) => {
+                            if (location.pathname === '/bookmarks') {
+                              toast.error(
+                                '북마크에서는 폴더를 생성할 수 없습니다.'
+                              );
+                            }
+                            e.stopPropagation();
+                            e.preventDefault();
+                            handleToggleFolderList();
+                          }}
+                          aria-label="폴더 추가"
+                          height={18}
+                          width={18}
+                        />
+                      )}
                     </div>
                   </div>
-                  <div className="mt-2 flex flex-col gap-[2px]">
-                    {refinedFolderList?.map((folder: any) => (
-                      <div key={folder.folderId}>
-                        <div className="flex items-center">
-                          {/* 하위 폴더가 있는 경우 화살표 표시 */}
+                  {isFolderListOpen && (
+                    <>
+                      <div className="mt-2 flex flex-col gap-[2px]">
+                        {refinedFolderList?.map((folder: any) => (
+                          <div key={folder.folderId}>
+                            <div className="flex items-center">
+                              {/* 하위 폴더가 있는 경우 화살표 표시 */}
 
-                          <Link
-                            to={`/shared/${params.pageId}/folder/${folder.folderId}`}
-                            className={`flex w-full items-center justify-between rounded-[8px] py-2 pr-3 pl-2 text-[14px] font-[600] ${
-                              location.pathname ===
-                              `/shared/${params.pageId}/folder/${folder.folderId}`
-                                ? 'bg-primary-5 text-primary-50'
-                                : 'text-gray-70 hover:bg-primary-5'
-                            }`}
-                          >
-                            {folder.folderTitle}
-                            {folder.children && folder.children.length > 0 ? (
-                              <button
-                                onClick={() => toggleFolder(folder.folderId)}
-                                className="hover:text-gray-70 mr-1 flex h-4 w-4 cursor-pointer items-center justify-center text-gray-50"
-                                aria-label={`${folder.folderTitle} 폴더 ${expandedFolders.has(folder.folderId) ? '접기' : '펼치기'}`}
+                              <Link
+                                to={`/shared/${params.pageId}/folder/${folder.folderId}`}
+                                className={`flex w-full items-center justify-between rounded-[8px] py-2 pr-3 pl-2 text-[14px] font-[600] ${
+                                  location.pathname ===
+                                  `/shared/${params.pageId}/folder/${folder.folderId}`
+                                    ? 'bg-primary-5 text-primary-50'
+                                    : 'text-gray-70 hover:bg-primary-5'
+                                }`}
                               >
-                                <FolderToggleIcon
-                                  isCollapsed={
-                                    !expandedFolders.has(folder.folderId)
-                                  }
-                                  folderId={folder.folderId}
-                                />
-                              </button>
-                            ) : (
-                              <div className="mr-1 h-4 w-4" />
-                            )}
-                          </Link>
-                        </div>
-
-                        {/* 폴더 뎁스2 리스트 - 펼쳐져 있을 때만 표시 */}
-                        {folder.children &&
-                          folder.children.length > 0 &&
-                          expandedFolders.has(folder.folderId) && (
-                            <div className="mt-1 ml-5 flex flex-col gap-[2px]">
-                              {folder.children.map((child: any) => (
-                                <Link
-                                  key={child.folderId}
-                                  to={`/shared/${params.pageId}/folder/${child.folderId}`}
-                                  className={`block rounded-[8px] py-2 pr-3 pl-2 text-[14px] font-[600] ${
-                                    location.pathname ===
-                                    `/shared/${params.pageId}/folder/${child.folderId}`
-                                      ? 'bg-primary-5 text-primary-50'
-                                      : 'text-gray-70 hover:bg-primary-5'
-                                  }`}
-                                >
-                                  <span className="pr-2">•</span>
-                                  <span>{child.folderTitle}</span>
-                                </Link>
-                              ))}
+                                {folder.folderTitle}
+                                {folder.children &&
+                                folder.children.length > 0 ? (
+                                  <button
+                                    onClick={() =>
+                                      toggleFolder(folder.folderId)
+                                    }
+                                    className="hover:text-gray-70 mr-1 flex h-4 w-4 cursor-pointer items-center justify-center text-gray-50"
+                                    aria-label={`${folder.folderTitle} 폴더 ${expandedFolders.has(folder.folderId) ? '접기' : '펼치기'}`}
+                                  >
+                                    <FolderToggleIcon
+                                      isCollapsed={
+                                        !expandedFolders.has(folder.folderId)
+                                      }
+                                      folderId={folder.folderId}
+                                    />
+                                  </button>
+                                ) : (
+                                  <div className="mr-1 h-4 w-4" />
+                                )}
+                              </Link>
                             </div>
-                          )}
+
+                            {/* 폴더 뎁스2 리스트 - 펼쳐져 있을 때만 표시 */}
+                            {folder.children &&
+                              folder.children.length > 0 &&
+                              expandedFolders.has(folder.folderId) && (
+                                <div className="mt-1 ml-5 flex flex-col gap-[2px]">
+                                  {folder.children.map((child: any) => (
+                                    <Link
+                                      key={child.folderId}
+                                      to={`/shared/${params.pageId}/folder/${child.folderId}`}
+                                      className={`block rounded-[8px] py-2 pr-3 pl-2 text-[14px] font-[600] ${
+                                        location.pathname ===
+                                        `/shared/${params.pageId}/folder/${child.folderId}`
+                                          ? 'bg-primary-5 text-primary-50'
+                                          : 'text-gray-70 hover:bg-primary-5'
+                                      }`}
+                                    >
+                                      <span className="pr-2">•</span>
+                                      <span>{child.folderTitle}</span>
+                                    </Link>
+                                  ))}
+                                </div>
+                              )}
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
+                    </>
+                  )}
                 </>
               )}
             </li>
