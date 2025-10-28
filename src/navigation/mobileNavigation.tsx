@@ -1,7 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useMobile } from '@/hooks/useMobile';
-import PersonalPageActive from '@/assets/widget-ui-assets/PersonalPageActive.svg?react';
-import BookMarkActive from '@/assets/widget-ui-assets/BookMarkActive.svg?react';
 
 interface NavItem {
   id: string;
@@ -15,19 +13,43 @@ export default function MobileNavigation() {
   const navigate = useNavigate();
   const isMobile = useMobile();
 
-  // 네비게이션 아이템들
   const navItems: NavItem[] = [
     {
       id: 'personal',
       label: '개인페이지',
       path: '/',
-      icon: <PersonalPageActive />,
+      icon: (
+        <svg
+          width="28"
+          height="28"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <rect x="3" y="3" width="7" height="7" rx="1" />
+          <rect x="14" y="3" width="7" height="7" rx="1" />
+          <rect x="14" y="14" width="7" height="7" rx="1" />
+          <rect x="3" y="14" width="7" height="7" rx="1" />
+        </svg>
+      ),
     },
     {
       id: 'bookmarks',
       label: '북마크',
       path: '/bookmarks',
-      icon: <BookMarkActive />,
+      icon: (
+        <svg
+          width="28"
+          height="28"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+        </svg>
+      ),
     },
   ];
 
@@ -44,11 +66,10 @@ export default function MobileNavigation() {
     navigate(path);
   };
 
-  // 모바일이 아니면 렌더링하지 않음
   if (!isMobile) return null;
 
   return (
-    <nav className="fixed right-0 bottom-0 left-0 z-50 md:hidden">
+    <nav className="fixed right-0 bottom-0 left-0 z-9999 bg-white md:hidden">
       <div className="flex h-16 items-center justify-around px-4">
         {navItems.map((item) => {
           const isActive = currentNavId === item.id;
