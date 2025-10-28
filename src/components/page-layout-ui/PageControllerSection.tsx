@@ -31,6 +31,14 @@ export default function PageControllerSection({
           onClear={handleClear}
         />
       )}
+      {isMobile && showSearch && (
+        <Search
+          placeholder="폴더 또는 링크 검색"
+          value={searchKeyword}
+          onChange={handleSearchChange}
+          onClear={handleClear}
+        />
+      )}
       <DropDownView onChange={onSortChange} />
     </div>
   );
