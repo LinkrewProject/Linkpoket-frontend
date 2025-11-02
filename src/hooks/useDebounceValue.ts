@@ -10,3 +10,5 @@ export function useDebounceValue<T>(value: T, delay: number): T {
 
   return debouncedValue;
 }
+
+//값 자체를 debounce하는 훅

@@ -2,6 +2,7 @@ import { Button } from '@/components/common-ui/button';
 import 히어로이미지 from '@/assets/common-ui-assets/히어로 이미지.webp';
 import { useMobile } from '@/hooks/useMobile';
 import { CHROME_EXTENSION_URL } from '@/constants/urls';
+import toast from 'react-hot-toast';
 
 const HeroSection: React.FC = () => {
   const isMobile = useMobile();
@@ -48,7 +49,7 @@ const HeroSection: React.FC = () => {
                 aria-label={
                   index === 1
                     ? '구글 확장 프로그램 다운로드 (새 창)'
-                    : '링크루 시작하기'
+                    : '링크포켓 시작하기'
                 }
               >
                 <Button

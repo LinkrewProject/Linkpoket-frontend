@@ -6,7 +6,7 @@ import PageHeaderSection from '@/components/page-layout-ui/PageHeaderSection';
 import PageControllerSection from '@/components/page-layout-ui/PageControllerSection';
 import useFetchFolderDetails from '@/hooks/queries/useFetchFolderDetails';
 import { usePageLayout } from '@/hooks/usePageLayout';
-import { usePageData } from '@/hooks/usePageData';
+import { getPageDataLength } from '@/utils/pageData';
 import { ErrorState } from '@/components/common-ui/ErrorState';
 import { LoadingState } from '@/components/common-ui/LoadingState';
 import { PageLayout } from '@/components/common-ui/PageLayout';
@@ -39,7 +39,7 @@ export default function FolderDetailPage() {
   const refinedData = data?.data;
   const folderData = refinedData?.folderDetailResponses ?? [];
   const linkData = refinedData?.linkDetailResponses ?? [];
-  const { folderDataLength, linkDataLength } = usePageData(
+  const { folderDataLength, linkDataLength } = getPageDataLength(
     folderData,
     linkData
   );

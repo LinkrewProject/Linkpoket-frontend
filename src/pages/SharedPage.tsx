@@ -6,7 +6,7 @@ import PageControllerSection from '@/components/page-layout-ui/PageControllerSec
 import { useFetchSharedPage } from '@/hooks/queries/useFetchSharedPage';
 import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
 import { usePageLayout } from '@/hooks/usePageLayout';
-import { usePageData } from '@/hooks/usePageData';
+import { getPageDataLength } from '@/utils/pageData';
 import { PageLayout } from '@/components/common-ui/PageLayout';
 
 const SharedPageContentSection = lazy(
@@ -24,7 +24,7 @@ export default function SharedPage() {
   const refinedData = data?.data;
   const folderData = refinedData?.directoryDetailResponses ?? [];
   const linkData = refinedData?.linkDetailResponses ?? [];
-  const { folderDataLength, linkDataLength } = usePageData(
+  const { folderDataLength, linkDataLength } = getPageDataLength(
     folderData,
     linkData
   );

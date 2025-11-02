@@ -23,7 +23,7 @@ const SignupPage = () => {
   const selectedJob = watch('job');
 
   return (
-    <main className="flex min-h-screen min-w-screen flex-col items-center justify-center bg-white">
+    <main className="flex min-h-full flex-col items-center justify-center bg-white">
       <form onSubmit={onSubmit} className="w-[360px] max-w-md space-y-6">
         <h2 className="mb-8 flex justify-center text-[26px] font-bold">
           링크모아 회원 가입
