@@ -1,4 +1,3 @@
-import FooterLogo from '@/assets/common-ui-assets/FooterLogo.svg?react';
 import { PRIVACY_POLICY } from '@/constants/privacyPolicy';
 import { TERMS_OF_SERVICE } from '@/constants/termsOfService';
 import { Link } from 'react-router-dom';
@@ -21,7 +20,7 @@ const Footer: React.FC = () => {
   return (
     <footer className="footer-mobile footer-tablet footer-desktop flex justify-between">
       <div className="footer-logo-container-mobile footer-logo-container-desktop footer-logo-container-tablet flex items-center space-x-8">
-        <FooterLogo />
+        {/* <FooterLogo /> */}
         <p className="text-gray-90 footer-copyright-mobile footer-copyright-tablet footer-copyright-desktop text-[21px] font-medium">
           © 2025 Linkpoket
         </p>
