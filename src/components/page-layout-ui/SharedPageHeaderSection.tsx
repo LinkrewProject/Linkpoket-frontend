@@ -3,6 +3,7 @@ import { useDebounce } from '@/hooks/useDebounce';
 import useUpdateSharedPageTitle from '@/hooks/mutations/useUpdateSharedPageTitle';
 import { useModalStore } from '@/stores/modalStore';
 import { useLocation } from 'react-router-dom';
+import { useMobile } from '@/hooks/useMobile';
 import { useFolderColorStore } from '@/stores/folderColorStore';
 import { Button } from '../common-ui/button';
 
@@ -19,13 +20,17 @@ export default function SharedPageHeaderSection({
 }: PageHeaderSectionProps) {
   const [title, setTitle] = useState(pageTitle ?? '');
   const lastUpdateTitle = useRef({ title });
-  const { openLinkModal, openFolderModal } = useModalStore();
-  const { getCurrentColor } = useFolderColorStore();
-  const currentFolderColor = getCurrentColor();
-  const { mutate: updateSharedPageTitle } = useUpdateSharedPageTitle(pageId);
+
   const location = useLocation();
   const currentLocation = location.pathname;
   const isLinkButtonVisible = currentLocation !== '/bookmarks';
+  const isMobile = useMobile();
+
+  const { openLinkModal, openFolderModal } = useModalStore();
+  const { getCurrentColor } = useFolderColorStore();
+  const currentFolderColor = getCurrentColor();
+
+  const { mutate: updateSharedPageTitle } = useUpdateSharedPageTitle(pageId);
 
   const updateSharedPageTitleImmediately = () => {
     if (!pageId) return;
@@ -85,7 +90,9 @@ export default function SharedPageHeaderSection({
           className={`outline-nonetext-gray-90' } inline-block w-full text-[22px] font-bold`}
         />
         {isLinkButtonVisible && (
-          <div className="flex items-center gap-[8px]">
+          <div
+            className={`flex items-center gap-[8px] ${isMobile ? 'hidden' : ''}`}
+          >
             <Button
               size="sm"
               style={{
