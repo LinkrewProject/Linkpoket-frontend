@@ -8,15 +8,15 @@ import { toast } from 'react-hot-toast';
 interface UsePageDragAndDropParams {
   pageData: (FolderDetail | LinkDetail)[];
   searchKeyword: string;
-  pageId: string;
-  parentsFolderId: string;
+  pageId: number;
+  parentsFolderId: number;
   onMutation: (params: {
-    baseRequest: { pageId: string; commandType: 'EDIT' };
-    targetId: string;
+    baseRequest: { pageId: number; commandType: 'EDIT' };
+    targetId: number;
     itemType: string;
     newOrderIndex: number;
-    toFolderId: string;
-    fromFolderId: string;
+    toFolderId: number;
+    fromFolderId: number;
   }) => Promise<unknown>;
   onDataChange?: (data: (FolderDetail | LinkDetail)[]) => void;
 }

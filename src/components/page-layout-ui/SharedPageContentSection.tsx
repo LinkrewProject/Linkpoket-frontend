@@ -80,7 +80,7 @@ export default function SharedPageContentSection({
     pageData,
     searchKeyword,
     pageId,
-    parentsFolderId: parentsFolderId ?? '',
+    parentsFolderId: parentsFolderId ?? 0,
     onMutation: updateDragAndDropMutation.mutateAsync,
     onDataChange: setPageData,
   });
