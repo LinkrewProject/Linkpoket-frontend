@@ -10,7 +10,7 @@ export interface SenderInfo {
 }
 
 export interface NotificationItem {
-  id: string;
+  dispatchRequestId: number;
   senderInfo: SenderInfo;
   requestStatus: NotificationRequestStatus;
   notificationType: NotificationType;
@@ -23,10 +23,13 @@ export interface NotificationModalProps {
   notifications: NotificationItem[];
   isProcessing: boolean;
   isShareProcessing: boolean;
-  onAccept?: (params: { id: string; type: NotificationType }) => void;
-  onReject?: (params: { id: string; type: NotificationType }) => void;
-  onDelete?: (
-    dispatch: string,
-    type: 'INVITE_PAGE' | 'TRANSMIT_DIRECTORY'
-  ) => void;
+  onAccept?: (params: {
+    dispatchRequestId: number;
+    type: NotificationType;
+  }) => void;
+  onReject?: (params: {
+    dispatchRequestId: number;
+    type: NotificationType;
+  }) => void;
+  onDelete?: (dispatchRequestId: number, type: NotificationType) => void;
 }

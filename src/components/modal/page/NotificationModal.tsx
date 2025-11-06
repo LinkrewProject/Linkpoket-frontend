@@ -103,7 +103,7 @@ export default function NotificationModal({
             {shown.length !== 0 ? (
               shown.map((item, idx) => (
                 <li
-                  key={`${item.notificationType}-${item.id}`}
+                  key={`${item.notificationType}-${item.dispatchRequestId}`}
                   className={`py-4 ${shown.length - 1 === idx ? '' : 'border-b-gray-30 border-b'}`}
                 >
                   <div className="h-[30px] w-[30px] rounded-full object-cover md:h-[34px] md:w-[34px]">
@@ -125,7 +125,12 @@ export default function NotificationModal({
                     </div>
 
                     <button
-                      onClick={() => onDelete?.(item.id, item.notificationType)}
+                      onClick={() =>
+                        onDelete?.(
+                          item.dispatchRequestId,
+                          item.notificationType
+                        )
+                      }
                       className="cursor-pointer"
                       aria-label="알림 삭제"
                     >
@@ -140,7 +145,7 @@ export default function NotificationModal({
                         disabled={isProcessing || isShareProcessing}
                         onClick={() =>
                           onReject?.({
-                            id: item.id,
+                            dispatchRequestId: item.dispatchRequestId,
                             type: item.notificationType,
                           })
                         }
@@ -152,7 +157,7 @@ export default function NotificationModal({
                         disabled={isProcessing || isShareProcessing}
                         onClick={() =>
                           onAccept?.({
-                            id: item.id,
+                            dispatchRequestId: item.dispatchRequestId,
                             type: item.notificationType,
                           })
                         }

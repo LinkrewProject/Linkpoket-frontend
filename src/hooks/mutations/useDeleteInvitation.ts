@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 export const useDeleteInvitation = () => {
   const queryClient = useQueryClient();
 
-  return useMutation({
+  return useMutation<unknown, unknown, { dispatchRequestId: number }>({
     mutationFn: deleteInvitation,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['notifications'] });

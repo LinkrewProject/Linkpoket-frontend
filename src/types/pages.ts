@@ -70,7 +70,7 @@ export interface UpdateSharedPagePermissionData {
 }
 
 export interface PatchSharedPageInvitationData {
-  requestId: string;
+  dispatchRequestId: number;
   requestStatus: string;
   notificationType: string;
 }

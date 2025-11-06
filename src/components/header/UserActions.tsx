@@ -53,19 +53,19 @@ export function UserActions() {
 
   const handleStatusChange = useCallback(
     (
-      requestId: string,
+      dispatchRequestId: number,
       requestStatus: 'ACCEPTED' | 'REJECTED',
       type: 'INVITE_PAGE' | 'TRANSMIT_DIRECTORY'
     ) => {
       if (type === 'INVITE_PAGE') {
         patchShareInvitation({
-          requestId,
+          dispatchRequestId,
           requestStatus,
           notificationType: 'INVITE_PAGE',
         });
       } else if (type === 'TRANSMIT_DIRECTORY') {
         patchDirectoryTransmission({
-          requestId,
+          dispatchRequestId,
           requestStatus,
           notificationType: 'TRANSMIT_DIRECTORY',
         });
@@ -77,11 +77,11 @@ export function UserActions() {
   );
 
   const handleDelete = useCallback(
-    (dispatchId: string, type: 'INVITE_PAGE' | 'TRANSMIT_DIRECTORY') => {
+    (dispatchRequestId: number, type: 'INVITE_PAGE' | 'TRANSMIT_DIRECTORY') => {
       if (type === 'INVITE_PAGE') {
-        deleteInvitation({ dispatchId });
+        deleteInvitation({ dispatchRequestId });
       } else {
-        deleteDirectoryRequest({ dispatchId });
+        deleteDirectoryRequest({ dispatchRequestId });
       }
     },
     [deleteInvitation, deleteDirectoryRequest]
@@ -119,11 +119,11 @@ export function UserActions() {
               notifications={notifications}
               isProcessing={isProcessing}
               isShareProcessing={isShareProcessing}
-              onAccept={({ id, type }) =>
-                handleStatusChange(id, 'ACCEPTED', type)
+              onAccept={({ dispatchRequestId, type }) =>
+                handleStatusChange(dispatchRequestId, 'ACCEPTED', type)
               }
-              onReject={({ id, type }) =>
-                handleStatusChange(id, 'REJECTED', type)
+              onReject={({ dispatchRequestId, type }) =>
+                handleStatusChange(dispatchRequestId, 'REJECTED', type)
               }
               onDelete={handleDelete}
             />
