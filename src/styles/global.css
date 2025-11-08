@@ -551,9 +551,122 @@ html {
     }
   }
 
+  @media (min-width: 769px) and (max-width: 1023px) {
+    .grid-cols-custom {
+      grid-template-columns: repeat(3, calc(50% - 8px));
+    }
+
+    .responsive-button {
+      width: auto ;
+      height: auto ;
+      padding: 6.4px 10.3px ;
+      border-radius: 6px ;
+      font-size: 9px ;
+      font-weight: 600;
+    }
+
+    .sidebar-text {
+      font-size: 10px;
+    }
+
+    /* 60% 비율 */
+    .group.relative.flex[class*="h-[242px]"] {
+      height: 145.2px !important;
+    }
+
+    .group.relative.flex[class*="min-w-[156px]"] {
+      min-width: 93.6px !important;
+    }
+
+    .group.relative.flex > div.relative.mx-auto,
+    .group.relative.flex > div[style*="width"] {
+      width: 72px !important;
+      height: 72px !important;
+      min-width: 72px !important;
+      min-height: 72px !important;
+      max-width: 72px !important;
+      max-height: 72px !important;
+    }
+
+    .group.relative.flex > div.relative.mx-auto > div.absolute[class*="top-5"] {
+      width: 44.4px !important;
+      height: 40.2px !important;
+      top: 12px !important;
+    }
+
+    .group.relative.flex > div.relative.mx-auto > div.absolute[class*="top-7"] {
+      width: 43.2px !important;
+      height: 39px !important;
+      top: 16.8px !important;
+    }
+
+    .group.relative.flex > div.relative.mx-auto > div.absolute[class*="top-9"] {
+      width: 42px !important;
+      height: 37.8px !important;
+      top: 21.6px !important;
+    }
+  }
+
   @media (min-width: 1024px) and (max-width: 1279px) {
     .grid-cols-custom {
-      grid-template-columns: repeat(3, minmax(120px, max-content));
+      grid-template-columns: repeat(4, minmax(120px, max-content));
+    }
+
+    .responsive-button {
+      width: auto ;
+      height: auto;
+      padding: 7.1px 11.4px ;
+      border-radius: 6px ;
+      font-size: 10px ;
+      font-weight: 600 ;
+    }
+
+    .sidebar-text {
+      font-size: 11px;
+    }
+    /*70% 비율*/
+
+    /* 카드 컨테이너 (LinkCard & FolderCard) - 높이 242px → 170px */
+    .group.relative.flex[class*="h-[242px]"] {
+      height: 170px !important;
+    }
+    
+    /* 데스크탑 카드 너비 156px → 109px */
+    .group.relative.flex[class*="min-w-[156px]"] {
+      min-width: 109px !important;
+    }
+    
+    /* 이미지/아이콘 영역 크기 120px → 84px */
+    .group.relative.flex > div.relative.mx-auto,
+    .group.relative.flex > div[style*="width"] {
+      width: 50px !important;
+      height: 84px !important;
+      min-width: 84px !important;
+      min-height: 84px !important;
+      max-width: 84px !important;
+      max-height: 84px !important;
+    }
+    
+    /* 폴더 안의 링크 카드들 크기 및 위치 조정 (0.7배) */
+    /* 첫 번째 카드: 74px × 67px → 52px × 47px, top: 20px → 14px */
+    .group.relative.flex > div.relative.mx-auto > div.absolute[class*="top-5"] {
+      width: 52px !important;
+      height: 47px !important;
+      top: 14px !important;
+    }
+    
+    /* 두 번째 카드: 72px × 65px → 50px × 46px, top: 28px → 20px */
+    .group.relative.flex > div.relative.mx-auto > div.absolute[class*="top-7"] {
+      width: 50px !important;
+      height: 46px !important;
+      top: 20px !important;
+    }
+    
+    /* 세 번째 카드: 70px × 63px → 49px × 44px, top: 36px → 25px */
+    .group.relative.flex > div.relative.mx-auto > div.absolute[class*="top-9"] {
+      width: 49px !important;
+      height: 44px !important;
+      top: 25px !important;
     }
   }
 
@@ -561,17 +674,164 @@ html {
     .grid-cols-custom {
       grid-template-columns: repeat(4, minmax(120px, max-content));
     }
+
+    .responsive-button {
+      width: auto;
+      height: auto;
+      padding: 7.9px 12.6px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .sidebar-text {
+      font-size: 12px;
+    }
+
+    /* 카드 컨테이너 (LinkCard & FolderCard) - 높이 242px → 170px */
+    .group.relative.flex[class*="h-[242px]"] {
+      height: 193.6px !important;
+        }
+        
+        /* 데스크탑 카드 너비 156px → 109px */
+    .group.relative.flex[class*="min-w-[156px]"] {
+      min-width: 124.8px !important;
+        }
+        
+        /* 이미지/아이콘 영역 크기 120px → 84px */
+        .group.relative.flex > div.relative.mx-auto,
+        .group.relative.flex > div[style*="width"] {
+      width: 96px !important;
+      height: 96px !important;
+      min-width: 96px !important;
+      min-height: 96px !important;
+      max-width: 96px !important;
+      max-height: 96px !important;
+        }
+        
+        /* 폴더 안의 링크 카드들 크기 및 위치 조정 (0.7배) */
+        /* 첫 번째 카드: 74px × 67px → 52px × 47px, top: 20px → 14px */
+        .group.relative.flex > div.relative.mx-auto > div.absolute[class*="top-5"] {
+      width: 59.2px !important;
+      height: 53.6px !important;
+      top: 16px !important;
+        }
+        
+        /* 두 번째 카드: 72px × 65px → 50px × 46px, top: 28px → 20px */
+        .group.relative.flex > div.relative.mx-auto > div.absolute[class*="top-7"] {
+      width: 57.6px !important;
+      height: 52px !important;
+      top: 22.4px !important;
+        }
+        
+        /* 세 번째 카드: 70px × 63px → 49px × 44px, top: 36px → 25px */
+        .group.relative.flex > div.relative.mx-auto > div.absolute[class*="top-9"] {
+      width: 56px !important;
+      height: 50.4px !important;
+      top: 28.8px !important;
+        }
+
+    
   }
 
   @media (min-width: 1440px) and (max-width: 1919px) {
     .grid-cols-custom {
       grid-template-columns: repeat(5, minmax(120px, max-content));
     }
+
+    .responsive-button {
+      width: auto;
+      height: auto;
+      padding: 9.3px 14.9px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .sidebar-text {
+      font-size: 13px;
+    }
+
+      
+    /* 80% 비율 */
+    .group.relative.flex[class*="h-[242px]"] {
+      height: 193.6px !important;
+    }
+
+    .group.relative.flex[class*="min-w-[156px]"] {
+      min-width: 124.8px !important;
+    }
+
+    .group.relative.flex > div.relative.mx-auto,
+    .group.relative.flex > div[style*="width"] {
+      width: 96px !important;
+      height: 96px !important;
+      min-width: 96px !important;
+      min-height: 96px !important;
+      max-width: 96px !important;
+      max-height: 96px !important;
+    }
+
+    .group.relative.flex > div.relative.mx-auto > div.absolute[class*="top-5"] {
+      width: 59.2px !important;
+      height: 53.6px !important;
+      top: 16px !important;
+    }
+
+    .group.relative.flex > div.relative.mx-auto > div.absolute[class*="top-7"] {
+      width: 57.6px !important;
+      height: 52px !important;
+      top: 22.4px !important;
+    }
+
+    .group.relative.flex > div.relative.mx-auto > div.absolute[class*="top-9"] {
+      width: 56px !important;
+      height: 50.4px !important;
+      top: 28.8px !important;
+    }
+      
   }
 
   @media (min-width: 1920px) {
     .grid-cols-custom {
       grid-template-columns: repeat(6, minmax(120px, max-content));
+    }
+
+    /* 90% 비율 */
+    .group.relative.flex[class*="h-[242px]"] {
+      height: 217.8px !important;
+    }
+
+    .group.relative.flex[class*="min-w-[156px]"] {
+      min-width: 140.4px !important;
+    }
+
+    .group.relative.flex > div.relative.mx-auto,
+    .group.relative.flex > div[style*="width"] {
+      width: 108px !important;
+      height: 108px !important;
+      min-width: 108px !important;
+      min-height: 108px !important;
+      max-width: 108px !important;
+      max-height: 108px !important;
+    }
+
+    .group.relative.flex > div.relative.mx-auto > div.absolute[class*="top-5"] {
+      width: 66.6px !important;
+      height: 60.3px !important;
+      top: 18px !important;
+    }
+
+    .group.relative.flex > div.relative.mx-auto > div.absolute[class*="top-7"] {
+      width: 64.8px !important;
+      height: 58.5px !important;
+      top: 25.2px !important;
+    }
+
+    .group.relative.flex > div.relative.mx-auto > div.absolute[class*="top-9"] {
+      width: 63px !important;
+      height: 56.7px !important;
+      top: 32.4px !important;
     }
   }
 }
@@ -580,88 +840,16 @@ html {
   --font-sans: 'Pretendard', sans-serif;
 }
 
+
 /* 1024px 미만에서 카드 크기를 0.7배로 조정 */
 @media (max-width: 1550px) {
-  /* 카드 컨테이너 (LinkCard & FolderCard) - 높이 242px → 170px */
-  .group.relative.flex[class*="h-[242px]"] {
-    height: 170px !important;
-  }
   
-  /* 데스크탑 카드 너비 156px → 109px */
-  .group.relative.flex[class*="min-w-[156px]"] {
-    min-width: 109px !important;
-  }
-  
-  /* 이미지/아이콘 영역 크기 120px → 84px */
-  .group.relative.flex > div.relative.mx-auto,
-  .group.relative.flex > div[style*="width"] {
-    width: 84px !important;
-    height: 84px !important;
-    min-width: 84px !important;
-    min-height: 84px !important;
-    max-width: 84px !important;
-    max-height: 84px !important;
-  }
-  
-  /* 폴더 안의 링크 카드들 크기 및 위치 조정 (0.7배) */
-  /* 첫 번째 카드: 74px × 67px → 52px × 47px, top: 20px → 14px */
-  .group.relative.flex > div.relative.mx-auto > div.absolute[class*="top-5"] {
-    width: 52px !important;
-    height: 47px !important;
-    top: 14px !important;
-  }
-  
-  /* 두 번째 카드: 72px × 65px → 50px × 46px, top: 28px → 20px */
-  .group.relative.flex > div.relative.mx-auto > div.absolute[class*="top-7"] {
-    width: 50px !important;
-    height: 46px !important;
-    top: 20px !important;
-  }
-  
-  /* 세 번째 카드: 70px × 63px → 49px × 44px, top: 36px → 25px */
-  .group.relative.flex > div.relative.mx-auto > div.absolute[class*="top-9"] {
-    width: 49px !important;
-    height: 44px !important;
-    top: 25px !important;
-  }
 }
 
-/* 2000px 미만에서 버튼 크기 제한 */
-@media (max-width: 1440px) {
-  .responsive-button {
-    width: 90px !important;
-    height: 36px !important;
-    font-size: 12px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    padding: 0 !important;
-  }
-}
 
-@media (max-width: 1280px) {
-  .responsive-button {
-    width: 80px !important;
-    height: 32px !important;
-    font-size: 11px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    padding: 0 !important;
-  }
-}
 
-@media (max-width: 1024px) {
-  .responsive-button {
-    width: 70px !important;
-    height: 29x !important;
-    font-size: 10px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    padding: 0 !important;
-  }
-}
+
+
 
 body {
   @apply font-sans antialiased;
