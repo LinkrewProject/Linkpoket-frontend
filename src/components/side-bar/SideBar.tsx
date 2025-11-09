@@ -25,6 +25,7 @@ type MenubarProps = {
   setShowSidebar: React.Dispatch<React.SetStateAction<boolean>>;
   isFoldSidebar: boolean;
   setIsFoldSidebar: React.Dispatch<React.SetStateAction<boolean>>;
+  initialCollapsed?: boolean;
 };
 
 const SideBar: React.FC<MenubarProps> = ({
@@ -32,20 +33,40 @@ const SideBar: React.FC<MenubarProps> = ({
   setShowSidebar,
   isFoldSidebar,
   setIsFoldSidebar,
+  initialCollapsed = false,
 }) => {
   const [isFolderListOpen, setIsFolderListOpen] = useState(true);
   const sidebarRef = useRef<HTMLElement | null>(null);
+  const initialCollapseAppliedRef = useRef(false);
   const isMobile = useMobile();
   const { pageId } = usePageStore();
   const location = useLocation();
   const navigate = useNavigate();
   const params = useParams();
 
-  //768px 이하의 경우, showSidebar를 false처리, 이외엔 true처리
+  //768px 이하의 경우 자동 접기, 홈 초기 상태 제어
   useEffect(() => {
-    setShowSidebar(!isMobile);
-    setIsFoldSidebar(isMobile);
-  }, [isMobile, setShowSidebar, setIsFoldSidebar]);
+    if (initialCollapsed && !isMobile && !initialCollapseAppliedRef.current) {
+      setShowSidebar(false);
+      setIsFoldSidebar(true);
+      initialCollapseAppliedRef.current = true;
+      return;
+    }
+
+    if (isMobile) {
+      setShowSidebar(false);
+      setIsFoldSidebar(true);
+    } else if (!initialCollapsed) {
+      setShowSidebar(true);
+      setIsFoldSidebar(false);
+    }
+  }, [initialCollapsed, isMobile, setIsFoldSidebar, setShowSidebar]);
+
+  useEffect(() => {
+    if (!initialCollapsed) {
+      initialCollapseAppliedRef.current = false;
+    }
+  }, [initialCollapsed]);
 
   //useClickOutside 사용시 isMobile === false일 때도 계속 리스너가 등록되어 있어 명시적으로
   useEffect(() => {

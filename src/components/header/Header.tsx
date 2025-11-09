@@ -30,7 +30,7 @@ export function Header({
   return !isMobile ? (
     <header className="header-desktop border-b-gray-10 flex items-center justify-between border-b">
       <div className="header-desktop__left flex items-center">
-        <Link to="/" className="header-logo flex items-center">
+        <Link to="/home" className="header-logo flex items-center">
           <Logo className="header-logo__icon" />
           <span className="header-logo__text font-[800]">LINKPOKET</span>
         </Link>
@@ -58,7 +58,7 @@ export function Header({
           <div className="header-mobile__hamburger flex items-center">
             <HamburgerButton onClick={() => setShowSidebar?.(true)} />
           </div>
-          <Link to="/" className="header-logo flex items-center">
+          <Link to="/home" className="header-logo flex items-center">
             <Logo className="header-logo__icon" />
             <span className="header-logo__text font-[800]">LINKPOKET</span>
           </Link>
