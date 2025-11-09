@@ -166,15 +166,23 @@ const SideBar: React.FC<MenubarProps> = ({
 
     if (isActive) {
       return isCollapsed ? (
-        <ColorDown width={16} height={16} />
+        <ColorDown
+          width={12}
+          height={12}
+          style={{ filter: 'grayscale(1) brightness(0)' }}
+        />
       ) : (
-        <ColorUp width={16} height={16} />
+        <ColorUp
+          width={12}
+          height={12}
+          style={{ filter: 'grayscale(1) brightness(0)' }}
+        />
       );
     } else {
       return isCollapsed ? (
-        <NoColorDown width={16} height={16} />
+        <NoColorDown width={12} height={12} />
       ) : (
-        <NoColorUp width={16} height={16} />
+        <NoColorUp width={12} height={12} />
       );
     }
   };
@@ -249,8 +257,8 @@ const SideBar: React.FC<MenubarProps> = ({
                       handleCreateSharedPage();
                     }}
                     aria-label="공유페이지 추가"
-                    height={18}
-                    width={18}
+                    height={14}
+                    width={14}
                   />
                 </div>
               </div>
@@ -294,8 +302,8 @@ const SideBar: React.FC<MenubarProps> = ({
                             handleToggleFolderList();
                           }}
                           aria-label="폴더 추가"
-                          height={18}
-                          width={18}
+                          height={14}
+                          width={14}
                         />
                       ) : (
                         <NoColorDown
@@ -311,8 +319,8 @@ const SideBar: React.FC<MenubarProps> = ({
                             handleToggleFolderList();
                           }}
                           aria-label="폴더 추가"
-                          height={18}
-                          width={18}
+                          height={14}
+                          width={14}
                         />
                       )}
                     </div>
@@ -331,8 +339,8 @@ const SideBar: React.FC<MenubarProps> = ({
                                 to={getFolderLink(folder.folderId)}
                                 className={`sidebar-text flex w-full items-center justify-between rounded-[8px] py-2 pr-3 pl-2 text-[14px] font-[600] ${
                                   isFolderActive(folder.folderId)
-                                    ? 'bg-primary-5 text-primary-50'
-                                    : 'text-gray-70 hover:bg-primary-5'
+                                    ? 'bg-gray-5 text-gray-90'
+                                    : 'text-gray-70 hover:bg-gray-5'
                                 }`}
                               >
                                 {folder.folderTitle}
@@ -369,8 +377,8 @@ const SideBar: React.FC<MenubarProps> = ({
                                       to={getFolderLink(child.folderId)}
                                       className={`sidebar-text block rounded-[8px] py-2 pr-3 pl-2 text-[14px] font-[600] ${
                                         isFolderActive(child.folderId)
-                                          ? 'bg-primary-5 text-primary-50'
-                                          : 'text-gray-70 hover:bg-primary-5'
+                                          ? 'bg-gray-5 text-gray-90'
+                                          : 'text-gray-70 hover:bg-gray-5'
                                       }`}
                                     >
                                       <span className="pr-2">•</span>
@@ -409,8 +417,8 @@ const SideBar: React.FC<MenubarProps> = ({
                             handleToggleFolderList();
                           }}
                           aria-label="폴더 추가"
-                          height={18}
-                          width={18}
+                          height={14}
+                          width={14}
                         />
                       ) : (
                         <NoColorDown
@@ -426,8 +434,8 @@ const SideBar: React.FC<MenubarProps> = ({
                             handleToggleFolderList();
                           }}
                           aria-label="폴더 추가"
-                          height={18}
-                          width={18}
+                          height={14}
+                          width={14}
                         />
                       )}
                     </div>
@@ -445,8 +453,8 @@ const SideBar: React.FC<MenubarProps> = ({
                                 className={`sidebar-text flex w-full items-center justify-between rounded-[8px] py-2 pr-3 pl-2 text-[14px] font-[600] ${
                                   location.pathname ===
                                   `/shared/${params.pageId}/folder/${folder.folderId}`
-                                    ? 'bg-primary-5 text-primary-50'
-                                    : 'text-gray-70 hover:bg-primary-5'
+                                    ? 'bg-gray-5 text-gray-90'
+                                    : 'text-gray-70 hover:bg-gray-5'
                                 }`}
                               >
                                 {folder.folderTitle}
@@ -484,8 +492,8 @@ const SideBar: React.FC<MenubarProps> = ({
                                       className={`sidebar-text block rounded-[8px] py-2 pr-3 pl-2 text-[14px] font-[600] ${
                                         location.pathname ===
                                         `/shared/${params.pageId}/folder/${child.folderId}`
-                                          ? 'bg-primary-5 text-primary-50'
-                                          : 'text-gray-70 hover:bg-primary-5'
+                                          ? 'bg-gray-5 text-gray-90'
+                                          : 'text-gray-70 hover:bg-gray-5'
                                       }`}
                                     >
                                       <span className="pr-2">•</span>
