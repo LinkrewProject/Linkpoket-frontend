@@ -28,37 +28,46 @@ export function Header({
   const showSearch = pathName !== '/signup' && pathName !== '/login';
 
   return !isMobile ? (
-    <header className="border-b-gray-10 flex h-[62px] justify-between border-b px-[24px] py-[12px]">
-      <div className="flex items-center gap-[24px]">
-        <Link to="/" className="flex items-center">
-          <Logo className="h-[36px]" />
-          <span className="text-[24px] font-[800]">LINKPOKET</span>
+    <header className="header-desktop border-b-gray-10 flex items-center justify-between border-b">
+      <div className="header-desktop__left flex items-center">
+        <Link to="/" className="header-logo flex items-center">
+          <Logo className="header-logo__icon" />
+          <span className="header-logo__text font-[800]">LINKPOKET</span>
         </Link>
       </div>
-      <div className="flex items-center gap-[24px]">
+      <div className="header-desktop__right flex items-center">
         {showSearch && (
           <Search
+            containerClassName="header-search"
+            className="header-search__input"
             placeholder="폴더 또는 링크 검색"
             value={searchKeyword}
             onChange={handleSearchChange}
             onClear={handleClear}
           />
         )}
-        {showHeaderButton && (isLoggedIn ? <UserActions /> : <AuthButtons />)}
+        <div className="header-actions flex items-center">
+          {showHeaderButton && (isLoggedIn ? <UserActions /> : <AuthButtons />)}
+        </div>
       </div>
     </header>
   ) : (
-    <header className="flex h-[56px] flex-col gap-2 px-2">
-      <div className="border-b-gray-10 flex w-full flex-1 justify-between border-b">
-        <div className="flex items-center gap-[16px]">
-          <HamburgerButton onClick={() => setShowSidebar?.(true)} />
-          <Link to="/" className="flex items-center">
-            <Logo className="h-[36px]" />
-            <span className="text-[24px] font-[800]">LINKPOKET</span>
+    <header className="header-mobile flex flex-col">
+      <div className="header-mobile__top border-b-gray-10 flex w-full flex-1 justify-between border-b">
+        <div className="header-mobile__left flex items-center">
+          <div className="header-mobile__hamburger flex items-center">
+            <HamburgerButton onClick={() => setShowSidebar?.(true)} />
+          </div>
+          <Link to="/" className="header-logo flex items-center">
+            <Logo className="header-logo__icon" />
+            <span className="header-logo__text font-[800]">LINKPOKET</span>
           </Link>
         </div>
-        <div className="flex items-center gap-[24px]">
-          {showHeaderButton && (isLoggedIn ? <UserActions /> : <AuthButtons />)}
+        <div className="header-mobile__right flex items-center">
+          <div className="header-actions flex items-center">
+            {showHeaderButton &&
+              (isLoggedIn ? <UserActions /> : <AuthButtons />)}
+          </div>
         </div>
       </div>
     </header>
