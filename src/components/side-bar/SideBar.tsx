@@ -267,7 +267,7 @@ const SideBar: React.FC<MenubarProps> = ({
                 북마크
               </Link>
 
-              <div className="sidebar-text mt-4 flex items-center px-[8px] py-[4px] text-[14px] font-[500] text-gray-50 hover:rounded-[8px] active:rounded-[8px]">
+              <div className="sidebar-text mt-4 flex items-center px-[8px] py-[4px] text-[14px] font-[600] text-gray-100 hover:rounded-[8px] active:rounded-[8px]">
                 <div className="group flex w-full items-center justify-between">
                   <div className="flex items-center gap-[12px]">
                     <SidebarSharedPageIcon
@@ -292,15 +292,15 @@ const SideBar: React.FC<MenubarProps> = ({
               </div>
 
               {/* 공유페이지 리스트 */}
-              <div className="mt-2 flex flex-col gap-[2px]">
+              <div className="mt-2 flex flex-col gap-[2px] pl-2">
                 {joinedPage?.map((page: any) => (
                   <Link
                     key={page.pageId}
                     to={`/shared/${page.pageId}`}
-                    className={`sidebar-text block rounded-[8px] py-2 pr-3 pl-2 text-[14px] font-[600] ${
+                    className={`sidebar-text block rounded-[8px] py-2 pr-3 pl-4 text-[14px] font-[600] ${
                       isSharedPageActive(page.pageId)
                         ? 'bg-gray-5 text-gray-90'
-                        : 'text-gray-70 hover:bg-gray-5'
+                        : 'text-gray-60 hover:bg-gray-5'
                     }`}
                   >
                     {page.pageTitle}
@@ -311,7 +311,7 @@ const SideBar: React.FC<MenubarProps> = ({
               {/* 폴더 섹션 - 개인페이지 내 폴더 표시 */}
               {currentContext === 'personal' && (
                 <>
-                  <div className="sidebar-text mt-4 flex items-center px-[8px] py-[4px] text-[14px] font-[500] text-gray-50 hover:rounded-[8px] active:rounded-[8px]">
+                  <div className="sidebar-text mt-4 flex items-center px-[8px] py-[4px] text-[14px] font-[600] text-gray-100 hover:rounded-[8px] active:rounded-[8px]">
                     <div className="group flex w-full items-center justify-between">
                       <div className="flex items-center gap-[12px]">
                         <SidebarFolderIcon
@@ -362,7 +362,7 @@ const SideBar: React.FC<MenubarProps> = ({
                   {isFolderListOpen && (
                     <>
                       {/* 폴더 뎁스1 리스트 */}
-                      <div className="mt-2 flex flex-col gap-[2px]">
+                      <div className="mt-2 flex flex-col gap-[2px] pl-2">
                         {refinedFolderList?.map((folder: any) => (
                           <div key={folder.folderId}>
                             <div className="flex items-center">
@@ -370,10 +370,10 @@ const SideBar: React.FC<MenubarProps> = ({
 
                               <Link
                                 to={getFolderLink(folder.folderId)}
-                                className={`sidebar-text flex w-full items-center justify-between rounded-[8px] py-2 pr-3 pl-2 text-[14px] font-[600] ${
+                                className={`sidebar-text flex w-full items-center justify-between rounded-[8px] py-2 pr-3 pl-4 text-[14px] font-[600] ${
                                   isFolderActive(folder.folderId)
                                     ? 'bg-gray-5 text-gray-90'
-                                    : 'text-gray-70 hover:bg-gray-5'
+                                    : 'text-gray-60 hover:bg-gray-5'
                                 }`}
                               >
                                 {folder.folderTitle}
@@ -403,15 +403,15 @@ const SideBar: React.FC<MenubarProps> = ({
                             {folder.children &&
                               folder.children.length > 0 &&
                               expandedFolders.has(folder.folderId) && (
-                                <div className="mt-1 ml-5 flex flex-col gap-[2px]">
+                                <div className="mt-1 ml-6 flex flex-col gap-[2px]">
                                   {folder.children.map((child: any) => (
                                     <Link
                                       key={child.folderId}
                                       to={getFolderLink(child.folderId)}
-                                      className={`sidebar-text block rounded-[8px] py-2 pr-3 pl-2 text-[14px] font-[600] ${
+                                      className={`sidebar-text block rounded-[8px] py-2 pr-3 pl-4 text-[14px] font-[600] ${
                                         isFolderActive(child.folderId)
                                           ? 'bg-gray-5 text-gray-90'
-                                          : 'text-gray-70 hover:bg-gray-5'
+                                          : 'hover:bg-gray-5 text-gray-50'
                                       }`}
                                     >
                                       <span className="pr-2">•</span>
@@ -431,7 +431,7 @@ const SideBar: React.FC<MenubarProps> = ({
               {/* 공유페이지 내 폴더 표시 */}
               {currentContext === 'shared' && params.pageId && (
                 <>
-                  <div className="sidebar-text mt-4 flex items-center px-[8px] py-[4px] text-[14px] font-[500] text-gray-50 hover:rounded-[8px] active:rounded-[8px]">
+                  <div className="sidebar-text mt-4 flex items-center px-[8px] py-[4px] text-[14px] font-[600] text-gray-100 hover:rounded-[8px] active:rounded-[8px]">
                     <div className="group flex w-full items-center justify-between">
                       <div className="flex items-center gap-[12px]">
                         <SidebarFolderIcon
@@ -480,7 +480,7 @@ const SideBar: React.FC<MenubarProps> = ({
                   </div>
                   {isFolderListOpen && (
                     <>
-                      <div className="mt-2 flex flex-col gap-[2px]">
+                      <div className="mt-2 flex flex-col gap-[2px] pl-2">
                         {refinedFolderList?.map((folder: any) => (
                           <div key={folder.folderId}>
                             <div className="flex items-center">
@@ -488,11 +488,11 @@ const SideBar: React.FC<MenubarProps> = ({
 
                               <Link
                                 to={`/shared/${params.pageId}/folder/${folder.folderId}`}
-                                className={`sidebar-text flex w-full items-center justify-between rounded-[8px] py-2 pr-3 pl-2 text-[14px] font-[600] ${
+                                className={`sidebar-text flex w-full items-center justify-between rounded-[8px] py-2 pr-3 pl-4 text-[14px] font-[600] ${
                                   location.pathname ===
                                   `/shared/${params.pageId}/folder/${folder.folderId}`
                                     ? 'bg-gray-5 text-gray-90'
-                                    : 'text-gray-70 hover:bg-gray-5'
+                                    : 'text-gray-60 hover:bg-gray-5'
                                 }`}
                               >
                                 {folder.folderTitle}
@@ -522,16 +522,16 @@ const SideBar: React.FC<MenubarProps> = ({
                             {folder.children &&
                               folder.children.length > 0 &&
                               expandedFolders.has(folder.folderId) && (
-                                <div className="mt-1 ml-5 flex flex-col gap-[2px]">
+                                <div className="mt-1 ml-6 flex flex-col gap-[2px]">
                                   {folder.children.map((child: any) => (
                                     <Link
                                       key={child.folderId}
                                       to={`/shared/${params.pageId}/folder/${child.folderId}`}
-                                      className={`sidebar-text block rounded-[8px] py-2 pr-3 pl-2 text-[14px] font-[600] ${
+                                      className={`sidebar-text block rounded-[8px] py-2 pr-3 pl-4 text-[14px] font-[600] ${
                                         location.pathname ===
                                         `/shared/${params.pageId}/folder/${child.folderId}`
                                           ? 'bg-gray-5 text-gray-90'
-                                          : 'text-gray-70 hover:bg-gray-5'
+                                          : 'hover:bg-gray-5 text-gray-50'
                                       }`}
                                     >
                                       <span className="pr-2">•</span>

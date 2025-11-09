@@ -6,6 +6,7 @@ import { AuthButtons } from './AuthButtons';
 import { useMobile } from '@/hooks/useMobile';
 import { Search } from '../common-ui/Search';
 import { usePageSearch } from '@/hooks/usePageSearch';
+import { useFolderColorStore } from '@/stores/folderColorStore';
 
 interface Props {
   isLoggedIn: boolean;
@@ -24,6 +25,8 @@ export function Header({
   const pathName = useLocation().pathname;
 
   const { searchKeyword, handleSearchChange, handleClear } = usePageSearch();
+  const { getCurrentColor } = useFolderColorStore();
+  const currentFolderColor = getCurrentColor();
 
   const showSearch = pathName !== '/signup' && pathName !== '/login';
 
@@ -44,6 +47,7 @@ export function Header({
             value={searchKeyword}
             onChange={handleSearchChange}
             onClear={handleClear}
+            focusColor={currentFolderColor.previewColor}
           />
         )}
         <div className="header-actions flex items-center">
