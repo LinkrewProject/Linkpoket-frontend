@@ -49,5 +49,9 @@ export default function ReissuePage() {
     handleRedirection();
   }, []);
 
-  return <p>Reissuing access token... Please wait.</p>;
+  return (
+    <div className="flex min-h-screen items-center justify-center">
+      <p>잠시만 기다려주세요.</p>
+    </div>
+  );
 }
