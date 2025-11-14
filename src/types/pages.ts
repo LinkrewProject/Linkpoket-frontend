@@ -1,13 +1,21 @@
 import { FolderDetail } from './folders';
 import { LinkDetail } from './links';
 
+export interface BaseRequest {
+  pageId: string;
+  commandType: 'CREATE' | 'EDIT' | 'DELETE' | 'VIEW';
+}
+
+interface PageBaseFields {
+  pageId: string;
+  pageTitle: string;
+}
+
 export interface CreateSharedPageData {
   pageType: 'SHARED';
 }
 
-export interface JoinedPageData {
-  pageId: string;
-  pageTitle: string;
+export interface JoinedPageData extends PageBaseFields {
   pageType: 'PERSONAL' | 'SHARED';
 }
 
@@ -15,9 +23,7 @@ export interface PageParamsData {
   pageId: string;
 }
 
-export interface PageDetails {
-  pageId: string;
-  pageTitle: string;
+export interface PageDetails extends PageBaseFields {
   rootFolderId: string;
   directoryDetailRespons: FolderDetail[];
   siteDetailResponses: LinkDetail[];
@@ -25,17 +31,11 @@ export interface PageDetails {
 }
 
 export interface DeleteSharedPageData {
-  baseRequest: {
-    pageId: string;
-    commandType: string;
-  };
+  baseRequest: BaseRequest;
 }
 
 export interface UpdatePageTitleData {
-  baseRequest: {
-    pageId: string;
-    commandType: string;
-  };
+  baseRequest: BaseRequest;
   pageTitle: string;
 }
 
@@ -52,19 +52,13 @@ export interface PageContentSectionProps {
 }
 
 export interface UpdateSharedPageInvitationData {
-  baseRequest: {
-    pageId: string;
-    commandType: 'SHARED_PAGE_INVITATION';
-  };
+  baseRequest: BaseRequest & { commandType: 'SHARED_PAGE_INVITATION' };
   receiverEmail: string;
   permissionType: string;
 }
 
 export interface UpdateSharedPagePermissionData {
-  baseRequest: {
-    pageId: string;
-    commandType: 'SHARED_PAGE_PERMISSION_CHANGE';
-  };
+  baseRequest: BaseRequest & { commandType: 'SHARED_PAGE_PERMISSION_CHANGE' };
   targetMemberId: string;
   permissionType: string | null;
 }

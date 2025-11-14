@@ -1,70 +1,65 @@
-export type CreateFolderData = {
-  baseRequest: {
-    pageId: string;
-    commandType: string;
-  };
+export type CommandType = 'CREATE' | 'EDIT' | 'DELETE' | 'VIEW';
+
+export interface BaseRequest {
+  pageId: string;
+  commandType: 'CREATE' | 'EDIT' | 'DELETE' | 'VIEW';
+}
+
+interface FolderBaseFields {
+  folderId: string;
+  folderName: string;
+}
+
+export interface CreateFolderData {
+  baseRequest: BaseRequest;
   folderName: string;
   parentFolderId: string;
-};
+}
 
-export type TransferFolderData = {
-  baseRequest: {
-    pageId: string;
-    commandType: 'DIRECTORY_TRANSMISSION';
-  };
+export interface TransferFolderData {
+  baseRequest: BaseRequest & { commandType: 'DIRECTORY_TRANSMISSION' };
   receiverEmail: string;
   folderId: string;
-};
+}
 
-export type TransferFolderResponse = {
+export interface TransferFolderResponse {
   data: {
     receiverEmail: string;
     senderEmail: string;
     folderName: string;
     folderTransmissionId: string;
   };
-};
+}
 
-export type FolderDetail = {
-  folderId: string;
-  folderName: string;
+export interface FolderDetail extends FolderBaseFields {
   isFavorite: boolean;
   orderIndex: number;
   createdDate: string;
-};
+}
 
 export type FolderDetailResponse = Array<FolderDetail>;
 
-export type UpdateFolderData = {
-  baseRequest: {
-    pageId: string;
-    commandType: string;
-  };
+export interface UpdateFolderData {
+  baseRequest: BaseRequest;
+  folderId: string;
   folderName: string;
-  folderId: string;
   folderDescription?: string;
-};
+}
 
-export type DeleteFolderData = {
-  baseRequest: {
-    pageId: string;
-    commandType: string;
-  };
+export interface DeleteFolderData {
+  baseRequest: BaseRequest;
   folderId: string;
-};
+}
 
 export interface FetchFolderDetailsProps {
   pageId: string;
-  commandType: string;
+  commandType: CommandType;
   folderId: string;
   sortType: string;
 }
 
 export interface UpdateDragandDropProps {
-  baseRequest: {
-    pageId: string;
-    commandType: string;
-  };
+  baseRequest: BaseRequest;
   targetId: string;
   itemType: string;
   newOrderIndex: number;
