@@ -8,7 +8,6 @@ export function useSearchPageItems(params: PageItemSearchRequest) {
     queryFn: () => searchPageItems(params),
     select: (response) => response,
     enabled: !!params.pageId && !!params.keyword,
-    structuralSharing: true,
   });
 
   return { pageItems: data, ...rest };

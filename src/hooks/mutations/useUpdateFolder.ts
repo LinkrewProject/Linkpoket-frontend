@@ -26,12 +26,10 @@ export default function useUpdateFolder(
       // 폴더 상세, 공유페이지, 개인페이지 캐시 무효화
       queryClient.invalidateQueries({
         queryKey: ['folderList', pageId],
-        refetchType: 'active',
       });
 
       queryClient.invalidateQueries({
         queryKey: ['favorite'],
-        refetchType: 'active',
       });
 
       if (isFolderPage) {
@@ -55,7 +53,6 @@ export default function useUpdateFolder(
       if (isBookmarksPage) {
         queryClient.invalidateQueries({
           queryKey: ['favorite'],
-          refetchType: 'active',
         });
         queryClient.invalidateQueries({
           queryKey: ['folderDetails', pageId],

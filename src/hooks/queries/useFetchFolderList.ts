@@ -6,7 +6,6 @@ export default function useFetchFolderList(pageId: string) {
     queryKey: ['folderList', pageId],
     queryFn: () => fetchFolderList(pageId),
     placeholderData: (prev) => prev,
-    structuralSharing: true,
     enabled: !!pageId,
   });
 

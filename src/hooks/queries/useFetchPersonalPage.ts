@@ -6,6 +6,5 @@ export function useFetchPersonalPage(pageImageUrl: string) {
     queryKey: ['personalPage'],
     queryFn: () => fetchPersonalPage({ pageImageUrl }),
     placeholderData: (prev) => prev,
-    structuralSharing: true,
   });
 }

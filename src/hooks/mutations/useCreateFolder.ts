@@ -128,22 +128,18 @@ export function useCreateFolder(
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
         queryKey: ['folderList', pageId],
-        refetchType: 'active',
       });
       if (isSharedPage)
         queryClient.invalidateQueries({
           queryKey: ['sharedPage', pageId],
-          refetchType: 'active',
         });
       if (isFolderPage)
         queryClient.invalidateQueries({
           queryKey: ['folderDetails', pageId],
-          refetchType: 'active',
         });
       if (isMainPage)
         queryClient.invalidateQueries({
           queryKey: ['personalPage'],
-          refetchType: 'active',
         });
       options?.onSuccess?.(data, variables, context);
     },

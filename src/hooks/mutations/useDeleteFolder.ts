@@ -131,20 +131,17 @@ export default function useDeleteFolder(
       //사이드바 폴더 리스트 업데이트
       queryClient.invalidateQueries({
         queryKey: ['folderList', pageId],
-        refetchType: 'active',
       });
 
       if (isSharedPage) {
         queryClient.invalidateQueries({
           queryKey: ['sharedPage', pageId],
-          refetchType: 'active',
         });
       }
       // 폴더 상세 페이지 쿼리 무효화 (모든 폴더 ID에 대해)
       if (isFolderPage) {
         queryClient.invalidateQueries({
           queryKey: ['folderDetails', pageId],
-          refetchType: 'active',
         });
       }
 
@@ -152,30 +149,24 @@ export default function useDeleteFolder(
       if (isMainPage) {
         queryClient.invalidateQueries({
           queryKey: ['personalPage'],
-          refetchType: 'active',
         });
       }
 
       if (isBookmarksPage) {
         queryClient.invalidateQueries({
           queryKey: ['favorite'],
-          refetchType: 'active',
         });
         queryClient.invalidateQueries({
           queryKey: ['folderList', pageId],
-          refetchType: 'active',
         });
         queryClient.invalidateQueries({
           queryKey: ['sharedPage', pageId],
-          refetchType: 'active',
         });
         queryClient.invalidateQueries({
           queryKey: ['folderDetails', pageId],
-          refetchType: 'active',
         });
         queryClient.invalidateQueries({
           queryKey: ['personalPage'],
-          refetchType: 'active',
         });
       }
     },

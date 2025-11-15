@@ -8,7 +8,6 @@ export default function useFetchJoinedPage() {
     select: (response) => response.data.slice(1),
     staleTime: 1000 * 60,
     placeholderData: (prev) => prev,
-    structuralSharing: true,
   });
 
   return { joinedPage: data, ...rest };

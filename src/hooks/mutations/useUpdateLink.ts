@@ -24,34 +24,29 @@ export function useUpdateLink(
     onSuccess: (response, variables, context) => {
       queryClient.invalidateQueries({
         queryKey: ['favorite'],
-        refetchType: 'active',
       });
 
       if (!isFolderPage && isSharedPage) {
         queryClient.invalidateQueries({
           queryKey: ['sharedPage', variables.baseRequest.pageId],
-          refetchType: 'active',
         });
       }
 
       if (isFolderPage) {
         queryClient.invalidateQueries({
           queryKey: ['folderDetails', variables.baseRequest.pageId],
-          refetchType: 'active',
         });
       }
 
       if (isMainPage) {
         queryClient.invalidateQueries({
           queryKey: ['personalPage'],
-          refetchType: 'active',
         });
       }
 
       if (isBookmarksPage) {
         queryClient.invalidateQueries({
           queryKey: ['favorite'],
-          refetchType: 'active',
         });
         queryClient.invalidateQueries({
           queryKey: ['folderDetails', variables.baseRequest.pageId],

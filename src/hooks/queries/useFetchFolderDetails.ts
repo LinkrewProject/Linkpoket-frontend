@@ -10,6 +10,5 @@ export default function useFetchFolderDetails(data: FetchFolderDetailsProps) {
     retry: false, // 500 에러는 재시도 안함
     throwOnError: false, // 에러 발생해도 컴포넌트 크래시 방지
     placeholderData: (prev) => prev,
-    structuralSharing: true,
   });
 }

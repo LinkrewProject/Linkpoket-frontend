@@ -6,6 +6,5 @@ export default function useUserInfo() {
     queryKey: ['userInfo'],
     queryFn: fetchUserInfo,
     placeholderData: (prev) => prev,
-    structuralSharing: true,
   });
 }

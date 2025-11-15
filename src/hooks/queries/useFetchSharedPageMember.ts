@@ -10,6 +10,5 @@ export default function useFetchSharedPageMember(
     queryFn: () => fetchSharedPageMember(data),
     enabled: !!data.pageId && !!data.enabled,
     placeholderData: (prev) => prev,
-    structuralSharing: true,
   });
 }

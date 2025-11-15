@@ -24,7 +24,6 @@ export default function useUpdateDragandDrop(data: UpdateDragandDropProps) {
       if (isFolderPage) {
         queryClient.invalidateQueries({
           queryKey: ['folderList', data.baseRequest.pageId],
-          refetchType: 'active',
         });
       }
       if (isSharedPage) {
@@ -40,7 +39,6 @@ export default function useUpdateDragandDrop(data: UpdateDragandDropProps) {
       if (isBookmarksPage) {
         queryClient.invalidateQueries({
           queryKey: ['favorite'],
-          refetchType: 'active',
         });
       }
     },

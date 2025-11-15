@@ -27,7 +27,6 @@ export function useCreateLink(
       if (!isFolderPage && isSharedPage) {
         queryClient.invalidateQueries({
           queryKey: ['sharedPage', variables.baseRequest.pageId],
-          refetchType: 'active',
         });
       }
 
@@ -35,7 +34,6 @@ export function useCreateLink(
       if (isFolderPage) {
         queryClient.invalidateQueries({
           queryKey: ['folderDetails', variables.baseRequest.pageId],
-          refetchType: 'active',
         });
       }
 
@@ -43,7 +41,6 @@ export function useCreateLink(
       if (isMainPage) {
         queryClient.invalidateQueries({
           queryKey: ['personalPage'],
-          refetchType: 'active',
         });
       }
 

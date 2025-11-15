@@ -7,6 +7,5 @@ export default function useFetchSharedPageDashboard(data: PageParamsData) {
     queryKey: ['sharedPageDashboard', data.pageId],
     queryFn: () => fetchSharedPageDashboard(data),
     placeholderData: (prev) => prev,
-    structuralSharing: true,
   });
 }

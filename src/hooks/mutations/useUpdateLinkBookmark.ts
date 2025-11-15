@@ -29,28 +29,23 @@ export default function useUpdateLinkBookmark({
     onSuccess: (response, variables, context) => {
       queryClient.invalidateQueries({
         queryKey: ['favorite'],
-        refetchType: 'active',
       });
       queryClient.invalidateQueries({
         queryKey: ['bookmark', linkId],
-        refetchType: 'active',
       });
       if (isSharedPage) {
         queryClient.invalidateQueries({
           queryKey: ['sharedPage', pageId],
-          refetchType: 'active',
         });
       }
       if (isFolderPage) {
         queryClient.invalidateQueries({
           queryKey: ['folderDetails', pageId],
-          refetchType: 'active',
         });
       }
       if (isMainPage) {
         queryClient.invalidateQueries({
           queryKey: ['personalPage'],
-          refetchType: 'active',
         });
       }
 
