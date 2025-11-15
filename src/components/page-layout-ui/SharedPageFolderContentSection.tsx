@@ -21,7 +21,7 @@ import MobileLinkCardButton from '../link-card/mobile/MobileLinkCardButton';
 const AddLinkModal = lazy(() => import('../modal/link/AddLinkModal'));
 const AddFolderModal = lazy(() => import('../modal/folder/AddFolderModal'));
 
-export default function SharedPageContentSection({
+export default function SharedPageFolderContentSection({
   folderData = [],
   linkData = [],
   sortType,

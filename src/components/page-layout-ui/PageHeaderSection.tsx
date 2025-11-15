@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useModalStore } from '@/stores/modalStore';
 import { useLocation } from 'react-router-dom';
 import { useUpdateTitle } from '@/hooks/useUpdateTitle';
@@ -8,6 +8,7 @@ import { Button } from '../common-ui/button';
 
 type PageHeaderSectionProps = {
   pageTitle: string;
+  pageId?: string;
   folderId?: string;
 };
 
@@ -15,10 +16,20 @@ const MAX_TITLE_LENGTH = 12;
 
 export default function PageHeaderSection({
   pageTitle,
+  pageId,
   folderId,
 }: PageHeaderSectionProps) {
   const [title, setTitle] = useState(pageTitle ?? '');
-  const { debouncedUpdate, handleBlur } = useUpdateTitle(folderId, title);
+  const { debouncedUpdate, handleBlur } = useUpdateTitle(
+    folderId,
+    title,
+    folderId
+      ? undefined
+      : {
+          pageId,
+          isPageTitle: true,
+        }
+  );
   const { openLinkModal, openFolderModal } = useModalStore();
   const { getCurrentColor } = useFolderColorStore();
   const currentFolderColor = getCurrentColor();
@@ -27,8 +38,12 @@ export default function PageHeaderSection({
   const isLinkButtonVisible = currentLocation !== '/bookmarks';
   const isMobile = useMobile();
 
+  useEffect(() => {
+    setTitle(pageTitle ?? '');
+  }, [pageTitle]);
+
   return (
-    <div className="mb-[24px] flex w-full items-center justify-between md:min-w-[328px]">
+    <div className="mb-[24px] flex w-full min-w-[328px] items-center justify-between">
       <div className="flex w-full">
         <input
           id="page-title"

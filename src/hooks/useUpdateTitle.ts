@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { usePageStore } from '@/stores/pageStore';
 import useUpdateFolder from '@/hooks/mutations/useUpdateFolder';
 import { useUpdateLink } from '@/hooks/mutations/useUpdateLink';
+import useUpdateSharedPageTitle from '@/hooks/mutations/useUpdateSharedPageTitle';
 import { useDebounce } from '@/hooks/useDebounce';
 import { UpdateLinkData } from '@/types/links';
 
@@ -9,16 +10,31 @@ type TitleUpdate = {
   title: string;
 };
 
+type UseUpdateTitleOptions = {
+  type?: string;
+  link?: string;
+  pageId?: string;
+  isPageTitle?: boolean;
+};
+
 export function useUpdateTitle(
   id?: string,
   initialTitle: string = '',
-  type?: string,
+  options?: UseUpdateTitleOptions | string,
   link?: string
 ) {
+  // 옵션 파라미터 처리
+  const opts: UseUpdateTitleOptions =
+    typeof options === 'string' ? { type: options, link } : options || {};
+
   const lastUpdateRef = useRef({ title: initialTitle });
-  const { pageId } = usePageStore();
+  const { pageId: storePageId } = usePageStore();
+  const pageId = opts.pageId || storePageId;
   const { mutate: updateFolder } = useUpdateFolder(pageId);
   const { mutate: updateLink } = useUpdateLink();
+  const { mutate: updateSharedPageTitle } = useUpdateSharedPageTitle(
+    pageId || ''
+  );
 
   const updateFolderImmediately = (title: string) => {
     if (!id) return;
@@ -39,9 +55,30 @@ export function useUpdateTitle(
     });
   };
 
+  const updatePageTitleImmediately = (title: string) => {
+    if (!pageId || !opts.isPageTitle) return;
+
+    const updateData = {
+      baseRequest: { pageId, commandType: 'EDIT' as const },
+      pageTitle: title,
+    };
+
+    updateSharedPageTitle(updateData, {
+      onSuccess: () => {
+        lastUpdateRef.current = { title };
+      },
+      onError: (error) => {
+        console.error('페이지 제목 업데이트 실패:', error);
+      },
+    });
+  };
+
   const handleDebouncedUpdate = (update: TitleUpdate) => {
     lastUpdateRef.current = update;
-    if (type !== null) {
+    if (opts.isPageTitle) {
+      updatePageTitleImmediately(update.title);
+    } else if (id) {
+      // folderId나 linkId가 있으면 폴더/링크 업데이트
       updateFolderImmediately(update.title);
     }
   };
@@ -54,7 +91,7 @@ export function useUpdateTitle(
         pageId,
         commandType: 'EDIT',
       },
-      linkUrl: link ?? '',
+      linkUrl: opts.link ?? '',
       linkId: id,
       linkName: title,
     };
@@ -71,7 +108,7 @@ export function useUpdateTitle(
 
   const handleDebouncedUpdateLink = (update: TitleUpdate) => {
     lastUpdateRef.current = update;
-    if (type !== null) {
+    if (opts.type !== null && opts.type !== undefined) {
       updateLinkImmediately(update.title);
     }
   };
@@ -82,10 +119,23 @@ export function useUpdateTitle(
   );
 
   const handleBlur = (title: string) => {
+    if (opts.isPageTitle) {
+      lastUpdateRef.current = { title };
+      updatePageTitleImmediately(title);
+      return;
+    }
+
+    if (id) {
+      // folderId나 linkId가 있으면 폴더/링크 업데이트
+      lastUpdateRef.current = { title };
+      updateFolderImmediately(title);
+      return;
+    }
+
     const currentPath = window.location.pathname;
     if (
-      (type === null && currentPath === '/') ||
-      (type === null && currentPath === '/bookmarks')
+      (opts.type === null && currentPath === '/') ||
+      (opts.type === null && currentPath === '/bookmarks')
     ) {
       return;
     }

@@ -11,8 +11,8 @@ import { ErrorState } from '@/components/common-ui/ErrorState';
 import { LoadingState } from '@/components/common-ui/LoadingState';
 import { PageLayout } from '@/components/common-ui/PageLayout';
 
-const SharedPageContentSection = lazy(
-  () => import('@/components/page-layout-ui/SharedPageContentSection')
+const SharedPageFolderContentSection = lazy(
+  () => import('@/components/page-layout-ui/SharedPageFolderContentSection')
 );
 
 export default function FolderDetailPage() {
@@ -45,6 +45,8 @@ export default function FolderDetailPage() {
     linkData
   );
 
+  console.log('refinedData', refinedData);
+
   const folderName = refinedData?.targetFolderName;
 
   if (isError) {
@@ -57,13 +59,17 @@ export default function FolderDetailPage() {
 
   return (
     <PageLayout>
-      <PageHeaderSection pageTitle={folderName} folderId={folderId} />
+      <PageHeaderSection
+        pageTitle={folderName ?? ''}
+        pageId={pageId}
+        folderId={folderId}
+      />
       <PageControllerSection
         folderDataLength={folderDataLength}
         linkDataLength={linkDataLength}
         onSortChange={handleSort}
       />
-      <SharedPageContentSection
+      <SharedPageFolderContentSection
         folderData={folderData}
         linkData={linkData}
         sortType={sortType}
