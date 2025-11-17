@@ -8,6 +8,7 @@ import { usePageLayout } from '@/hooks/usePageLayout';
 import { getPageDataLength } from '@/utils/pageData';
 import { PageLayout } from '@/components/common-ui/PageLayout';
 import ScrollToTopButton from '@/components/common-ui/ScrollToTopButton';
+import { BackButton } from '@/components/common-ui/BackButton';
 
 const SharedPageFolderContentSection = lazy(
   () => import('@/components/page-layout-ui/SharedPageFolderContentSection')
@@ -45,19 +46,22 @@ export default function SharedPage() {
   }, [pageId, rootFolderId, setPageInfo, setParentsFolderId]);
 
   return (
-    <PageLayout>
-      <PageHeaderSection pageTitle={pageTitle} pageId={pageId} />
-      <PageControllerSection
-        folderDataLength={folderDataLength}
-        linkDataLength={linkDataLength}
-        onSortChange={handleSort}
-      />
-      <SharedPageFolderContentSection
-        folderData={folderData}
-        linkData={linkData}
-        sortType={sortType}
-      />
-      <ScrollToTopButton />
-    </PageLayout>
+    <>
+      <BackButton />
+      <PageLayout>
+        <PageHeaderSection pageTitle={pageTitle} pageId={pageId} />
+        <PageControllerSection
+          folderDataLength={folderDataLength}
+          linkDataLength={linkDataLength}
+          onSortChange={handleSort}
+        />
+        <SharedPageFolderContentSection
+          folderData={folderData}
+          linkData={linkData}
+          sortType={sortType}
+        />
+        <ScrollToTopButton />
+      </PageLayout>
+    </>
   );
 }

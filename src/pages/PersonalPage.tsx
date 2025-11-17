@@ -9,6 +9,7 @@ import { usePageLayout } from '@/hooks/usePageLayout';
 import { getPageDataLength } from '@/utils/pageData';
 import { PageLayout } from '@/components/common-ui/PageLayout';
 import ScrollToTopButton from '@/components/common-ui/ScrollToTopButton';
+import { BackButton } from '@/components/common-ui/BackButton';
 
 const PersonalPageContentSection = lazy(
   () => import('@/components/page-layout-ui/PersonalPageContentSection')
@@ -55,6 +56,7 @@ export default function PersonalPage() {
 
   return (
     <>
+      <BackButton />
       <PageLayout>
         <PageHeaderSection pageTitle={pageTitle} />
         <PageControllerSection
