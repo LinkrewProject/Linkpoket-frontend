@@ -1,10 +1,12 @@
-import { useRef, useState, useEffect, useLayoutEffect } from 'react';
+import { useRef, useState, useEffect, useLayoutEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMobile } from '@/hooks/useMobile';
 import { useUserStore } from '@/stores/userStore';
 import { UserActions } from '@/components/header/UserActions';
 import { AuthButtons } from '@/components/header/AuthButtons';
-import useFetchJoinedPage from '@/hooks/queries/useFetchJoinedPage';
+import { useQuery } from '@tanstack/react-query';
+import { fetchJoinedPage } from '@/apis/page-apis/fetchJoinedPage';
+import useFetchFavorite from '@/hooks/queries/useFetchFavorite';
 import {
   baseCards,
   DEFAULT_SHARED_PAGE_IMAGE,
@@ -17,33 +19,99 @@ export default function MobileHome() {
   const navigate = useNavigate();
   const { nickname, isLoggedIn } = useUserStore();
 
-  // 공유 페이지 데이터 가져오기
-  const { joinedPage } = useFetchJoinedPage();
+  // /api/personal-pages/overview를 사용하여 모든 페이지 + 폴더 정보 한번에 가져오기
+  const { data: overviewData, isLoading: overviewLoading } = useQuery({
+    queryKey: ['pagesOverview'],
+    queryFn: fetchJoinedPage,
+    enabled: isLoggedIn,
+    staleTime: 0,
+    gcTime: 1000 * 60,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
+  });
+
+  // Overview API 응답에서 데이터 추출 (useMemo로 메모이제이션)
+  const { personalPage, sharedPages } = useMemo(() => {
+    const pagesLocal = overviewData?.data || [];
+    const personalPage = pagesLocal.find((p: any) => p.pageType === 'PERSONAL');
+    const sharedPages = pagesLocal.filter((p: any) => p.pageType === 'SHARED');
+
+    return { personalPage, sharedPages };
+  }, [overviewData?.data]);
+
+  // 북마크 데이터만 별도로 가져오기 (북마크는 페이지가 아니므로)
+  const { favorite: bookmarkData, isLoading: bookmarkLoading } =
+    useFetchFavorite();
 
   // 동적으로 카드 목록 생성 (기본 카드 + 공유 페이지 카드)
   const [allCards, setAllCards] = useState<HomeCard[]>(baseCards);
 
   useEffect(() => {
-    // 공유 페이지 카드 생성
-    const sharedPageCards: HomeCard[] = (joinedPage || []).map(
-      (page: any, index: number) => ({
+    if (
+      !overviewLoading &&
+      !bookmarkLoading &&
+      (personalPage || sharedPages.length > 0)
+    ) {
+      // 1. 기본 카드 업데이트 (개인 페이지, 북마크)
+      const updatedBaseCards = baseCards.map((card) => {
+        let folders: any[] = [];
+        let backgroundImage = card.backgroundImage;
+
+        switch (card.id) {
+          case 'space-travel': // 개인 페이지
+            folders =
+              personalPage?.folders?.map((folder: any) => ({
+                folderId: folder.folderId,
+                folderTitle: folder.folderName,
+              })) || [];
+            backgroundImage = resolvePageImageUrl(
+              personalPage?.pageImageUrl,
+              card.backgroundImage
+            );
+            break;
+          case 'ocean-life': // 북마크
+            folders =
+              bookmarkData?.directorySimpleResponses?.map((folder: any) => ({
+                folderId: folder.folderId,
+                folderTitle: folder.folderTitle,
+              })) || [];
+            break;
+        }
+
+        return { ...card, folders, backgroundImage };
+      });
+
+      // 2. 공유 페이지 카드 생성
+      const sharedPageCards: HomeCard[] = sharedPages.map((page: any) => ({
         id: `shared-page-${page.pageId}`,
-        title: page.pageTitle || `공유 페이지 ${index + 1}`,
+        title: page.pageTitle,
         category: 'shared',
-        tags: ['collaboration', 'team', 'project'],
-        interestedCount: page.memberCount || 0,
+        tags: ['collaboration', 'team'],
+        interestedCount: 0,
         backgroundImage: resolvePageImageUrl(
           page.pageImageUrl,
           DEFAULT_SHARED_PAGE_IMAGE
         ),
         pageId: page.pageId,
         isSharedPage: true,
-      })
-    );
+        folders:
+          page.folders?.map((folder: any) => ({
+            folderId: folder.folderId,
+            folderTitle: folder.folderName,
+          })) || [],
+      }));
 
-    // 기본 카드 + 공유 페이지 카드 합치기
-    setAllCards([...baseCards, ...sharedPageCards]);
-  }, [joinedPage]);
+      // 기본 카드 + 공유 페이지 카드 합치기
+      setAllCards([...updatedBaseCards, ...sharedPageCards]);
+    }
+  }, [
+    personalPage,
+    sharedPages,
+    bookmarkData,
+    overviewLoading,
+    bookmarkLoading,
+  ]);
 
   // === Infinite loop setup ===
   const L = allCards.length;
