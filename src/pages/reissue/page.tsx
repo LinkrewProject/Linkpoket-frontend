@@ -38,7 +38,7 @@ export default function ReissuePage() {
           if (sseToken) {
             localStorage.setItem('sse_token', sseToken);
           }
-          window.location.href = '/';
+          window.location.href = '/home';
         }
       } catch (error) {
         console.log(error);

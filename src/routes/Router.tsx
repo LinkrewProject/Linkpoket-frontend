@@ -1,5 +1,9 @@
 import { lazy } from 'react';
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import {
+  RouterProvider,
+  createBrowserRouter,
+  Navigate,
+} from 'react-router-dom';
 import { ProtectedRoute } from './guards/ProtectedRoute';
 import { RedirectIfAuthenticated } from './guards/RedirectIfAuthenticated';
 import Layout from '../layout/layout';
@@ -18,6 +22,11 @@ const router = createBrowserRouter([
   {
     element: <Layout />,
     children: [
+      // 항상 접근 가능한 라우트들 (먼저 정의)
+      { path: 'home', element: <HomePage /> },
+      { path: 'landing', element: <LandingPage /> },
+      { path: 'reissue', element: <ReissuePage /> },
+
       // 인증이 필요한 라우트들
       {
         element: <ProtectedRoute />,
@@ -56,11 +65,6 @@ const router = createBrowserRouter([
           { path: 'signup', element: <SignupPage /> },
         ],
       },
-
-      // 항상 접근 가능한 라우트들
-      { path: 'landing', element: <LandingPage /> },
-      { path: 'home', element: <HomePage /> },
-      { path: 'reissue', element: <ReissuePage /> },
     ],
   },
 ]);

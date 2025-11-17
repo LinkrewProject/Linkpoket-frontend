@@ -60,7 +60,7 @@ export const useSignupSubmit = () => {
       // userStore 상태 수동 업데이트
       setIsLoggedIn(true);
 
-      navigate('/');
+      navigate('/home');
     } catch (error: any) {
       console.error('회원가입 에러:', error);
       if (axios.isAxiosError(error)) {
