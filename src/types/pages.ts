@@ -3,7 +3,7 @@ import { LinkDetail } from './links';
 
 export interface BaseRequest {
   pageId: string;
-  commandType: 'CREATE' | 'EDIT' | 'DELETE' | 'VIEW';
+  commandType: string;
 }
 
 interface PageBaseFields {
