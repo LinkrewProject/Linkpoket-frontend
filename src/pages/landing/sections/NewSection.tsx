@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import 확장프로그램이미지 from '@/assets/common-ui-assets/크롬브라우저 이미지.webp';
-import 폴더별정리이미지 from '@/assets/common-ui-assets/폴더별정리이미지.webp';
+import 폴더별정리이미지 from '@/assets/common-ui-assets/폴더별정리이미지_LINKPOKET.webp';
 import 공유페이지이미지 from '@/assets/common-ui-assets/공유페이지이미지_LINKPOKET.webp';
 
 const NewSection = () => {
@@ -148,7 +148,7 @@ const NewSection = () => {
         <div className="mt-[138px] flex flex-col md:w-full md:flex-row md:place-content-between">
           <img
             src={폴더별정리이미지}
-            className="mb-12 w-[312px] rounded-3xl object-cover md:mb-0 md:w-[466px]"
+            className="mb-12 w-[400px] rounded-3xl object-cover md:mb-0 md:w-[520px]"
             loading="lazy"
             fetchPriority="low"
           />
