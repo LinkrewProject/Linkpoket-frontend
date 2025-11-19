@@ -19,8 +19,8 @@ export default function MobilePageBackground() {
   const isSharedPage = location.pathname.startsWith('/shared');
   const isBookmarkPage = location.pathname.startsWith('/bookmarks');
 
-  // 개인 페이지 이미지
-  const { data: personalData } = useFetchPersonalPage('');
+  // 개인 페이지 이미지 (개인 페이지일 때만 호출)
+  const { data: personalData } = useFetchPersonalPage(isPersonalPage);
   const personalPageImageUrl = personalData?.data?.pageImageUrl;
 
   // 공유 페이지 이미지 (공유 페이지일 때만 호출)

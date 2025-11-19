@@ -17,7 +17,7 @@ const PersonalPageContentSection = lazy(
 );
 
 export default function PersonalPage() {
-  const { data } = useFetchPersonalPage('');
+  const { data } = useFetchPersonalPage();
 
   const { setUser } = useUserStore();
   const { setPageInfo } = usePageStore();
