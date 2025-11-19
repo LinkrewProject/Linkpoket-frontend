@@ -1,8 +1,32 @@
+import { useEffect, useRef, useState } from 'react';
 import 확장프로그램이미지 from '@/assets/common-ui-assets/크롬브라우저 이미지.webp';
 import 폴더별정리이미지 from '@/assets/common-ui-assets/폴더별정리이미지.webp';
-import 공유페이지이미지 from '@/assets/common-ui-assets/공유페이지이미지.webp';
+import 공유페이지이미지 from '@/assets/common-ui-assets/공유페이지이미지_LINKPOKET.webp';
 
 const NewSection = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef<HTMLParagraphElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
+  }, []);
   const featureData = [
     {
       description: (
@@ -18,13 +42,7 @@ const NewSection = () => {
 
   const secondData = [
     {
-      item: (
-        <>
-          다시 보고 싶은 링크,
-          <br />
-          클릭 한 번으로 저장하세요
-        </>
-      ),
+      item: <>간편한 링크 저장</>,
       className: 'font-bold mb-4 text-[28px]',
     },
     {
@@ -70,7 +88,7 @@ const NewSection = () => {
     {
       item: (
         <>
-          함께 쓰면 더 강력해지는
+          함께 쓰면 더 강력한
           <br />
           공유 페이지
         </>
@@ -80,13 +98,9 @@ const NewSection = () => {
     {
       item: (
         <>
-          프로젝트별 공유 페이지를 만들어 팀이 함께
+          팀, 스터디, 프로젝트 별로
           <br />
-          사용할 수 있는 협업 공간을 제공합니다.
-          <br />
-          업무, 스터디, 회의 자료에 필요한 링크를 함께
-          <br />
-          정리하고 공유할 수 있어요.
+          필요한 자료를 함께 정리하고 공유하세요.
         </>
       ),
       className: '',
@@ -98,7 +112,15 @@ const NewSection = () => {
       {/* 1번째 */}
       {featureData.map((feature, idx) => {
         return (
-          <p key={idx} className={`${feature.className} text-center`}>
+          <p
+            ref={idx === 0 ? sectionRef : undefined}
+            key={idx}
+            className={`${feature.className} text-center transition-all duration-1000 ease-out ${
+              isVisible
+                ? 'translate-y-0 opacity-100'
+                : 'translate-y-8 opacity-0'
+            }`}
+          >
             {feature.description}
           </p>
         );
