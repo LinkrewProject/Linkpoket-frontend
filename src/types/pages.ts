@@ -69,6 +69,17 @@ export interface PatchSharedPageInvitationData {
   notificationType: string;
 }
 
+export interface PatchSharedPageInvitationResponseData {
+  status: number;
+  message: string;
+  data: {
+    dispatchRequestId: string;
+    requestStatus: 'ACCEPTED' | 'REJECTED';
+    senderEmail: string;
+    notificationType: string;
+  };
+}
+
 export interface PageData {
   status: number;
   message: string;
@@ -76,8 +87,30 @@ export interface PageData {
     pageId: string;
     pageTitle: string;
     rootFolderId: string;
-    directoryDetailRespons: any[];
-    siteDetailResponses: any[];
+    pageImageUrl: string;
+    folderDetailResponses: FolderDetail[];
+    linkDetailResponses: LinkDetail[];
     fullPath: string;
+    pageVisibility: 'PUBLIC' | 'RESTRICTED';
   };
+}
+
+export interface JoinedPageFolder {
+  folderId: string;
+  folderName: string;
+  orderIndex: number;
+}
+
+export interface JoinedPageItem {
+  pageId: number;
+  pageTitle: string;
+  pageType: 'PERSONAL' | 'SHARED';
+  pageImageUrl: string;
+  folders: JoinedPageFolder[];
+}
+
+export interface FetchJoinedPageResponseData {
+  status: number;
+  message: string;
+  data: JoinedPageItem[];
 }

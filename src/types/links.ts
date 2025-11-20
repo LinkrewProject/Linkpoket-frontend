@@ -19,6 +19,7 @@ type WithBaseRequest<T> = T & {
 };
 
 export interface LinkDetail extends LinkBaseFields, LinkIdentity {
+  description: string;
   isFavorite: boolean;
   faviconUrl: string;
   representImageUrl: string;

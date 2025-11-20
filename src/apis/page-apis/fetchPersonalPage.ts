@@ -1,8 +1,11 @@
 import { axiosInstance } from '../axiosInstance';
+import { PageData } from '@/types/pages';
 
-export async function fetchPersonalPage() {
+export async function fetchPersonalPage(): Promise<PageData> {
   try {
-    const response = await axiosInstance.get('/api/personal-pages/main');
+    const response = await axiosInstance.get<PageData>(
+      '/api/personal-pages/main'
+    );
     return response.data;
   } catch (error) {
     console.error('Error fetching personal page:', error);
