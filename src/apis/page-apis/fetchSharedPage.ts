@@ -14,7 +14,7 @@ export async function fetchSharedPage(data: PageParamsData): Promise<PageData> {
     );
     return response.data;
   } catch (error) {
-    console.error('Error fetching shared page:', error);
+    console.error('공유 페이지 조회 실패:', error);
     throw error;
   }
 }

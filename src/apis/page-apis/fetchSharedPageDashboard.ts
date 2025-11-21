@@ -17,7 +17,7 @@ export async function fetchSharedPageDashboard(
     );
     return response.data;
   } catch (error) {
-    console.error('Error fetching shared page dashboard:', error);
+    console.error('공유 페이지 대시보드 조회 실패:', error);
     throw error;
   }
 }

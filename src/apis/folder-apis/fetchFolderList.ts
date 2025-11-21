@@ -10,7 +10,7 @@ export default async function fetchFolderList(pageId: string) {
     });
     return response.data;
   } catch (error) {
-    console.error('Error fetching folder list:', error);
+    console.error('폴더 목록 조회 실패:', error);
     throw error;
   }
 }

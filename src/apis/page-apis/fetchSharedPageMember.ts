@@ -17,7 +17,7 @@ export async function fetchSharedPageMember(
     );
     return response.data;
   } catch (error) {
-    console.error('Error fetching shared page member:', error);
+    console.error('공유 페이지 멤버 조회 실패:', error);
     throw error;
   }
 }

@@ -6,6 +6,7 @@ import {
 import { createFolder } from '@/apis/folder-apis/createFolder';
 import { CreateFolderData } from '@/types/folders';
 import { useLocation } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 export function useCreateFolder(
   pageId: string,
@@ -121,6 +122,9 @@ export function useCreateFolder(
       if (context?.personalPage)
         queryClient.setQueryData(['personalPage'], context.personalPage);
       console.error('폴더 생성 에러:', error);
+      toast.error(
+        error instanceof Error ? error.message : '폴더 생성에 실패했습니다.'
+      );
       options?.onError?.(error, variables, context);
     },
 

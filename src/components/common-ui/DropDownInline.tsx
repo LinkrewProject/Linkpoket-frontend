@@ -62,12 +62,17 @@ const DropDownInline = ({
       setIsDropDownInline(false);
     },
     onError: (error: any) => {
-      switch (error.errorCode) {
-        case 'TRANSMIT_DIRECTORY_REQUEST_ACCEPTED_EXIST':
-          toast.error('이미 해당 디렉토리 전송 요청을 수락하였습니다.');
-          break;
-        default:
-          toast.error(error.detail || '전송 중 오류가 발생했습니다.');
+      if (
+        error?.errorData?.errorCode ===
+        'TRANSMIT_DIRECTORY_REQUEST_ACCEPTED_EXIST'
+      ) {
+        toast.error('이미 해당 디렉토리 전송 요청을 수락하였습니다.');
+      } else {
+        toast.error(
+          error instanceof Error
+            ? error.message
+            : '전송 중 오류가 발생했습니다.'
+        );
       }
     },
   });

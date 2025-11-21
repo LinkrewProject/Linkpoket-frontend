@@ -15,7 +15,7 @@ export default async function patchSharedPageInvitation(
       );
     return response.data;
   } catch (error) {
-    console.error('Error patching shared page invitation:', error);
+    console.error('공유 페이지 초대 상태 변경 실패:', error);
     throw error;
   }
 }

@@ -6,10 +6,11 @@ import { useLocation } from 'react-router-dom';
 import { useMobile } from '@/hooks/useMobile';
 import { useFolderColorStore } from '@/stores/folderColorStore';
 import { Button } from '../common-ui/button';
+import toast from 'react-hot-toast';
 
 type PageHeaderSectionProps = {
   pageTitle: string;
-  pageId: number;
+  pageId: string;
 };
 
 const MAX_TITLE_LENGTH = 12;
@@ -46,6 +47,11 @@ export default function SharedPageHeaderSection({
       },
       onError: (error) => {
         console.error('설명 업데이트 실패:', error);
+        toast.error(
+          error instanceof Error
+            ? error.message
+            : '페이지 제목 업데이트에 실패했습니다.'
+        );
       },
     });
   };

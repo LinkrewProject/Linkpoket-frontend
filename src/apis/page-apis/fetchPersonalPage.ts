@@ -8,7 +8,7 @@ export async function fetchPersonalPage(): Promise<PageData> {
     );
     return response.data;
   } catch (error) {
-    console.error('Error fetching personal page:', error);
+    console.error('개인 페이지 조회 실패:', error);
     throw error;
   }
 }

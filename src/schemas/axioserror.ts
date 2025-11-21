@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { z } from 'zod';
 
 const apiErrorSchema = z.object({
@@ -12,25 +12,31 @@ const apiErrorSchema = z.object({
 
 export type BackendError = z.infer<typeof apiErrorSchema>;
 
-export function handleApiError(error: unknown): unknown {
-  // AxiosError가 아니면 원본 에러 반환
+export interface StructuredAxiosError extends AxiosError {
+  errorData?: BackendError;
+}
+
+export function handleApiError(error: unknown): StructuredAxiosError | Error {
+  //  AxiosError가 아닌 경우 처리
   if (!axios.isAxiosError(error)) {
-    return error;
+    return error instanceof Error
+      ? error
+      : new Error(String(error) || '알 수 없는 오류가 발생했습니다.');
   }
 
-  const validation = apiErrorSchema.safeParse(error.response?.data);
+  const structuredError = error as StructuredAxiosError;
+
+  const validation = apiErrorSchema.safeParse(structuredError.response?.data);
 
   if (!validation.success) {
-    return error;
+    return structuredError;
   }
 
   const errorData = validation.data;
 
-  // 원본 에러 객체의 message만 업데이트
-  error.message = errorData.detail || errorData.title;
+  structuredError.message = errorData.detail || errorData.title;
 
-  // 에러 객체에 구조화된 에러 정보 추가
-  (error as any).errorData = errorData;
+  structuredError.errorData = errorData;
 
-  return error;
+  return structuredError;
 }

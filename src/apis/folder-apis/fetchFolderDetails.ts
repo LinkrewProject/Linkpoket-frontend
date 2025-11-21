@@ -15,7 +15,7 @@ export default async function fetchFolderDetails(
     });
     return response.data;
   } catch (error) {
-    console.error('Error fetching folder details:', error);
+    console.error('폴더 상세 정보 조회 실패:', error);
     throw error;
   }
 }

@@ -8,7 +8,7 @@ export async function fetchJoinedPage(): Promise<FetchJoinedPageResponseData> {
     );
     return response.data;
   } catch (error) {
-    console.error('Error fetching joined page:', error);
+    console.error('참여 페이지 조회 실패:', error);
     throw error;
   }
 }
