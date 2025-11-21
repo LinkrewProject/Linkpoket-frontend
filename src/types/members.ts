@@ -9,7 +9,7 @@ interface ApiResponseStructure<T> {
 // 응답 데이터 타입
 
 export interface PageMember {
-  memberId: number;
+  memberId: string;
   email: string;
   nickName: string;
   colorCode: string;
