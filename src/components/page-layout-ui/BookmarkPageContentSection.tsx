@@ -111,7 +111,7 @@ export default function BookmarkPageContentSection({
               <div className="text-gray-90 mb-4 px-4 text-lg font-semibold">
                 링크 ({linkData.length})
               </div>
-              <div className="relative grid w-full grid-cols-2 justify-center gap-x-2 gap-y-8 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+              <div className="relative grid w-full grid-cols-3 justify-center gap-x-2 gap-y-8 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
                 <MobileLinkCardButton />
                 {linkData.map((item: LinkDetail) => (
                   <SortablePageItem key={item.linkId} item={item} />
