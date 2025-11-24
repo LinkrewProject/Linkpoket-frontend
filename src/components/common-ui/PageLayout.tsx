@@ -6,16 +6,23 @@ interface PageLayoutProps {
   children: ReactNode;
   className?: string;
   isMobile: boolean;
+  pageImageUrl?: string;
 }
 
 export const PageLayout: React.FC<PageLayoutProps> = ({
   children,
   isMobile,
+  pageImageUrl,
   className = '',
 }) => {
   return (
     <>
-      {isMobile && <MobilePageBackground isMobile={isMobile} />}
+      {isMobile && (
+        <MobilePageBackground
+          isMobile={isMobile}
+          pageImageUrl={pageImageUrl ?? ''}
+        />
+      )}
       <div
         className={`bg-gray-5 flex min-h-screen min-w-[328px] flex-col px-[24px] py-[20px] md:px-[64px] md:py-[56px] xl:px-[102px] ${className}`}
       >

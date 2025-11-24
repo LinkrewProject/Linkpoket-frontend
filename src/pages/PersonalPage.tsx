@@ -55,12 +55,13 @@ export default function PersonalPage() {
   );
 
   const pageTitle = data.pageTitle;
+  const pageImage = data.pageImageUrl;
 
   return (
     <>
       <BackButton isMobile={isMobile} />
       <CopyLinkButton isMobile={isMobile} />
-      <PageLayout isMobile={isMobile}>
+      <PageLayout isMobile={isMobile} pageImageUrl={pageImage}>
         <PageHeaderSection pageTitle={pageTitle} isMobile={isMobile} />
         <PageControllerSection
           folderDataLength={folderDataLength}
