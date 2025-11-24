@@ -25,8 +25,7 @@ interface ApiResponseStructure<T> {
   data: T;
 }
 
-// 요청 데이터 타입
-
+// 요청 데이터 타입 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 export interface CreateSharedPageData {
   pageType: 'SHARED';
 }
@@ -58,7 +57,7 @@ export interface PatchSharedPageInvitationData {
   notificationType: string;
 }
 
-// 응답 데이터 타입
+// 응답 데이터 타입 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 
 //개인 페이지 데이터 타입
 export interface PageDetails extends PageBaseFields {
@@ -119,8 +118,8 @@ export type PatchSharedPageInvitationResponseData =
 
 interface BookmarkResponseContent {
   email: string;
-  directorySimpleResponses: FolderDetail[];
-  siteSimpleResponses: LinkDetail[];
+  folderSimpleResponses: FolderDetail[];
+  linkSimpleResponses: LinkDetail[];
 }
 
 export type BookmarkResponse = ApiResponseStructure<BookmarkResponseContent>;

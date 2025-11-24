@@ -16,11 +16,11 @@ const BookmarkPageContentSection = lazy(
 
 export default function BookmarkPage() {
   const isMobile = useMobile();
-  const { favorite: refinedData } = useFetchFavorite();
+  const { data } = useFetchFavorite();
   const { sortType, handleSort } = usePageLayout();
 
-  const folderData = refinedData.directorySimpleResponses;
-  const linkData = refinedData.siteSimpleResponses;
+  const folderData = data.folderSimpleResponses;
+  const linkData = data.linkSimpleResponses;
   const { folderDataLength, linkDataLength } = getPageDataLength(
     folderData,
     linkData
