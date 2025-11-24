@@ -4,6 +4,7 @@ import { useFetchPersonalPage } from '@/hooks/queries/useFetchPersonalPage';
 import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
 import { useUserStore } from '@/stores/userStore';
 import { usePageLayout } from '@/hooks/usePageLayout';
+import { useMobile } from '@/hooks/useMobile';
 import { getPageDataLength } from '@/utils/pageData';
 import { PageLayout } from '@/components/common-ui/PageLayout';
 import ScrollToTopButton from '@/components/common-ui/ScrollToTopButton';
@@ -23,6 +24,7 @@ export default function PersonalPage() {
   const { setPageInfo } = usePageStore();
   const { setParentsFolderId } = useParentsFolderIdStore();
   const { sortType, handleSort } = usePageLayout();
+  const isMobile = useMobile();
 
   useEffect(() => {
     if (!data) return;
@@ -56,19 +58,21 @@ export default function PersonalPage() {
 
   return (
     <>
-      <BackButton />
-      <CopyLinkButton />
-      <PageLayout>
-        <PageHeaderSection pageTitle={pageTitle} />
+      <BackButton isMobile={isMobile} />
+      <CopyLinkButton isMobile={isMobile} />
+      <PageLayout isMobile={isMobile}>
+        <PageHeaderSection pageTitle={pageTitle} isMobile={isMobile} />
         <PageControllerSection
           folderDataLength={folderDataLength}
           linkDataLength={linkDataLength}
           onSortChange={handleSort}
+          isMobile={isMobile}
         />
         <PersonalPageContentSection
           folderData={folderData}
           linkData={linkData}
           sortType={sortType}
+          isMobile={isMobile}
         />
         <ScrollToTopButton />
       </PageLayout>

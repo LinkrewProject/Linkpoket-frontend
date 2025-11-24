@@ -13,7 +13,6 @@ import { AddLinkModalSkeleton } from '../skeleton/AddLinkModalSkeleton';
 import { sortPageData } from '@/utils/pageData';
 import { usePageDragAndDrop } from '@/hooks/usePageDragAndDrop';
 import { useDragAndDropSensors } from '@/utils/dragAndDrop';
-import { useMobile } from '@/hooks/useMobile';
 import MobileFolderCard from '../folder-card/mobile/MobileFolderCard';
 import MobileFolderCardAddButton from '../folder-card/mobile/MobileFolderCardAddButton';
 import MobileLinkCardButton from '../link-card/mobile/MobileLinkCardButton';
@@ -25,15 +24,14 @@ export default function SharedPageFolderContentSection({
   folderData = [],
   linkData = [],
   sortType,
-}: PageContentSectionProps) {
+  isMobile,
+}: PageContentSectionProps & { isMobile: boolean }) {
   const {
     isLinkModalOpen,
     closeLinkModal,
     isFolderModalOpen,
     closeFolderModal,
   } = useModalStore();
-
-  const isMobile = useMobile();
 
   // 검색 스토어 구독
   const searchKeyword = useSearchStore((state) => state.searchKeyword);

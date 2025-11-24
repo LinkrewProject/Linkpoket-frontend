@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useFetchSharedPage } from '@/hooks/queries/useFetchSharedPage';
 import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
 import { usePageLayout } from '@/hooks/usePageLayout';
+import { useMobile } from '@/hooks/useMobile';
 import { getPageDataLength } from '@/utils/pageData';
 import { PageLayout } from '@/components/common-ui/PageLayout';
 import ScrollToTopButton from '@/components/common-ui/ScrollToTopButton';
@@ -10,7 +11,6 @@ import PageHeaderSection from '@/components/page-layout-ui/PageHeaderSection';
 import PageControllerSection from '@/components/page-layout-ui/PageControllerSection';
 import { BackButton } from '@/components/common-ui/BackButton';
 import { CopyLinkButton } from '@/components/common-ui/CopyLinkButton';
-
 const SharedPageFolderContentSection = lazy(
   () => import('@/components/page-layout-ui/SharedPageFolderContentSection')
 );
@@ -18,6 +18,8 @@ const SharedPageFolderContentSection = lazy(
 export default function SharedPage() {
   const { pageId: pageIdParam } = useParams();
   const pageId = pageIdParam ?? '';
+  const isMobile = useMobile();
+
   const { data } = useFetchSharedPage(pageId);
 
   const { setPageInfo } = usePageStore();
@@ -47,19 +49,25 @@ export default function SharedPage() {
 
   return (
     <>
-      <BackButton />
-      <CopyLinkButton />
-      <PageLayout>
-        <PageHeaderSection pageTitle={pageTitle} pageId={pageId} />
+      <BackButton isMobile={isMobile} />
+      <CopyLinkButton isMobile={isMobile} />
+      <PageLayout isMobile={isMobile}>
+        <PageHeaderSection
+          pageTitle={pageTitle}
+          pageId={pageId}
+          isMobile={isMobile}
+        />
         <PageControllerSection
           folderDataLength={folderDataLength}
           linkDataLength={linkDataLength}
           onSortChange={handleSort}
+          isMobile={isMobile}
         />
         <SharedPageFolderContentSection
           folderData={folderData}
           linkData={linkData}
           sortType={sortType}
+          isMobile={isMobile}
         />
         <ScrollToTopButton />
       </PageLayout>

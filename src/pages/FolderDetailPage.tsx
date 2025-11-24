@@ -1,6 +1,7 @@
 import { lazy, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
+import { useMobile } from '@/hooks/useMobile';
 import PageHeaderSection from '@/components/page-layout-ui/PageHeaderSection';
 import PageControllerSection from '@/components/page-layout-ui/PageControllerSection';
 import useFetchFolderDetails from '@/hooks/queries/useFetchFolderDetails';
@@ -15,6 +16,7 @@ const SharedPageFolderContentSection = lazy(
 export default function FolderDetailPage() {
   const { folderId: folderIdParam } = useParams();
   const folderId = folderIdParam ?? '';
+  const isMobile = useMobile();
   const { pageId } = usePageStore();
   const { setParentsFolderId } = useParentsFolderIdStore();
   const { sortType, handleSort } = usePageLayout();
@@ -44,21 +46,24 @@ export default function FolderDetailPage() {
   const folderName = data.targetFolderName;
 
   return (
-    <PageLayout>
+    <PageLayout isMobile={isMobile}>
       <PageHeaderSection
         pageTitle={folderName}
         pageId={pageId}
         folderId={folderId}
+        isMobile={isMobile}
       />
       <PageControllerSection
         folderDataLength={folderDataLength}
         linkDataLength={linkDataLength}
         onSortChange={handleSort}
+        isMobile={isMobile}
       />
       <SharedPageFolderContentSection
         folderData={folderData}
         linkData={linkData}
         sortType={sortType}
+        isMobile={isMobile}
       />
     </PageLayout>
   );

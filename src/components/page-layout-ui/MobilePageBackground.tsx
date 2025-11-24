@@ -1,4 +1,3 @@
-import { useMobile } from '@/hooks/useMobile';
 import { useLocation, useParams } from 'react-router-dom';
 import { useFetchPersonalPage } from '@/hooks/queries/useFetchPersonalPage';
 import { useFetchSharedPage } from '@/hooks/queries/useFetchSharedPage';
@@ -8,8 +7,11 @@ import { baseCards } from '@/constants/homeCards';
 const FALLBACK_IMAGE =
   'https://d3b39vpyptsv01.cloudfront.net/photo/1/2/17f552dbb8d76670480cd3ec5e9ac0c2.jpg';
 
-export default function MobilePageBackground() {
-  const isMobile = useMobile();
+export default function MobilePageBackground({
+  isMobile,
+}: {
+  isMobile: boolean;
+}) {
   const location = useLocation();
   const params = useParams();
 
@@ -20,13 +22,13 @@ export default function MobilePageBackground() {
   const isBookmarkPage = location.pathname.startsWith('/bookmarks');
 
   // 개인 페이지 이미지 (개인 페이지일 때만 호출)
-  const { data: personalData } = useFetchPersonalPage(isPersonalPage);
-  const personalPageImageUrl = personalData?.data?.pageImageUrl;
+  const { data: personalData } = useFetchPersonalPage();
+  const personalPageImageUrl = personalData.pageImageUrl;
 
   // 공유 페이지 이미지 (공유 페이지일 때만 호출)
   const pageId = params.pageId || '';
-  const { data: sharedData } = useFetchSharedPage(pageId, isSharedPage);
-  const sharedPageImageUrl = sharedData?.data?.pageImageUrl;
+  const { data: sharedData } = useFetchSharedPage(pageId);
+  const sharedPageImageUrl = sharedData.pageImageUrl;
 
   // 북마크 카드 이미지 (/home에서 사용하는 이미지)
   const bookmarkCard = baseCards.find((card) => card.id === 'ocean-life');

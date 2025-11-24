@@ -8,12 +8,14 @@ import { getPageDataLength } from '@/utils/pageData';
 import { PageLayout } from '@/components/common-ui/PageLayout';
 import { BackButton } from '@/components/common-ui/BackButton';
 import { CopyLinkButton } from '@/components/common-ui/CopyLinkButton';
+import { useMobile } from '@/hooks/useMobile';
 
 const BookmarkPageContentSection = lazy(
   () => import('@/components/page-layout-ui/BookmarkPageContentSection')
 );
 
 export default function BookmarkPage() {
+  const isMobile = useMobile();
   const { favorite: refinedData } = useFetchFavorite();
   const { sortType, handleSort } = usePageLayout();
 
@@ -26,19 +28,21 @@ export default function BookmarkPage() {
 
   return (
     <>
-      <BackButton />
-      <CopyLinkButton />
-      <PageLayout>
-        <PageHeaderSection pageTitle="북마크" />
+      <BackButton isMobile={isMobile} />
+      <CopyLinkButton isMobile={isMobile} />
+      <PageLayout isMobile={isMobile}>
+        <PageHeaderSection pageTitle="북마크" isMobile={isMobile} />
         <PageControllerSection
           folderDataLength={folderDataLength}
           linkDataLength={linkDataLength}
           onSortChange={handleSort}
+          isMobile={isMobile}
         />
         <BookmarkPageContentSection
           folderData={folderData}
           linkData={linkData}
           sortType={sortType}
+          isMobile={isMobile}
         />
       </PageLayout>
     </>

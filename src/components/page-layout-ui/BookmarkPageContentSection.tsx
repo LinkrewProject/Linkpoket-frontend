@@ -13,7 +13,6 @@ import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
 import { sortPageData } from '@/utils/pageData';
 import { usePageDragAndDrop } from '@/hooks/usePageDragAndDrop';
 import { useDragAndDropSensors } from '@/utils/dragAndDrop';
-import { useMobile } from '@/hooks/useMobile';
 import MobileFolderCard from '../folder-card/mobile/MobileFolderCard';
 import MobileFolderCardAddButton from '../folder-card/mobile/MobileFolderCardAddButton';
 import MobileLinkCardButton from '../link-card/mobile/MobileLinkCardButton';
@@ -22,13 +21,13 @@ export default function BookmarkPageContentSection({
   folderData,
   linkData,
   sortType,
-}: PageContentSectionProps) {
+  isMobile,
+}: PageContentSectionProps & { isMobile: boolean }) {
   const searchKeyword = useSearchStore((state) => state.searchKeyword);
   const searchResult = useSearchStore((state) => state.searchResult);
 
   const [pageData, setPageData] = useState<(FolderDetail | LinkDetail)[]>([]);
 
-  const isMobile = useMobile();
   const { pageId } = usePageStore();
   const { parentsFolderId } = useParentsFolderIdStore();
 
