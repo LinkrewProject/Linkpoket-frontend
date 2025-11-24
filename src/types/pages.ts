@@ -116,16 +116,11 @@ export type PatchSharedPageInvitationResponseData =
   ApiResponseStructure<PatchSharedPageInvitationResponseContent>;
 
 //북마크 타입
-type BookmarkDirectorySimpleResponse = Omit<FolderDetail, 'orderIndex'>;
-
-type BookmarkSiteSimpleResponse = Omit<LinkDetail, 'orderIndex'> & {
-  createdDate: string;
-};
 
 interface BookmarkResponseContent {
   email: string;
-  directorySimpleResponses: BookmarkDirectorySimpleResponse[];
-  siteSimpleResponses: BookmarkSiteSimpleResponse[];
+  directorySimpleResponses: FolderDetail[];
+  siteSimpleResponses: LinkDetail[];
 }
 
 export type BookmarkResponse = ApiResponseStructure<BookmarkResponseContent>;

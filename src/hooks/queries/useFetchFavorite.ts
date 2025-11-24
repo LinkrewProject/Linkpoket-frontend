@@ -1,12 +1,11 @@
 import { fetchFavorite } from '@/apis/favorite-apis/fetchFavorite';
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
 export default function useFetchFavorite() {
-  const { data, ...rest } = useQuery({
+  const { data, ...rest } = useSuspenseQuery({
     queryKey: ['favorite'],
     queryFn: fetchFavorite,
     select: (response) => response.data,
-    placeholderData: (prev) => prev,
   });
 
   return { favorite: data, ...rest };

@@ -6,9 +6,7 @@ import PageControllerSection from '@/components/page-layout-ui/PageControllerSec
 import useFetchFolderDetails from '@/hooks/queries/useFetchFolderDetails';
 import { usePageLayout } from '@/hooks/usePageLayout';
 import { getPageDataLength } from '@/utils/pageData';
-import { ErrorState } from '@/components/common-ui/ErrorState';
 import { PageLayout } from '@/components/common-ui/PageLayout';
-import { Spinner } from '@/components/common-ui/Spinner';
 
 const SharedPageFolderContentSection = lazy(
   () => import('@/components/page-layout-ui/SharedPageFolderContentSection')
@@ -34,32 +32,16 @@ export default function FolderDetailPage() {
     sortType: 'BASIC' as const,
   };
 
-  const { data, isLoading, isError } = useFetchFolderDetails(requestParams);
+  const { data } = useFetchFolderDetails(requestParams);
 
-  if (isError) {
-    return <ErrorState message="폴더 데이터를 불러올 수 없습니다." />;
-  }
-
-  if (isLoading) {
-    return (
-      <div className="relative h-full w-full">
-        <Spinner display={true} position="center" />
-      </div>
-    );
-  }
-
-  if (!data) {
-    return null;
-  }
-
-  const folderData = data.data.folderDetailResponses;
-  const linkData = data.data.linkDetailResponses;
+  const folderData = data.folderDetailResponses;
+  const linkData = data.linkDetailResponses;
   const { folderDataLength, linkDataLength } = getPageDataLength(
     folderData,
     linkData
   );
 
-  const folderName = data.data.targetFolderName;
+  const folderName = data.targetFolderName;
 
   return (
     <PageLayout>

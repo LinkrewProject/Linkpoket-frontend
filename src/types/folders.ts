@@ -61,7 +61,7 @@ export interface FolderDetailsProps {
 
 export interface FolderDetail {
   isFavorite: boolean;
-  orderIndex: number;
+  orderIndex?: number;
   createdDate: string;
   folderId: string;
   folderName: string;

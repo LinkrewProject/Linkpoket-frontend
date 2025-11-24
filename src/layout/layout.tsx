@@ -1,14 +1,17 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
-import { Header } from '@/components/header/Header';
-import SideBar from '@/components/side-bar/SideBar';
 import { Outlet, useLocation } from 'react-router-dom';
+import { useMobile } from '@/hooks/useMobile';
 import { useUserStore } from '@/stores/userStore';
 import { useProfileModalStore } from '@/stores/profileModalStore';
 import { useNotificationSSE } from '@/hooks/useNotificationSSE';
 import useRouteChangeTracker from '@/hooks/useRouteChangeTracker';
+import { Header } from '@/components/header/Header';
 import { ProfileSettingsModalSkeleton } from '@/components/skeleton/ProfileSettingModal';
 import { DeleteModalSkeleton } from '@/components/skeleton/DeleteModalSkeleton';
-import { useMobile } from '@/hooks/useMobile';
+import { Spinner } from '@/components/common-ui/Spinner';
+import { ErrorBoundary } from 'react-error-boundary';
+import { ErrorState } from '@/components/common-ui/ErrorState';
+import SideBar from '@/components/side-bar/SideBar';
 
 const ProfileSettingsModal = lazy(
   () => import('@/components/modal/profile/ProfileSettingsModal')
@@ -87,7 +90,16 @@ export default function Layout() {
           />
         ) : null}
         <main id="app-scroll-container" className="flex-1 overflow-auto">
-          <Outlet context={{ showSidebar }} />
+          {/* 페이지 렌더링 컴포넌트 */}
+          <ErrorBoundary
+            fallbackRender={() => (
+              <ErrorState message="페이지를 불러올 수 없습니다." />
+            )}
+          >
+            <Suspense fallback={<Spinner display={true} position="center" />}>
+              <Outlet context={{ showSidebar }} />
+            </Suspense>
+          </ErrorBoundary>
 
           {isProfileModalOpen && (
             <Suspense fallback={<ProfileSettingsModalSkeleton />}>

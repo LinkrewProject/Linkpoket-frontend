@@ -19,8 +19,8 @@ import MobileFolderCardAddButton from '../folder-card/mobile/MobileFolderCardAdd
 import MobileLinkCardButton from '../link-card/mobile/MobileLinkCardButton';
 
 export default function BookmarkPageContentSection({
-  folderData = [],
-  linkData = [],
+  folderData,
+  linkData,
   sortType,
 }: PageContentSectionProps) {
   const searchKeyword = useSearchStore((state) => state.searchKeyword);

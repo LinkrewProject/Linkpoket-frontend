@@ -1,7 +1,5 @@
 import { lazy, useEffect } from 'react';
 
-import PageHeaderSection from '@/components/page-layout-ui/PageHeaderSection';
-import PageControllerSection from '@/components/page-layout-ui/PageControllerSection';
 import { useFetchPersonalPage } from '@/hooks/queries/useFetchPersonalPage';
 import { usePageStore, useParentsFolderIdStore } from '@/stores/pageStore';
 import { useUserStore } from '@/stores/userStore';
@@ -11,15 +9,15 @@ import { PageLayout } from '@/components/common-ui/PageLayout';
 import ScrollToTopButton from '@/components/common-ui/ScrollToTopButton';
 import { BackButton } from '@/components/common-ui/BackButton';
 import { CopyLinkButton } from '@/components/common-ui/CopyLinkButton';
-import { Spinner } from '@/components/common-ui/Spinner';
-import { ErrorState } from '@/components/common-ui/ErrorState';
+import PageHeaderSection from '@/components/page-layout-ui/PageHeaderSection';
+import PageControllerSection from '@/components/page-layout-ui/PageControllerSection';
 
 const PersonalPageContentSection = lazy(
   () => import('@/components/page-layout-ui/PersonalPageContentSection')
 );
 
 export default function PersonalPage() {
-  const { data, isLoading, isError } = useFetchPersonalPage();
+  const { data } = useFetchPersonalPage();
 
   const { setUser } = useUserStore();
   const { setPageInfo } = usePageStore();
@@ -29,8 +27,8 @@ export default function PersonalPage() {
   useEffect(() => {
     if (!data) return;
 
-    const pageId = data.data.pageId;
-    const rootFolderId = data.data.rootFolderId;
+    const pageId = data.pageId;
+    const rootFolderId = data.rootFolderId;
 
     setPageInfo(pageId);
 
@@ -47,30 +45,14 @@ export default function PersonalPage() {
     );
   }, [data, setPageInfo, setParentsFolderId, setUser]);
 
-  if (isError) {
-    return <ErrorState message="개인 페이지를 불러올 수 없습니다." />;
-  }
-
-  if (isLoading) {
-    return (
-      <div className="relative h-full w-full">
-        <Spinner display={true} position="center" />
-      </div>
-    );
-  }
-
-  if (!data) {
-    return null;
-  }
-
-  const folderData = data.data.folderDetailResponses;
-  const linkData = data.data.linkDetailResponses;
+  const folderData = data.folderDetailResponses;
+  const linkData = data.linkDetailResponses;
   const { folderDataLength, linkDataLength } = getPageDataLength(
     folderData,
     linkData
   );
 
-  const pageTitle = data.data.pageTitle;
+  const pageTitle = data.pageTitle;
 
   return (
     <>
