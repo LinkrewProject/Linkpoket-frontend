@@ -8,19 +8,27 @@ import {
   useMemo,
   useState,
 } from 'react';
-import HeaderMenu from './HeaderMenu';
 import { useFetchNotifications } from '@/hooks/queries/useFetchNotification';
 import { usePatchShareInvitationStatus } from '@/hooks/mutations/usePatchShareInvitationStatus';
 import { usePatchDirectoryTransmissionStatus } from '@/hooks/mutations/usePatchDirectoryTransmissionStatus';
 import { useDeleteDirectoryRequest } from '@/hooks/mutations/useDeleteDirectoryRequest';
-import { useProfileModalStore } from '@/stores/profileModalStore';
 import { useNotificationStore } from '@/stores/notification';
 import { useDeleteInvitation } from '@/hooks/mutations/useDeleteInvitation';
 import { NotificationModalSkeleton } from '../skeleton/NotificationModalSkeleton';
-import useUserInfo from '@/hooks/queries/useUserInfo';
+import { ProfileSettingsModalSkeleton } from '../skeleton/ProfileSettingModal';
+import { DeleteModalSkeleton } from '../skeleton/DeleteModalSkeleton';
 import { useUserStore } from '@/stores/userStore';
+import { useProfileModalStore } from '@/stores/profileModalStore';
+import useUserInfo from '@/hooks/queries/useUserInfo';
+import HeaderMenu from './HeaderMenu';
 
 const NotificationModal = lazy(() => import('../modal/page/NotificationModal'));
+const ProfileSettingsModal = lazy(
+  () => import('../modal/profile/ProfileSettingsModal')
+);
+const WithdrawAccountModal = lazy(
+  () => import('../modal/profile/WithdrawAccountModal')
+);
 
 export function UserActions() {
   const [isAlarmOpen, setIsAlarmOpen] = useState<boolean>(false);
@@ -28,7 +36,13 @@ export function UserActions() {
   const [isContactOpen, setIsContactOpen] = useState<boolean>(false);
   const { data: notifications = [], refetch } = useFetchNotifications();
   const { data: userInfo } = useUserInfo();
-  const { openProfileModal } = useProfileModalStore();
+  const {
+    openProfileModal,
+    isProfileModalOpen,
+    isWithdrawModalOpen,
+    closeProfileModal,
+    closeWithdrawModal,
+  } = useProfileModalStore();
   const { setUser, colorCode, nickname } = useUserStore();
 
   useEffect(() => {
@@ -197,6 +211,26 @@ export function UserActions() {
           />
         )}
       </div>
+
+      {/* 프로필 설정 모달 */}
+      {isProfileModalOpen && (
+        <Suspense fallback={<ProfileSettingsModalSkeleton />}>
+          <ProfileSettingsModal
+            isOpen={isProfileModalOpen}
+            onClose={closeProfileModal}
+          />
+        </Suspense>
+      )}
+
+      {/* 계정 탈퇴 모달 */}
+      {isWithdrawModalOpen && (
+        <Suspense fallback={<DeleteModalSkeleton />}>
+          <WithdrawAccountModal
+            isOpen={isWithdrawModalOpen}
+            onClose={closeWithdrawModal}
+          />
+        </Suspense>
+      )}
     </>
   );
 }
