@@ -21,7 +21,8 @@ export const CopyLinkButton: React.FC = () => {
   return (
     <button
       onClick={handleCopyLink}
-      className="hover:bg-gray-10 active:bg-gray-20 fixed top-4 right-4 z-50 flex h-10 w-10 items-center justify-center rounded-lg bg-white shadow-md transition-colors md:hidden"
+      className="hover:bg-gray-10 active:bg-gray-20 fixed top-4 right-4 z-[9999] flex h-10 w-10 items-center justify-center rounded-lg bg-white shadow-md transition-colors"
+      style={{ position: 'fixed' }}
       aria-label="링크 복사"
     >
       <Copy className="text-gray-90 h-5 w-5" />

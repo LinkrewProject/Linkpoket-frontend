@@ -9,6 +9,8 @@ import { getPageDataLength } from '@/utils/pageData';
 import { ErrorState } from '@/components/common-ui/ErrorState';
 import { PageLayout } from '@/components/common-ui/PageLayout';
 import { Spinner } from '@/components/common-ui/Spinner';
+import { BackButton } from '@/components/common-ui/BackButton';
+import { CopyLinkButton } from '@/components/common-ui/CopyLinkButton';
 
 const SharedPageFolderContentSection = lazy(
   () => import('@/components/page-layout-ui/SharedPageFolderContentSection')
@@ -62,22 +64,26 @@ export default function FolderDetailPage() {
   const folderName = data.data.targetFolderName;
 
   return (
-    <PageLayout>
-      <PageHeaderSection
-        pageTitle={folderName}
-        pageId={pageId}
-        folderId={folderId}
-      />
-      <PageControllerSection
-        folderDataLength={folderDataLength}
-        linkDataLength={linkDataLength}
-        onSortChange={handleSort}
-      />
-      <SharedPageFolderContentSection
-        folderData={folderData}
-        linkData={linkData}
-        sortType={sortType}
-      />
-    </PageLayout>
+    <>
+      <BackButton />
+      <CopyLinkButton />
+      <PageLayout>
+        <PageHeaderSection
+          pageTitle={folderName}
+          pageId={pageId}
+          folderId={folderId}
+        />
+        <PageControllerSection
+          folderDataLength={folderDataLength}
+          linkDataLength={linkDataLength}
+          onSortChange={handleSort}
+        />
+        <SharedPageFolderContentSection
+          folderData={folderData}
+          linkData={linkData}
+          sortType={sortType}
+        />
+      </PageLayout>
+    </>
   );
 }
