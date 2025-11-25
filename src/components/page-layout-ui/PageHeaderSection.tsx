@@ -3,7 +3,6 @@ import { useModalStore } from '@/stores/modalStore';
 import { useLocation } from 'react-router-dom';
 import { useUpdateTitle } from '@/hooks/useUpdateTitle';
 import { useFolderColorStore } from '@/stores/folderColorStore';
-import { useMobile } from '@/hooks/useMobile';
 import { Button } from '../common-ui/button';
 
 type PageHeaderSectionProps = {
@@ -18,7 +17,8 @@ export default function PageHeaderSection({
   pageTitle,
   pageId,
   folderId,
-}: PageHeaderSectionProps) {
+  isMobile,
+}: PageHeaderSectionProps & { isMobile: boolean }) {
   const [title, setTitle] = useState(pageTitle ?? '');
   const { debouncedUpdate, handleBlur } = useUpdateTitle(
     folderId,
@@ -36,7 +36,6 @@ export default function PageHeaderSection({
   const location = useLocation();
   const currentLocation = location.pathname;
   const isLinkButtonVisible = currentLocation !== '/bookmarks';
-  const isMobile = useMobile();
 
   useEffect(() => {
     setTitle(pageTitle ?? '');

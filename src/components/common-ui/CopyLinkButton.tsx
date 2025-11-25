@@ -1,11 +1,10 @@
 import React from 'react';
-import { useMobile } from '@/hooks/useMobile';
 import toast from 'react-hot-toast';
 import Copy from '@/assets/common-ui-assets/Copy.svg?react';
 
-export const CopyLinkButton: React.FC = () => {
-  const isMobile = useMobile();
-
+export const CopyLinkButton: React.FC<{ isMobile: boolean }> = ({
+  isMobile,
+}) => {
   const handleCopyLink = async () => {
     try {
       const currentUrl = window.location.href;

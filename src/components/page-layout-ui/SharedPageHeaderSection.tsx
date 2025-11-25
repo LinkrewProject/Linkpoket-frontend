@@ -3,7 +3,6 @@ import { useDebounce } from '@/hooks/useDebounce';
 import useUpdateSharedPageTitle from '@/hooks/mutations/useUpdateSharedPageTitle';
 import { useModalStore } from '@/stores/modalStore';
 import { useLocation } from 'react-router-dom';
-import { useMobile } from '@/hooks/useMobile';
 import { useFolderColorStore } from '@/stores/folderColorStore';
 import { Button } from '../common-ui/button';
 import toast from 'react-hot-toast';
@@ -18,14 +17,14 @@ const MAX_TITLE_LENGTH = 12;
 export default function SharedPageHeaderSection({
   pageTitle,
   pageId,
-}: PageHeaderSectionProps) {
+  isMobile,
+}: PageHeaderSectionProps & { isMobile: boolean }) {
   const [title, setTitle] = useState(pageTitle ?? '');
   const lastUpdateTitle = useRef({ title });
 
   const location = useLocation();
   const currentLocation = location.pathname;
   const isLinkButtonVisible = currentLocation !== '/bookmarks';
-  const isMobile = useMobile();
 
   const { openLinkModal, openFolderModal } = useModalStore();
   const { getCurrentColor } = useFolderColorStore();

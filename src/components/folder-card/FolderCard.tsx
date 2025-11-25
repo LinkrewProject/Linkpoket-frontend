@@ -49,7 +49,7 @@ export default function FolderCard({
   };
 
   const { data: folderDetailsData } = useFetchFolderDetails(requestParams);
-  const linkData = folderDetailsData?.data.linkDetailResponses ?? [];
+  const linkData = folderDetailsData.linkDetailResponses;
 
   const getFolderLink = (folderId: string) => {
     const currentPath = location.pathname;

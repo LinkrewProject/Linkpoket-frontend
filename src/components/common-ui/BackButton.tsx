@@ -1,19 +1,19 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useMobile } from '@/hooks/useMobile';
 
 interface BackButtonProps {
   className?: string;
   onClick?: () => void;
+  isMobile: boolean;
 }
 
 export const BackButton: React.FC<BackButtonProps> = ({
   className = '',
   onClick,
+  isMobile,
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const isMobile = useMobile();
 
   // 개인페이지, 공유 페이지, 북마크 페이지, 폴더 페이지인지 확인
   const isPersonalPage =

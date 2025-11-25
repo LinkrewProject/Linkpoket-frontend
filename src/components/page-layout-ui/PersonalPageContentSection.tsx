@@ -4,7 +4,6 @@ import LinkCard from '../link-card/LinkCard';
 import FolderCard from '../folder-card/FolderCard';
 import { useModalStore } from '@/stores/modalStore';
 import { useSearchStore } from '@/stores/searchStore';
-import { useMobile } from '@/hooks/useMobile';
 import { PageContentSectionProps } from '@/types/pages';
 import { DndContext, closestCenter, DragOverlay } from '@dnd-kit/core';
 import { SortableContext, rectSwappingStrategy } from '@dnd-kit/sortable';
@@ -27,7 +26,9 @@ export default function PersonalPageContentSection({
   folderData,
   linkData,
   sortType,
-}: PageContentSectionProps) {
+  isMobile,
+  pageImageUrl,
+}: PageContentSectionProps & { isMobile: boolean; pageImageUrl?: string }) {
   const {
     isLinkModalOpen,
     closeLinkModal,
@@ -37,7 +38,6 @@ export default function PersonalPageContentSection({
 
   const searchKeyword = useSearchStore((state) => state.searchKeyword);
   const searchResult = useSearchStore((state) => state.searchResult);
-  const isMobile = useMobile();
 
   const { pageId } = usePageStore();
   const { parentsFolderId } = useParentsFolderIdStore();
@@ -120,6 +120,7 @@ export default function PersonalPageContentSection({
                     folder={item}
                     index={index}
                     folderDataLength={folderData.length}
+                    pageImageUrl={pageImageUrl}
                   />
                 ))}
               </div>
