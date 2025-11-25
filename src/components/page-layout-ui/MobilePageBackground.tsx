@@ -27,7 +27,7 @@ export default function MobilePageBackground({
             decoding="async"
           />
           {/* 하단 그라데이션 */}
-          <div className="absolute right-0 bottom-[-10px] left-0 h-37 bg-gradient-to-t from-white via-white/12 via-white/50 via-white/88 to-transparent"></div>
+          <div className="from-gray-5 via-gray-5/5 via-gray-5/20 via-gray-5/25 absolute right-0 bottom-[-5px] left-0 h-37 bg-gradient-to-t to-transparent"></div>
           {/* 타이틀 - 그림 위로 */}
           {pageTitle && (
             <div className="absolute top-20 right-6 left-6">
