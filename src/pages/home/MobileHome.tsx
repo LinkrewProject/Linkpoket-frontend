@@ -42,8 +42,7 @@ export default function MobileHome() {
   }, [overviewData?.data]);
 
   // 북마크 데이터만 별도로 가져오기 (북마크는 페이지가 아니므로)
-  const { favorite: bookmarkData, isLoading: bookmarkLoading } =
-    useFetchFavorite();
+  const { data: bookmarkData, isLoading: bookmarkLoading } = useFetchFavorite();
 
   // 동적으로 카드 목록 생성 (기본 카드 + 공유 페이지 카드)
   const [allCards, setAllCards] = useState<HomeCard[]>(baseCards);
@@ -73,7 +72,7 @@ export default function MobileHome() {
             break;
           case 'ocean-life': // 북마크
             folders =
-              bookmarkData?.directorySimpleResponses?.map((folder: any) => ({
+              bookmarkData?.folderSimpleResponses?.map((folder: any) => ({
                 folderId: folder.folderId,
                 folderTitle: folder.folderTitle,
               })) || [];
@@ -145,7 +144,7 @@ export default function MobileHome() {
   useLayoutEffect(() => {
     // 약간의 지연 후 초기 위치 설정
     const timer = setTimeout(() => {
-      console.log('🎯 초기 위치 설정:', {
+      console.log('🎯 [MOBILE] 초기 위치 설정:', {
         START_GLOBAL_INDEX,
         L,
         MIDDLE_BLOCK,

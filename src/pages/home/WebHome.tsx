@@ -42,7 +42,7 @@ export default function WebHome() {
     queryKey: ['pagesOverview'],
     queryFn: fetchJoinedPage,
     enabled: isLoggedIn,
-    // 새 공유 페이지 생성 직후 /home 진입 시 즉시 최신 데이터 보이도록 캐시 신선도 강화
+    // 웹에서는 실시간성을 위해 자주 refetch
     staleTime: 0,
     gcTime: 1000 * 60,
     refetchOnMount: true,
@@ -50,18 +50,16 @@ export default function WebHome() {
     refetchOnReconnect: true,
   });
 
-  // Overview API 응답에서 데이터 추출 (useMemo로 메모이제이션)
-  const { personalPage, sharedPages } = useMemo(() => {
-    const pagesLocal = overviewData?.data || [];
-    const personalPage = pagesLocal.find((p: any) => p.pageType === 'PERSONAL');
-    const sharedPages = pagesLocal.filter((p: any) => p.pageType === 'SHARED');
+  // Overview API 응답에서 데이터 추출
+  const personalPage = useMemo(
+    () => overviewData?.data?.find((p: any) => p.pageType === 'PERSONAL'),
+    [overviewData?.data]
+  );
 
-    console.log('📦 Overview 데이터:', pagesLocal);
-    console.log('👤 개인 페이지:', personalPage);
-    console.log('👥 공유 페이지들:', sharedPages);
-
-    return { personalPage, sharedPages };
-  }, [overviewData?.data]);
+  const sharedPages = useMemo(
+    () => overviewData?.data?.filter((p: any) => p.pageType === 'SHARED') || [],
+    [overviewData?.data]
+  );
 
   // 북마크 데이터만 별도로 가져오기 (북마크는 페이지가 아니므로)
   const { favorite: bookmarkData, isLoading: bookmarkLoading } =
@@ -74,7 +72,7 @@ export default function WebHome() {
       !bookmarkLoading &&
       (personalPage || sharedPages.length > 0)
     ) {
-      console.log('✅ 데이터 로딩 완료!');
+      console.log('✅ [WEB] 데이터 로딩 완료!');
 
       // 1. 기본 카드 업데이트 (개인 페이지, 북마크)
       const updatedBaseCards = baseCards.map((card) => {
@@ -126,8 +124,6 @@ export default function WebHome() {
       }));
 
       const updatedCards = [...updatedBaseCards, ...sharedPageCards];
-      console.log('🎯 최종 카드:', updatedCards);
-
       setCards(updatedCards);
       setIsDataLoaded(true);
       setVisibleCount(Math.min(12, updatedCards.length));
