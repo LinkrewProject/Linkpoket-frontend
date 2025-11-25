@@ -39,6 +39,7 @@ export default function MobilePageBackground({
           {/* 버튼들 - 이미지 위에 배치 */}
           <BackButton isMobile={isMobile} />
           <CopyLinkButton isMobile={isMobile} />
+          {/* 검색창과 정렬 버튼을 위한 컨테이너 - PageControllerSection이 여기에 absolute로 배치됨 */}
         </div>
       )}
     </div>

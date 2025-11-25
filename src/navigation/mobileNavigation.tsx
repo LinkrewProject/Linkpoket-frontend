@@ -1,5 +1,8 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useMobile } from '@/hooks/useMobile';
+import HomeIcon from '@/assets/widget-ui-assets/Home.svg?react';
+import BookMarkIcon from '@/assets/widget-ui-assets/BookMark.svg?react';
+import PersonalPageIcon from '@/assets/widget-ui-assets/PersonalPage.svg?react';
 
 interface NavItem {
   id: string;
@@ -15,49 +18,31 @@ export default function MobileNavigation() {
 
   const navItems: NavItem[] = [
     {
-      id: 'personal',
-      label: '개인페이지',
-      path: '/',
-      icon: (
-        <svg
-          width="28"
-          height="28"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-        >
-          <rect x="3" y="3" width="7" height="7" rx="1" />
-          <rect x="14" y="3" width="7" height="7" rx="1" />
-          <rect x="14" y="14" width="7" height="7" rx="1" />
-          <rect x="3" y="14" width="7" height="7" rx="1" />
-        </svg>
-      ),
+      id: 'home',
+      label: '홈',
+      path: '/home',
+      icon: <HomeIcon className="h-7 w-7" />,
     },
     {
       id: 'bookmarks',
       label: '북마크',
       path: '/bookmarks',
-      icon: (
-        <svg
-          width="28"
-          height="28"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-        >
-          <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
-        </svg>
-      ),
+      icon: <BookMarkIcon className="h-7 w-7" />,
+    },
+    {
+      id: 'personal',
+      label: '개인페이지',
+      path: '/',
+      icon: <PersonalPageIcon className="h-7 w-7" />,
     },
   ];
 
   const getCurrentNavId = () => {
     const path = location.pathname;
-    if (path === '/' || path.startsWith('/personal')) return 'personal';
+    if (path === '/home') return 'home';
     if (path.startsWith('/bookmarks')) return 'bookmarks';
-    return 'personal';
+    if (path === '/' || path.startsWith('/personal')) return 'personal';
+    return 'home';
   };
 
   const currentNavId = getCurrentNavId();
