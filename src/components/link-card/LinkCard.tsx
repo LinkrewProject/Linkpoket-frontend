@@ -133,7 +133,7 @@ export default function LinkCard({
   return (
     <>
       <div
-        className={`group relative flex h-[242px] flex-col items-center gap-4 overflow-visible p-[16px] hover:cursor-pointer ${
+        className={`group relative flex ${isMobile ? 'h-[170px]' : 'h-[242px]'} flex-col items-center gap-4 overflow-visible p-[16px] hover:cursor-pointer ${
           // isFocusMode
           // ? 'w-[125px]'
           isMobile ? 'min-w-[125px]' : 'min-w-[156px]'
