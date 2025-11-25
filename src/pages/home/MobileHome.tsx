@@ -331,7 +331,7 @@ export default function MobileHome() {
         <div
           ref={trackRef}
           onScroll={handleScroll}
-          className="scrollbar-none mx-auto flex max-w-md snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain px-4 pb-8 perspective-[1200px]"
+          className="scrollbar-none mx-auto flex max-w-md snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain px-4 pb-18 perspective-[1200px]"
           style={{
             WebkitOverflowScrolling: 'touch' as any,
             scrollbarWidth: 'none',
