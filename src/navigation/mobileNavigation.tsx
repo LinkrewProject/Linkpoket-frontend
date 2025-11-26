@@ -66,7 +66,7 @@ export default function MobileNavigation({
   if (!isMobile) return null;
 
   return (
-    <nav className="fixed right-0 bottom-0 left-0 z-9999 bg-white md:hidden">
+    <nav className="fixed right-0 bottom-0 left-0 z-9999 border-t border-gray-200 bg-white md:hidden">
       <div className="flex h-16 items-center justify-around px-4">
         {navItems.map((item) => {
           const isActive = currentNavId === item.id;
